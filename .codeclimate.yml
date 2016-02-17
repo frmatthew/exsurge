@@ -4,8 +4,5 @@ engines:
     
 ratings:
    paths:
-<<<<<<< HEAD
    - "**.js"
-=======
-   - "**.js"
->>>>>>> parent of f2042bb... Initial commit
+
