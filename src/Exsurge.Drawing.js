@@ -226,7 +226,7 @@ export class ChantContext {
 
     // font styles
     this.lyricTextSize = 16; // in points?
-    this.lyricTextFont = 'Minion Pro';
+    this.lyricTextFont = "'Palatino Linotype', 'Book Antiqua', Palatino, serif";
     this.lyricTextColor = "#000";
     
     this.dropCapTextSize = 64;
