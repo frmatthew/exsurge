@@ -13,29 +13,41 @@
   <![endif]-->
 </head>
 
-<body>
+<body onload="updateChant()" onresize="updateChant()">
+
+  <h1>exsurge Test Page</h1>
+
+  <p><em>This is the simplest of test pages, just to start testing out exsurge. For more information, please visit <a href="https://github.com/frmatthew/exsurge/">the exsurge GitHub pages</a>.</em></p>
+
+  <label>Enter your GABC code here:</label><br/>
+  <textarea rows="10" cols="80" id="gabcSource" oninput="updateChant()" onchange="updateChant()">(c3) PU(ei)ER(i) *() na(iji)tus(h) est(hhh) no(ih/ji)bis,(i) (;) et(ei~) fí(iji)li(hg)us(f) da(hhi)tus(h) est(h) no(hihh)bis:(efe) (:) cu(e)jus(f) im(h)pé(gi!jk)ri(ih)um(h) (,) su(h)per(h) hú(ih/ji)me(hg)rum(hhh) e(hf//hghvGF)jus:(gf) (:) et(hg) vo(h)cá(hji)bi(h)tur(hhh) no(h)men(hhh) e(highvGF)jus,(gf) (;) ma(hj)gni(i) con(eh~)sí(h)li(hhhf)i(f) An(fhf!gwh)ge(efe)lus.(e) Ps.(::) Can(ehg)tá(hi)te(i) Dó(i)mi(i)no(i) cán(ik)ti(j)cum(j) no(ji)vum:(ij) *(:) qui(ig)a(hi) mi(i)ra(i)bí(i!jwk)li(i)a(h) fe(hhh)cit.(fe) (::) Gló(ehg)ri(hi)a(i) Pa(i)tri.(i) (::) E(i) u(i!jwk) o(i) u(h) a(hhh) e.(fe) (::)</textarea>
+  <div id="chant-container">
+  </div>
+
   <script type="text/javascript" src="https://rawgit.com/frmatthew/exsurge/master/dist/exsurge.js"></script>
   <script type="text/javascript">
     /* testing exsurge */
-    var gabc = "(f3) EC(ce!fg)CE(f) *(,) ad(fe~)vé(f!gwhf)nit(f) (,)";
     var ctxt = new exsurge.ChantContext();
-    var score = exsurge.Gabc.loadChantScore(ctxt, gabc, true);
 
-    // add an annotation
-    score.annotation = new exsurge.Annotation(ctxt, "Ant. X");
 
-    // perform layout on the chant
-    score.performLayout(ctxt, function() {
-      score.layoutChantLines(ctxt, 1000, function() {
+    var updateChant = function() {
+      
+      var gabcSource = document.getElementById('gabcSource');
+      var chantContainer = document.getElementById('chant-container');
+      
+      var score = exsurge.Gabc.loadChantScore(ctxt, gabcSource.value, true);
+    
+      // add an annotation
+      //score.annotation = new exsurge.Annotation(ctxt, "Ant. X");
 
-        // render the score to svg code
-        var svgNode = document.createElement('div');
-        var innerHtml = score.createDrawable(ctxt);
-        svgNode.innerHTML = innerHtml;
-        document.body.appendChild(svgNode);
+      // perform layout on the chant
+      score.performLayout(ctxt, function() {
+        score.layoutChantLines(ctxt, chantContainer.offsetWidth * .9, function() {
+          // render the score to svg code
+          chantContainer.innerHTML = score.createDrawable(ctxt);
+        });
       });
-    });
-
+    }
   </script>
 </body>
 </html>
