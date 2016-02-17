@@ -1,0 +1,35 @@
+{
+  "name": "exsurge",
+  "version": "0.0.0",
+  "description": "A JavaScript library for rendering Gregorian Chant in square note notation",
+  "main": "dist/exsurge.js",
+  "scripts": {
+    "build": "webpack --mode=build",
+    "dev": "webpack --progress --colors --watch --mode=dev",
+    "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.js"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.5.2",
+    "babel-eslint": "^4.1.8",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-preset-es2015": "^6.5.0",
+    "chai": "^3.5.0",
+    "eslint": "^1.6.0",
+    "eslint-loader": "^1.2.1",
+    "mocha": "^2.4.5",
+    "webpack": "^1.12.13",
+    "yargs": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frmatthew/exsurge.git"
+  },
+  "author": "Fr. Matthew Spencer, O.S.J. <mspencer@osjusa.org> (http://marello.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frmatthew/exsurge/issues"
+  },
+  "homepage": "https://github.com/frmatthew/exsurge#readme"
+}

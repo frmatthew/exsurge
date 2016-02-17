@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>exsurge Test Page</title>
+  <meta name="description" content="exsurge Test Page">
+  <meta name="author" content="Fr. Matthew Spencer, O.S.J.">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <script src="../dist/exsurge.js"></script>
+  <script type="text/javascript">
+    /* testing exsurge */
+    var gabc = "(f3) EC(ce!fg)CE(f) *(,) ad(fe~)vé(f!gwhf)nit(f) (,)";
+    var ctxt = new exsurge.ChantContext();
+    var score = exsurge.Gabc.loadChantScore(ctxt, gabc, true);
+
+    // add an annotation
+    score.annotation = new exsurge.Annotation(ctxt, "Ant. X");
+
+    // perform layout on the chant
+    score.performLayout(ctxt, function() {
+      score.layoutChantLines(ctxt, 1000, function() {
+
+        // render the score to svg code
+        var svgNode = document.createElement('div');
+        var innerHtml = score.createDrawable(ctxt);
+        svgNode.innerHTML = innerHtml;
+        document.body.appendChild(svgNode);
+      });
+    });
+
+  </script>
+</body>
+</html>
