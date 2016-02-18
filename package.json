@@ -18,7 +18,9 @@
     "chai": "^3.5.0",
     "eslint": "^1.6.0",
     "eslint-loader": "^1.2.1",
+    "file-loader": "^0.8.5",
     "mocha": "^2.4.5",
+    "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
     "yargs": "^4.1.0"
   },

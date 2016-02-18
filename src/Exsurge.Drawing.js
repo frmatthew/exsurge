@@ -28,7 +28,8 @@ import { Glyphs } from 'Exsurge.Glyphs'
 import { Latin } from 'Exsurge.Text'
 
 
-var __syllableConnector = "-";
+// load in the web font for special chant characters here:
+var __exsurgeCharactersFont = require("url?limit=30000!../assets/fonts/ExsurgeChar.otf");
 
 export let GlyphCode = {
 
@@ -297,10 +298,27 @@ export class ChantContext {
     // if auto color is true, then exsurge tries to automatically colorize
     // some elements of the chant (directives become rubric color, etc.)
     this.autoColor = true;
+
+    this.insertFontsInDoc();
   }
 
   calculateHeightFromStaffPosition(staffPosition) {
     return -staffPosition * this.staffInterval;
+  }
+
+  insertFontsInDoc() {
+
+    var styleElement = document.getElementById('exsurge-fonts');
+
+    if (styleElement === null) {
+      // create it since it doesn't exist yet.
+      styleElement = document.createElement('style');
+      styleElement.id = 'exsurge-fonts';
+
+      styleElement.appendChild(document.createTextNode("@font-face{font-family: 'Exsurge Characters';font-weight: normal;font-style: normal;src: url(" + __exsurgeCharactersFont + ") format('opentype');}"));
+
+      document.head.appendChild(styleElement);
+    }
   }
 }
 
@@ -567,12 +585,12 @@ export class TextElement extends ChantLayoutElement {
     this.textAnchor = textAnchor;
     this.dominantBaseline = 'baseline'; // default placement
 
-    this.generateSpansFromText(text);
+    this.generateSpansFromText(ctxt, text);
 
     this.recalculateMetrics(ctxt);
   }
 
-  generateSpansFromText(text) {
+  generateSpansFromText(ctxt, text) {
 
     this.unsanitizedText = text;
     this.text = "";
@@ -614,7 +632,7 @@ export class TextElement extends ChantLayoutElement {
       // non-matching symbols first
       if (markupSymbol == "A/." || markupSymbol == "R/." || markupSymbol == "V/." ||
           markupSymbol == "a/." || markupSymbol == "r/." || markupSymbol == "v/.") {
-        closeSpan(text[match.index] + ".", "font-family:'Scribam Characters';fill:#f00;");
+        closeSpan(text[match.index] + ".", "font-family:'Exsurge Characters';fill:#f00;");
       } else if (markupStack.length == 0) {
         // otherwise we're dealing with matching markup delimeters
         // if this is our first markup frame, then just create an inline for preceding text and push the stack frame
@@ -690,7 +708,9 @@ export class TextElement extends ChantLayoutElement {
       spans += QuickSvg.createFragment('tspan', options, this.spans[i].text);
     }
 
-    var styleProperties = "font-family:" + this.fontFamily + ";font-size:" + this.fontSize + ";"
+    var styleProperties = "font-family:" + this.fontFamily +
+      ";font-size:" + this.fontSize +
+      ";font-kerning:normal;" +
       + this.getExtraStyleProperties(ctxt);
 
     return QuickSvg.createFragment('text', {
@@ -748,12 +768,12 @@ export class Lyric extends TextElement {
     }
   }
 
-  generateSpansFromText(text) {
-    super.generateSpansFromText(text);
+  generateSpansFromText(ctxt, text) {
+    super.generateSpansFromText(ctxt, text);
 
     if (this.spans.length > 0) {
       this.lastSpanText = this.spans[this.spans.length - 1].text;
-      this.lastSpanTextWithConnector = this.lastSpanText + __syllableConnector;
+      this.lastSpanTextWithConnector = this.lastSpanText + ctxt.syllableConnector;
     } else {
       this.lastSpanText = "";
       this.lastSpanTextWithConnector = "";
@@ -764,7 +784,7 @@ export class Lyric extends TextElement {
     super.recalculateMetrics(ctxt);
 
     this.widthWithoutConnector = this.bounds.width;
-    this.textWithConnector = this.text + __syllableConnector;
+    this.textWithConnector = this.text + ctxt.syllableConnector;
 
     this.widthWithConnector = this.bounds.width + ctxt.hyphenWidth;
 
