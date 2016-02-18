@@ -841,7 +841,7 @@ export class Lyric extends TextElement {
   getExtraStyleProperties(ctxt) {
     var props = super.getExtraStyleProperties();
 
-    if (this.lyricType == LyricType.Directive && ctxt)
+    if (this.lyricType == LyricType.Directive && ctxt.autoColor === true)
       props += "fill:#f00;";
 
     return props;

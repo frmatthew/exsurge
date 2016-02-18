@@ -2833,7 +2833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function getExtraStyleProperties(ctxt) {
 	      var props = _get(Object.getPrototypeOf(Lyric.prototype), 'getExtraStyleProperties', this).call(this);
 	
-	      if (this.lyricType == LyricType.Directive && ctxt) props += "fill:#f00;";
+	      if (this.lyricType == LyricType.Directive && ctxt.autoColor === true) props += "fill:#f00;";
 	
 	      return props;
 	    }
