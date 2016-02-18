@@ -711,7 +711,7 @@ export class TextElement extends ChantLayoutElement {
     var styleProperties = "font-family:" + this.fontFamily +
       ";font-size:" + this.fontSize +
       ";font-kerning:normal;" +
-      + this.getExtraStyleProperties(ctxt);
+      this.getExtraStyleProperties(ctxt);
 
     return QuickSvg.createFragment('text', {
       'x': this.bounds.x,
