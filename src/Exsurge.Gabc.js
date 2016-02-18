@@ -158,32 +158,11 @@ export var Gabc = {
       text = text.substring(0, text.length - 1);
     }
 
-    // replace special gabc characters
-    text = text.replace("<sp>R/</sp>", "R/");
-    text = text.replace("<sp>V/</sp>", "V/");
-
-    // check for italic/bold in the silliest way possible
-    // only works if italic is the outer tag
-    var italic = false;
-    if (text.startsWith('<i>') && text.endsWith('</i>')) {
-      text = text.substring(3, text.length - 4);
-      italic = true;
-    }
-
-    var bold = false;
-    if (text.startsWith('<b>') && text.endsWith('</b>')) {
-      text = text.substring(3, text.length - 4);
-      bold = true
-    }
+    if (text === "*" || text === "†")
+      lyricType = LyricType.Directive;
 
     var s = new Lyric(ctxt, text, lyricType);
     s.elidesToNext = elides;
-
-    if (italic)
-      s.italic = true;
-    
-    if (bold)
-      s.bold = true;
 
     // a hack to make the response/versicle characters work...
     //if (text.search('℟') >= 0 || text.search('℣') >= 0)

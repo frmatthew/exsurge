@@ -84,9 +84,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
+	exports.ChantVisualElement = undefined;
+	
 	var _Exsurge = __webpack_require__(1);
-
+	
 	var _loop = function _loop(_key10) {
 	  if (_key10 === "default") return 'continue';
 	  Object.defineProperty(exports, _key10, {
@@ -96,15 +97,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key10 in _Exsurge) {
 	  var _ret = _loop(_key10);
-
+	
 	  if (_ret === 'continue') continue;
 	}
-
+	
 	var _Exsurge2 = __webpack_require__(2);
-
+	
 	var _loop2 = function _loop2(_key11) {
 	  if (_key11 === "default") return 'continue';
 	  Object.defineProperty(exports, _key11, {
@@ -114,15 +115,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key11 in _Exsurge2) {
 	  var _ret2 = _loop2(_key11);
-
+	
 	  if (_ret2 === 'continue') continue;
 	}
-
+	
 	var _Exsurge3 = __webpack_require__(3);
-
+	
 	var _loop3 = function _loop3(_key12) {
 	  if (_key12 === "default") return 'continue';
 	  Object.defineProperty(exports, _key12, {
@@ -132,15 +133,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key12 in _Exsurge3) {
 	  var _ret3 = _loop3(_key12);
-
+	
 	  if (_ret3 === 'continue') continue;
 	}
-
+	
 	var _Exsurge4 = __webpack_require__(4);
-
+	
 	var _loop4 = function _loop4(_key13) {
 	  if (_key13 === "default") return 'continue';
 	  Object.defineProperty(exports, _key13, {
@@ -150,15 +151,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key13 in _Exsurge4) {
 	  var _ret4 = _loop4(_key13);
-
+	
 	  if (_ret4 === 'continue') continue;
 	}
-
+	
 	var _Exsurge5 = __webpack_require__(5);
-
+	
 	var _loop5 = function _loop5(_key14) {
 	  if (_key14 === "default") return 'continue';
 	  Object.defineProperty(exports, _key14, {
@@ -168,15 +169,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key14 in _Exsurge5) {
 	  var _ret5 = _loop5(_key14);
-
+	
 	  if (_ret5 === 'continue') continue;
 	}
-
+	
 	var _ExsurgeChant = __webpack_require__(8);
-
+	
 	var _loop6 = function _loop6(_key15) {
 	  if (_key15 === "default") return 'continue';
 	  Object.defineProperty(exports, _key15, {
@@ -186,15 +187,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key15 in _ExsurgeChant) {
 	  var _ret6 = _loop6(_key15);
-
+	
 	  if (_ret6 === 'continue') continue;
 	}
-
+	
 	var _ExsurgeChant2 = __webpack_require__(6);
-
+	
 	var _loop7 = function _loop7(_key16) {
 	  if (_key16 === "default") return 'continue';
 	  Object.defineProperty(exports, _key16, {
@@ -204,15 +205,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key16 in _ExsurgeChant2) {
 	  var _ret7 = _loop7(_key16);
-
+	
 	  if (_ret7 === 'continue') continue;
 	}
-
+	
 	var _ExsurgeChant3 = __webpack_require__(9);
-
+	
 	var _loop8 = function _loop8(_key17) {
 	  if (_key17 === "default") return 'continue';
 	  Object.defineProperty(exports, _key17, {
@@ -222,15 +223,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key17 in _ExsurgeChant3) {
 	  var _ret8 = _loop8(_key17);
-
+	
 	  if (_ret8 === 'continue') continue;
 	}
-
+	
 	var _Exsurge6 = __webpack_require__(7);
-
+	
 	var _loop9 = function _loop9(_key18) {
 	  if (_key18 === "default") return 'continue';
 	  Object.defineProperty(exports, _key18, {
@@ -240,12 +241,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  });
 	};
-
+	
 	for (var _key18 in _Exsurge6) {
 	  var _ret9 = _loop9(_key18);
-
+	
 	  if (_ret9 === 'continue') continue;
 	}
+	
+	// client side support
+	var ChantVisualElementPrototype = Object.create(HTMLElement.prototype);
+	
+	ChantVisualElementPrototype.createdCallback = function () {
+	  var ctxt = new _Exsurge4.ChantContext();
+	
+	  ctxt.lyricTextFont = "'Crimson Text', serif";
+	  ctxt.lyricTextSize *= 1.2;
+	  ctxt.dropCapTextFont = ctxt.lyricTextFont;
+	  ctxt.annotationTextFont = ctxt.lyricTextFont;
+	
+	  var useDropCap = true;
+	  var useDropCapAttr = this.getAttribute("use-drop-cap");
+	  if (useDropCapAttr === 'false') useDropCap = false;
+	
+	  var score = _Exsurge6.Gabc.loadChantScore(ctxt, this.innerText, useDropCap);
+	
+	  var annotationAttr = this.getAttribute("annotation");
+	  if (annotationAttr) {
+	    // add an annotation
+	    score.annotation = new _Exsurge4.Annotation(ctxt, annotationAttr);
+	  }
+	
+	  var _element = this;
+	
+	  // perform layout on the chant
+	  score.performLayout(ctxt, function () {
+	    score.layoutChantLines(ctxt, 0, function () {
+	      // render the score to svg code
+	      _element.innerHTML = score.createDrawable(ctxt);
+	    });
+	  });
+	};
+	
+	ChantVisualElementPrototype.attachedCallback = function () {
+	  console.log("Attached a chant-visual");
+	};
+	
+	// register the custom element
+	var ChantVisualElement = exports.ChantVisualElement = document.registerElement('chant-visual', {
+	  prototype: ChantVisualElementPrototype
+	});
 
 /***/ },
 /* 1 */
@@ -2160,15 +2204,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.defaultLanguage = new _Exsurge3.Latin();
 	
-	    // compile the paths objects for the glyphs so we can render them quickly to the canvas
-	    for (var glyphName in _Exsurge2.Glyphs) {
-	      var glyph = _Exsurge2.Glyphs[glyphName];
-	
-	      for (var i = 0; i < glyph.paths.length; i++) {
-	        glyph.paths[i].path2D = new Path2D(glyph.paths[i].data);
-	      }
-	    }
-	
 	    this.svgTextMeasurer = QuickSvg.svg(1, 1);
 	    this.svgTextMeasurer.setAttribute('id', "TextMeasurer");
 	    document.querySelector('body').appendChild(this.svgTextMeasurer);
@@ -2202,6 +2237,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //
 	    // fixme: condensing tolerance is not implemented yet!
 	    this.condensingTolerance = 0.9;
+	
+	    // if auto color is true, then exsurge tries to automatically colorize
+	    // some elements of the chant (directives become rubric color, etc.)
+	    this.autoColor = true;
 	  }
 	
 	  _createClass(ChantContext, [{
@@ -2452,11 +2491,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return GlyphVisualizer;
 	}(ChantLayoutElement);
 	
-	var TextSpan = function TextSpan(text, cssClasses) {
-	  if (typeof cssClasses === 'undefined' || cssClasses == null) cssClasses = "";
+	var TextSpan = function TextSpan(text, properties) {
+	  if (typeof properties === 'undefined' || properties === null) properties = "";
 	
 	  this.text = text;
-	  this.cssClasses = cssClasses;
+	  this.properties = properties;
 	};
 	
 	var boldMarkup = "*";
@@ -2464,32 +2503,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	var redMarkup = "^";
 	var smallCapsMarkup = "%";
 	
-	function MarkupStackFrame(symbol, startIndex, cssClass) {
+	function MarkupStackFrame(symbol, startIndex, properties) {
 	  this.symbol = symbol;
 	  this.startIndex = startIndex;
-	  this.cssClass = cssClass;
+	  this.properties = properties;
 	}
 	
 	MarkupStackFrame.createStackFrame = function (symbol, startIndex) {
 	
-	  var cssClass = "";
+	  var properties = "";
 	
 	  switch (symbol) {
 	    case boldMarkup:
-	      cssClass = 'bold';
+	      properties = 'font-weight:bold;';
 	      break;
 	    case italicMarkup:
-	      cssClass = 'italic';
+	      properties = 'font-style:italic;';
 	      break;
 	    case redMarkup:
-	      cssClass = 'red';
+	      properties = 'fill:#f00;'; // SVG text color is set by the fill property
 	      break;
 	    case smallCapsMarkup:
-	      cssClass = 'small-caps';
+	      properties = "font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
 	      break;
 	  }
 	
-	  return new MarkupStackFrame(symbol, startIndex, cssClass);
+	  return new MarkupStackFrame(symbol, startIndex, properties);
 	};
 	
 	var TextElement = exports.TextElement = function (_ChantLayoutElement5) {
@@ -2512,6 +2551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this5.fontFamily = fontFamily;
 	    _this5.fontSize = fontSize;
 	    _this5.textAnchor = textAnchor;
+	    _this5.dominantBaseline = 'baseline'; // default placement
 	
 	    _this5.generateSpansFromText(text);
 	
@@ -2528,7 +2568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.spans = [];
 	
 	      // save ourselves a lot of grief for a very common text:
-	      if (this.text == "*") {
+	      if (text === "*" || text === "†") {
 	        this.spans.push(new TextSpan(text, ""));
 	        return;
 	      }
@@ -2537,25 +2577,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var spanStartIndex = 0;
 	
 	      var that = this;
-	      var closeSpan = function closeSpan(spanText, extraCssClass) {
+	      var closeSpan = function closeSpan(spanText, extraProperties) {
 	        if (spanText == "") return;
 	
 	        that.text += spanText;
 	
-	        var cssClasses = "";
+	        var properties = "";
 	        for (var i = 0; i < markupStack.length; i++) {
-	          if (cssClasses != "") cssClasses += " ";
+	          properties += markupStack[i].properties;
+	        }if (extraProperties) properties = properties + extraProperties;
 	
-	          cssClasses = cssClasses + markupStack[i].cssClass;
-	        }
-	
-	        if (extraCssClass != null) {
-	          if (cssClasses != "") cssClasses += " ";
-	
-	          cssClasses = cssClasses + extraCssClass;
-	        }
-	
-	        that.spans.push(new TextSpan(spanText, cssClasses));
+	        that.spans.push(new TextSpan(spanText, properties));
 	      };
 	
 	      var markupRegex = /(\*|_|\^|%|[ARVarv]\/\.)/g;
@@ -2567,7 +2599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // non-matching symbols first
 	        if (markupSymbol == "A/." || markupSymbol == "R/." || markupSymbol == "V/." || markupSymbol == "a/." || markupSymbol == "r/." || markupSymbol == "v/.") {
-	          closeSpan(text[match.index] + ".", 'special-chant-character red');
+	          closeSpan(text[match.index] + ".", "font-family:'Scribam Characters';fill:#f00;");
 	        } else if (markupStack.length == 0) {
 	          // otherwise we're dealing with matching markup delimeters
 	          // if this is our first markup frame, then just create an inline for preceding text and push the stack frame
@@ -2625,7 +2657,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getCssClasses',
 	    value: function getCssClasses() {
-	      return "TextElement";
+	      return "";
+	    }
+	  }, {
+	    key: 'getExtraStyleProperties',
+	    value: function getExtraStyleProperties(ctxt) {
+	      return "";
 	    }
 	  }, {
 	    key: 'createDrawable',
@@ -2636,17 +2673,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (var i = 0; i < this.spans.length; i++) {
 	        var options = {};
 	
-	        if (this.spans[i].cssClasses) options['class'] = this.spans[i].cssClasses;
+	        if (this.spans[i].properties) options['style'] = this.spans[i].properties;
 	
 	        spans += QuickSvg.createFragment('tspan', options, this.spans[i].text);
 	      }
 	
+	      var styleProperties = "font-family:" + this.fontFamily + ";font-size:" + this.fontSize + ";" + this.getExtraStyleProperties(ctxt);
+	
 	      return QuickSvg.createFragment('text', {
-	        'transform': 'translate(' + this.bounds.x + ',' + this.bounds.y + ')',
-	        'class': this.getCssClasses(),
-	        'font-family': this.fontFamily,
-	        'font-size': this.fontSize,
-	        'text-anchor': this.textAnchor
+	        'x': this.bounds.x,
+	        'y': this.bounds.y,
+	        'class': this.getCssClasses().trim(),
+	        'text-anchor': this.textAnchor,
+	        'dominant-baseline': this.dominantBaseline,
+	        'style': styleProperties
 	      }, spans);
 	    }
 	  }]);
@@ -2763,11 +2803,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'getCssClasses',
 	    value: function getCssClasses() {
 	
-	      var classes = "Lyric ";
+	      var classes = "lyric ";
 	
 	      if (this.lyricType == LyricType.Directive) classes += "directive ";
 	
 	      return classes + _get(Object.getPrototypeOf(Lyric.prototype), 'getCssClasses', this).call(this);
+	    }
+	  }, {
+	    key: 'getExtraStyleProperties',
+	    value: function getExtraStyleProperties(ctxt) {
+	      var props = _get(Object.getPrototypeOf(Lyric.prototype), 'getExtraStyleProperties', this).call(this);
+	
+	      if (this.lyricType == LyricType.Directive && ctxt) props += "fill:#f00;";
+	
+	      return props;
 	    }
 	  }, {
 	    key: 'createDrawable',
@@ -2802,7 +2851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(DropCap, [{
 	    key: 'getCssClasses',
 	    value: function getCssClasses() {
-	      return "DropCap " + _get(Object.getPrototypeOf(DropCap.prototype), 'getCssClasses', this).call(this);
+	      return "dropCap " + _get(Object.getPrototypeOf(DropCap.prototype), 'getCssClasses', this).call(this);
 	    }
 	  }]);
 	
@@ -2821,14 +2870,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(Annotation).call(this, ctxt, text, ctxt.annotationTextFont, ctxt.annotationTextSize, 'middle'));
 	
-	    _this8.padding = ctxt.staffInterval * 2;
+	    _this8.padding = ctxt.staffInterval;
+	    _this8.dominantBaseline = 'hanging'; // so that annotations can be aligned at the top.
 	    return _this8;
 	  }
 	
 	  _createClass(Annotation, [{
 	    key: 'getCssClasses',
 	    value: function getCssClasses() {
-	      return "Annotation " + _get(Object.getPrototypeOf(Annotation.prototype), 'getCssClasses', this).call(this);
+	      return "annotation " + _get(Object.getPrototypeOf(Annotation.prototype), 'getCssClasses', this).call(this);
 	    }
 	  }]);
 	
@@ -3340,17 +3390,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      // dropCap and the annotations
-	      if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
+	      if (this.scoreNotationStart === 0) {
 	
-	        // drop caps and annotations are drawn from their center, so aligning them
-	        // horizontally is as easy as this.staffLeft / 2
+	        if (this.score.dropCap !== null) {
 	
-	        this.score.dropCap.bounds.x = this.staffLeft / 2;
-	        this.score.dropCap.bounds.y = this.lyricVerticalOffset;
+	          // drop caps and annotations are drawn from their center, so aligning them
+	          // horizontally is as easy as this.staffLeft / 2
+	          this.score.dropCap.bounds.x = this.staffLeft / 2;
+	          this.score.dropCap.bounds.y = this.lyricVerticalOffset;
+	        }
 	
-	        if (this.score.annotation != null) {
+	        if (this.score.annotation !== null) {
+	          // annotations use dominant-baseline to align text to the top
 	          this.score.annotation.bounds.x += this.staffLeft / 2;
-	          this.score.annotation.bounds.y += -ctxt.staffInterval * 1.5;
+	          this.score.annotation.bounds.y += -ctxt.staffInterval * 3;
 	        }
 	      }
 	
@@ -3388,11 +3441,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      // dropCap and the annotations
-	      if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
+	      if (this.scoreNotationStart === 0) {
 	
-	        inner += this.score.dropCap.createDrawable(ctxt);
+	        if (this.score.dropCap !== null) inner += this.score.dropCap.createDrawable(ctxt);
 	
-	        if (this.score.annotation != null) inner += this.score.annotation.createDrawable(ctxt);
+	        if (this.score.annotation !== null) inner += this.score.annotation.createDrawable(ctxt);
 	      }
 	
 	      // add all of the notations
@@ -3416,10 +3469,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (width > 0) this.staffRight = this.staffLeft + width;else this.staffRight = 99999999; // no limit to staff size
 	
-	      // Begin with the drop cap
-	      if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
-	        // add a little padding around the dropcap
-	        this.staffLeft += this.score.dropCap.bounds.width + this.score.dropCap.padding * 2;
+	      // If this is the first chant line, then we have to make room for a
+	      // drop cap and/or annotation, if present
+	      if (this.scoreNotationStart == 0) {
+	
+	        var padding = 0;
+	
+	        if (this.score.dropCap !== null) padding = this.score.dropCap.bounds.width + this.score.dropCap.padding * 2;
+	
+	        if (this.score.annotation !== null) padding = Math.max(padding, this.score.annotation.bounds.width + this.score.annotation.padding * 4);
+	
+	        this.staffLeft += padding;
 	      }
 	
 	      // set up the clef...
@@ -3694,25 +3754,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (this.annotation) this.annotation.recalculateMetrics(ctxt);
 	
-	      // add all text items to the svg measurer in order to calculate their bounds
-	      /*for (var i = 0; i < this.notations.length; i++) {
-	        if (this.notations[i].hasLyric())
-	          ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.notations[i].lyric.createDrawable(ctxt));
-	      }
-	        // annotations and drop caps
-	      if (this.dropCap != null)
-	        ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.dropCap.createDrawable(ctxt));
-	        if (this.annotation != null)
-	        ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.annotation.createDrawable(ctxt));
-	      */
-	
-	      // give the system a chance to render the text items, then measure them
-	      // and boot the compilation process
+	      // boot the compilation process
 	      setTimeout(function () {
-	        for (var i = 0; i < _this7.notations.length; i++) {
-	          if (_this7.notations[i].hasLyric()) ; //this.notations[i].lyric.updateMetricsFromSvg();
-	        }
-	
 	        _this7.compileElement(ctxt, 0, finishedCallback);
 	      }, 0);
 	    }
@@ -4490,30 +4533,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      text = text.substring(0, text.length - 1);
 	    }
 	
-	    // replace special gabc characters
-	    text = text.replace("<sp>R/</sp>", "R/");
-	    text = text.replace("<sp>V/</sp>", "V/");
-	
-	    // check for italic/bold in the silliest way possible
-	    // only works if italic is the outer tag
-	    var italic = false;
-	    if (text.startsWith('<i>') && text.endsWith('</i>')) {
-	      text = text.substring(3, text.length - 4);
-	      italic = true;
-	    }
-	
-	    var bold = false;
-	    if (text.startsWith('<b>') && text.endsWith('</b>')) {
-	      text = text.substring(3, text.length - 4);
-	      bold = true;
-	    }
+	    if (text === "*" || text === "†") lyricType = _Exsurge2.LyricType.Directive;
 	
 	    var s = new _Exsurge2.Lyric(ctxt, text, lyricType);
 	    s.elidesToNext = elides;
-	
-	    if (italic) s.italic = true;
-	
-	    if (bold) s.bold = true;
 	
 	    // a hack to make the response/versicle characters work...
 	    //if (text.search('℟') >= 0 || text.search('℣') >= 0)

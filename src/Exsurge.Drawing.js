@@ -260,14 +260,6 @@ export class ChantContext {
 
     this.defaultLanguage = new Latin();
 
-    // compile the paths objects for the glyphs so we can render them quickly to the canvas
-    for (var glyphName in Glyphs) {
-      var glyph = Glyphs[glyphName];
-
-      for (var i = 0; i < glyph.paths.length; i++)
-        glyph.paths[i].path2D = new Path2D(glyph.paths[i].data);
-    }
-
     this.svgTextMeasurer = QuickSvg.svg(1,1);
     this.svgTextMeasurer.setAttribute('id', "TextMeasurer");
     document.querySelector('body').appendChild(this.svgTextMeasurer);
@@ -301,6 +293,10 @@ export class ChantContext {
     //
     // fixme: condensing tolerance is not implemented yet!
     this.condensingTolerance = 0.9;
+
+    // if auto color is true, then exsurge tries to automatically colorize
+    // some elements of the chant (directives become rubric color, etc.)
+    this.autoColor = true;
   }
 
   calculateHeightFromStaffPosition(staffPosition) {
@@ -511,12 +507,12 @@ export class GlyphVisualizer extends ChantLayoutElement {
   }
 }
 
-var TextSpan = function(text, cssClasses) {
-  if (typeof cssClasses === 'undefined' || cssClasses == null)
-    cssClasses = "";
+var TextSpan = function(text, properties) {
+  if (typeof properties === 'undefined' || properties === null)
+    properties = "";
 
   this.text = text;
-  this.cssClasses = cssClasses;
+  this.properties = properties;
 };
 
 var boldMarkup = "*";
@@ -524,32 +520,32 @@ var italicMarkup = "_";
 var redMarkup = "^";
 var smallCapsMarkup = "%";
 
-function MarkupStackFrame(symbol, startIndex, cssClass) {
+function MarkupStackFrame(symbol, startIndex, properties) {
   this.symbol = symbol;
   this.startIndex = startIndex;
-  this.cssClass = cssClass;
+  this.properties = properties;
 }
 
 MarkupStackFrame.createStackFrame = function(symbol, startIndex) {
 
-  var cssClass = "";
+  var properties = "";
 
   switch(symbol) {
     case boldMarkup:
-      cssClass = 'bold';
+      properties = 'font-weight:bold;';
       break;
     case italicMarkup:
-      cssClass = 'italic';
+      properties = 'font-style:italic;';
       break;
     case redMarkup:
-      cssClass = 'red';
+      properties = 'fill:#f00;'; // SVG text color is set by the fill property
       break;
     case smallCapsMarkup:
-      cssClass = 'small-caps';
+      properties = "font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
       break;
   }
 
-  return new MarkupStackFrame(symbol, startIndex, cssClass);
+  return new MarkupStackFrame(symbol, startIndex, properties);
 };
 
 
@@ -569,6 +565,7 @@ export class TextElement extends ChantLayoutElement {
     this.fontFamily = fontFamily;
     this.fontSize = fontSize;
     this.textAnchor = textAnchor;
+    this.dominantBaseline = 'baseline'; // default placement
 
     this.generateSpansFromText(text);
 
@@ -582,7 +579,7 @@ export class TextElement extends ChantLayoutElement {
     this.spans = [];
 
     // save ourselves a lot of grief for a very common text:
-    if (this.text == "*") {
+    if (text === "*" || text === "†") {
       this.spans.push(new TextSpan(text, ""));
       return;
     }
@@ -591,28 +588,20 @@ export class TextElement extends ChantLayoutElement {
     var spanStartIndex = 0;
 
     var that = this;
-    var closeSpan = function (spanText, extraCssClass) {
+    var closeSpan = function (spanText, extraProperties) {
       if (spanText == "")
         return;
 
       that.text += spanText;
 
-      var cssClasses = "";
-      for (var i = 0; i < markupStack.length; i++) {
-        if (cssClasses != "")
-          cssClasses += " ";
+      var properties = "";
+      for (var i = 0; i < markupStack.length; i++)
+        properties += markupStack[i].properties;
 
-        cssClasses = cssClasses + markupStack[i].cssClass;
-      }
+      if (extraProperties)
+        properties = properties + extraProperties;
 
-      if (extraCssClass != null) {
-        if (cssClasses != "")
-          cssClasses += " ";
-
-        cssClasses = cssClasses + extraCssClass;
-      }
-
-      that.spans.push(new TextSpan(spanText, cssClasses));
+      that.spans.push(new TextSpan(spanText, properties));
     };
 
     var markupRegex = /(\*|_|\^|%|[ARVarv]\/\.)/g;
@@ -625,7 +614,7 @@ export class TextElement extends ChantLayoutElement {
       // non-matching symbols first
       if (markupSymbol == "A/." || markupSymbol == "R/." || markupSymbol == "V/." ||
           markupSymbol == "a/." || markupSymbol == "r/." || markupSymbol == "v/.") {
-        closeSpan(text[match.index] + ".", 'special-chant-character red');
+        closeSpan(text[match.index] + ".", "font-family:'Scribam Characters';fill:#f00;");
       } else if (markupStack.length == 0) {
         // otherwise we're dealing with matching markup delimeters
         // if this is our first markup frame, then just create an inline for preceding text and push the stack frame
@@ -681,28 +670,36 @@ export class TextElement extends ChantLayoutElement {
   }
 
   getCssClasses() {
-    return "TextElement";
+    return "";
+  }
+
+  getExtraStyleProperties(ctxt) {
+    return "";
   }
 
   createDrawable(ctxt) {
 
-    var spans = ""
+    var spans = "";
 
     for (var i = 0; i < this.spans.length; i++) {
       var options = {};
 
-      if (this.spans[i].cssClasses)
-        options['class'] = this.spans[i].cssClasses;
+      if (this.spans[i].properties)
+        options['style'] = this.spans[i].properties;
 
       spans += QuickSvg.createFragment('tspan', options, this.spans[i].text);
     }
 
+    var styleProperties = "font-family:" + this.fontFamily + ";font-size:" + this.fontSize + ";"
+      + this.getExtraStyleProperties(ctxt);
+
     return QuickSvg.createFragment('text', {
-      'transform': 'translate(' + this.bounds.x + ',' + this.bounds.y + ')',
-      'class': this.getCssClasses(),
-      'font-family': this.fontFamily,
-      'font-size': this.fontSize,
-      'text-anchor': this.textAnchor
+      'x': this.bounds.x,
+      'y': this.bounds.y,
+      'class': this.getCssClasses().trim(),
+      'text-anchor': this.textAnchor,
+      'dominant-baseline': this.dominantBaseline,
+      'style': styleProperties
     }, spans);
   }
 }
@@ -813,12 +810,21 @@ export class Lyric extends TextElement {
 
   getCssClasses() {
 
-    var classes = "Lyric ";
+    var classes = "lyric ";
 
     if (this.lyricType == LyricType.Directive)
       classes += "directive ";
 
     return classes + super.getCssClasses();
+  }
+
+  getExtraStyleProperties(ctxt) {
+    var props = super.getExtraStyleProperties();
+
+    if (this.lyricType == LyricType.Directive && ctxt)
+      props += "fill:#f00;";
+
+    return props;
   }
 
   createDrawable(ctxt) {
@@ -845,7 +851,7 @@ export class DropCap extends TextElement {
   }
 
   getCssClasses() {
-    return "DropCap " + super.getCssClasses();
+    return "dropCap " + super.getCssClasses();
   }
 }
 
@@ -856,11 +862,12 @@ export class Annotation extends TextElement {
    */
   constructor(ctxt, text) {
     super(ctxt, text, ctxt.annotationTextFont, ctxt.annotationTextSize, 'middle');
-    this.padding = ctxt.staffInterval * 2;
+    this.padding = ctxt.staffInterval;
+    this.dominantBaseline = 'hanging'; // so that annotations can be aligned at the top.
   }
 
   getCssClasses() {
-    return "Annotation " + super.getCssClasses();
+    return "annotation " + super.getCssClasses();
   }
 }
 

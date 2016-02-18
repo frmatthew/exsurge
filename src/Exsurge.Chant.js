@@ -332,17 +332,20 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // dropCap and the annotations
-    if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
+    if (this.scoreNotationStart === 0) {
 
-      // drop caps and annotations are drawn from their center, so aligning them
-      // horizontally is as easy as this.staffLeft / 2
+      if (this.score.dropCap !== null) {
 
-      this.score.dropCap.bounds.x = this.staffLeft / 2;
-      this.score.dropCap.bounds.y = this.lyricVerticalOffset;
+        // drop caps and annotations are drawn from their center, so aligning them
+        // horizontally is as easy as this.staffLeft / 2
+        this.score.dropCap.bounds.x = this.staffLeft / 2;
+        this.score.dropCap.bounds.y = this.lyricVerticalOffset;
+      }
 
-      if (this.score.annotation != null) {
+      if (this.score.annotation !== null) {
+        // annotations use dominant-baseline to align text to the top
         this.score.annotation.bounds.x += this.staffLeft / 2;
-        this.score.annotation.bounds.y += -ctxt.staffInterval * 1.5;
+        this.score.annotation.bounds.y +=  - ctxt.staffInterval * 3;
       }
     }
 
@@ -378,12 +381,13 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // dropCap and the annotations
-    if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
+    if (this.scoreNotationStart === 0) {
 
-      inner += this.score.dropCap.createDrawable(ctxt);
+      if (this.score.dropCap !== null)
+        inner += this.score.dropCap.createDrawable(ctxt);
 
-      if (this.score.annotation != null)
-        inner += this.score.annotation.createDrawable(ctxt);
+      if (this.score.annotation !== null)
+          inner += this.score.annotation.createDrawable(ctxt);
     }
 
     // add all of the notations
@@ -411,10 +415,19 @@ export class ChantLine extends ChantLayoutElement {
     else
       this.staffRight = 99999999; // no limit to staff size
 
-    // Begin with the drop cap
-    if (this.scoreNotationStart == 0 && this.score.dropCap != null) {
-      // add a little padding around the dropcap
-      this.staffLeft += this.score.dropCap.bounds.width + this.score.dropCap.padding * 2;
+    // If this is the first chant line, then we have to make room for a
+    // drop cap and/or annotation, if present
+    if (this.scoreNotationStart == 0) {
+
+      var padding = 0;
+
+      if (this.score.dropCap !== null)
+        padding = this.score.dropCap.bounds.width + this.score.dropCap.padding * 2;
+
+      if (this.score.annotation !== null)
+        padding = Math.max(padding, this.score.annotation.bounds.width + this.score.annotation.padding * 4);
+
+      this.staffLeft += padding;
     }
 
     // set up the clef...
@@ -702,28 +715,8 @@ export class ChantScore {
     if (this.annotation)
       this.annotation.recalculateMetrics(ctxt);
 
-    // add all text items to the svg measurer in order to calculate their bounds
-    /*for (var i = 0; i < this.notations.length; i++) {
-      if (this.notations[i].hasLyric())
-        ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.notations[i].lyric.createDrawable(ctxt));
-    }
-
-    // annotations and drop caps
-    if (this.dropCap != null)
-      ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.dropCap.createDrawable(ctxt));
-
-    if (this.annotation != null)
-      ctxt.svgTextMeasurer.insertAdjacentHTML('beforeend', this.annotation.createDrawable(ctxt));
-*/
-
-    // give the system a chance to render the text items, then measure them
-    // and boot the compilation process
+    // boot the compilation process
     setTimeout(() => {
-      for (var i = 0; i < this.notations.length; i++) {
-        if (this.notations[i].hasLyric())
-          ;//this.notations[i].lyric.updateMetricsFromSvg();
-      }
-
       this.compileElement(ctxt, 0, finishedCallback);
     }, 0);
   }

@@ -25,6 +25,54 @@
 
 'use strict';
 
+import { Annotation, ChantContext } from 'Exsurge.Drawing'
+import { Gabc } from 'Exsurge.Gabc'
+
+// client side support
+var ChantVisualElementPrototype = Object.create(HTMLElement.prototype);
+
+ChantVisualElementPrototype.createdCallback = function() {
+  var ctxt = new ChantContext();
+  
+  ctxt.lyricTextFont = "'Crimson Text', serif";
+  ctxt.lyricTextSize *= 1.2;
+  ctxt.dropCapTextFont = ctxt.lyricTextFont;
+  ctxt.annotationTextFont = ctxt.lyricTextFont;
+
+  var useDropCap = true;
+  var useDropCapAttr = this.getAttribute("use-drop-cap");
+  if (useDropCapAttr === 'false')
+    useDropCap = false;
+
+  var score = Gabc.loadChantScore(ctxt, this.innerText, useDropCap);
+
+  var annotationAttr = this.getAttribute("annotation");
+  if (annotationAttr) {
+    // add an annotation
+    score.annotation = new Annotation(ctxt, annotationAttr);
+  }
+
+  var _element = this;
+
+  // perform layout on the chant
+  score.performLayout(ctxt, function() {
+    score.layoutChantLines(ctxt, 0, function() {
+      // render the score to svg code
+      _element.innerHTML = score.createDrawable(ctxt);
+    });
+  });
+}
+
+ChantVisualElementPrototype.attachedCallback = function() {
+  console.log("Attached a chant-visual");
+}
+
+// register the custom element
+export var ChantVisualElement = document.registerElement('chant-visual', {
+  prototype: ChantVisualElementPrototype
+});
+
+
 export * from 'Exsurge.Core'
 export * from 'Exsurge.Text'
 export * from 'Exsurge.Glyphs'
