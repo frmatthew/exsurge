@@ -5,6 +5,10 @@ A JavaScript library for rendering Gregorian Chant in square note notation
 
 exsurge allows developers to create SVG images of square note notation from gabc notation. These SVGs can then be inserted in the DOM or used for presentation purposes.
 
+## Live Browser Example
+
+Want to see gabc code rendered to chant on the fly? [Try going here](http://frmatthew.github.io/exsurge/chant.html).
+
 ## Code Example
 
 First, create a ChantContext which contains the settings for how the chant will be rendered:
