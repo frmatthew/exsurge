@@ -5277,15 +5277,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (Math.abs(step % 2) === 1) y = (step - 0.5) * ctxt.staffInterval;
 	      }
 	
+	      var glyphCode = this.note.glyphVisualizer.glyphCode;
+	      var width;
+	
+	      // The porrectus requires special handling of the note width,
+	      // otherwise the width is just that of the note itself
+	      if (glyphCode === _Exsurge2.GlyphCode.Porrectus1 || glyphCode === _Exsurge2.GlyphCode.Porrectus2 || glyphCode === _Exsurge2.GlyphCode.Porrectus3 || glyphCode === _Exsurge2.GlyphCode.Porrectus4) width = ctxt.staffInterval;else width = this.note.bounds.width;
+	
 	      this.bounds.x = this.note.bounds.x;
 	      this.bounds.y = y;
-	      this.bounds.width = this.note.bounds.width;
+	      this.bounds.width = width;
 	      this.bounds.height = ctxt.episemaLineWeight;
 	
 	      this.origin.x = 0;
 	      this.origin.y = 0;
 	
-	      this.visualizer = new _Exsurge2.HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, this.note.bounds.width);
+	      this.visualizer = new _Exsurge2.HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, width);
 	    }
 	  }]);
 	
@@ -5488,6 +5495,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 0; i < this.notes.length; i++) {
 	                var note = this.notes[i];
 	
+	                var hasEpisema = false;
+	
 	                for (var j = 0; j < note.markings.length; j++) {
 	                    var marking = note.markings[j];
 	
@@ -5508,6 +5517,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    // better way to do it really!
 	
 	                    if (marking.constructor.name === "HorizontalEpisema") {
+	                        hasEpisema = true;
+	
 	                        // we try to blend the episema if we're able.
 	                        if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
 	                            // start a new set of episemae to potentially blend
@@ -5531,6 +5542,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        }
 	                    }
 	                }
+	
+	                if (hasEpisema === false) episemae = [];
 	            }
 	
 	            _get(Object.getPrototypeOf(Neume.prototype), 'finishLayout', this).call(this, ctxt);

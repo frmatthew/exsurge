@@ -128,15 +128,28 @@ export class HorizontalEpisema extends Marking {
         y = (step - 0.5) * ctxt.staffInterval;
     }
 
+    var glyphCode = this.note.glyphVisualizer.glyphCode;
+    var width;
+
+    // The porrectus requires special handling of the note width,
+    // otherwise the width is just that of the note itself
+    if (glyphCode === GlyphCode.Porrectus1 ||
+        glyphCode === GlyphCode.Porrectus2 ||
+        glyphCode === GlyphCode.Porrectus3 ||
+        glyphCode === GlyphCode.Porrectus4)
+      width = ctxt.staffInterval;
+    else
+      width = this.note.bounds.width;
+
     this.bounds.x = this.note.bounds.x;
     this.bounds.y = y;
-    this.bounds.width = this.note.bounds.width;
+    this.bounds.width = width;
     this.bounds.height = ctxt.episemaLineWeight;
 
     this.origin.x = 0;
     this.origin.y = 0;
 
-    this.visualizer = new HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, this.note.bounds.width);
+    this.visualizer = new HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, width);
   }
 }
 

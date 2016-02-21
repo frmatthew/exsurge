@@ -51,6 +51,8 @@ export class Neume extends ChantNotationElement {
     for (var i = 0; i < this.notes.length; i++) {
       var note = this.notes[i];
 
+      var hasEpisema = false;
+
       for (var j = 0; j < note.markings.length; j++) {
         var marking = note.markings[j];
 
@@ -71,6 +73,8 @@ export class Neume extends ChantNotationElement {
         // better way to do it really!
 
         if (marking.constructor.name === "HorizontalEpisema") {
+          hasEpisema = true;
+
           // we try to blend the episema if we're able.
           if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
             // start a new set of episemae to potentially blend
@@ -98,6 +102,9 @@ export class Neume extends ChantNotationElement {
           }
         }
       }
+
+      if (hasEpisema === false)
+        episemae = [];
     }
 
     super.finishLayout(ctxt);
