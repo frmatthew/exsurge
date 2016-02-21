@@ -1934,7 +1934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.ChantNotationElement = exports.Annotation = exports.DropCap = exports.Lyric = exports.LyricType = exports.TextElement = exports.GlyphVisualizer = exports.HorizontalEpisemaLineVisualizer = exports.NeumeLineVisualizer = exports.DividerLineVisualizer = exports.ChantLayoutElement = exports.ChantContext = exports.QuickSvg = exports.GlyphCode = undefined;
+	exports.ChantNotationElement = exports.Annotation = exports.DropCap = exports.Lyric = exports.LyricType = exports.TextElement = exports.GlyphVisualizer = exports.HorizontalEpisemaVisualizer = exports.NeumeLineVisualizer = exports.DividerLineVisualizer = exports.ChantLayoutElement = exports.ChantContext = exports.QuickSvg = exports.GlyphCode = undefined;
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
@@ -2399,32 +2399,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return NeumeLineVisualizer;
 	}(ChantLayoutElement);
 	
-	var HorizontalEpisemaLineVisualizer = exports.HorizontalEpisemaLineVisualizer = function (_ChantLayoutElement3) {
-	  _inherits(HorizontalEpisemaLineVisualizer, _ChantLayoutElement3);
+	var HorizontalEpisemaVisualizer = exports.HorizontalEpisemaVisualizer = function (_ChantLayoutElement3) {
+	  _inherits(HorizontalEpisemaVisualizer, _ChantLayoutElement3);
 	
-	  function HorizontalEpisemaLineVisualizer(ctxt, boundsToMark, position) {
-	    _classCallCheck(this, HorizontalEpisemaLineVisualizer);
+	  function HorizontalEpisemaVisualizer(ctxt, x, y, width) {
+	    _classCallCheck(this, HorizontalEpisemaVisualizer);
 	
-	    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(HorizontalEpisemaLineVisualizer).call(this));
+	    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(HorizontalEpisemaVisualizer).call(this));
 	
-	    var y = 0;
-	    var minDistanceAway = ctxt.staffInterval * 0.4; // min distance both from neume and staff lines
-	
-	    if (position == _Exsurge.MarkingPositionHint.Below) {
-	      y = boundsToMark.y + boundsToMark.height + minDistanceAway; // the highest the line could be at
-	
-	      // now, just take a step or two up if we need to
-	      if (Math.abs(y % ctxt.staffInterval) < minDistanceAway) y += minDistanceAway - Math.abs(y % ctxt.staffInterval);
-	    } else {
-	      y = boundsToMark.y - minDistanceAway; // the lowest the line could be at
-	
-	      // now, just take a step or two up if we need to
-	      if (Math.abs(y % ctxt.staffInterval) < minDistanceAway) y -= minDistanceAway - Math.abs(y % ctxt.staffInterval);
-	    }
-	
-	    _this3.bounds.x = boundsToMark.x;
-	    _this3.bounds.y = y - ctxt.episemaLineWeight / 2;
-	    _this3.bounds.width = boundsToMark.width;
+	    _this3.bounds.x = x;
+	    _this3.bounds.y = y;
+	    _this3.bounds.width = width;
 	    _this3.bounds.height = ctxt.episemaLineWeight;
 	
 	    _this3.origin.x = 0;
@@ -2432,18 +2417,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this3;
 	  }
 	
-	  _createClass(HorizontalEpisemaLineVisualizer, [{
+	  _createClass(HorizontalEpisemaVisualizer, [{
 	    key: 'createDrawable',
 	    value: function createDrawable(ctxt) {
-	      // fixme: implement this
-	      //this.drawable = QuickSvg.rect(this.bounds.width, this.bounds.height);
-	      //QuickSvg.translate(this.drawable, this.bounds.x, this.bounds.y).classList.add('HorizontalEpisema');
 	
-	      return "";
+	      return QuickSvg.createFragment('rect', {
+	        'x': this.bounds.x,
+	        'y': this.bounds.y,
+	        'width': this.bounds.width,
+	        'height': this.bounds.height,
+	        'fill': ctxt.neumeLineColor,
+	        'class': 'HorizontalEpisema'
+	      });
 	    }
 	  }]);
 	
-	  return HorizontalEpisemaLineVisualizer;
+	  return HorizontalEpisemaVisualizer;
 	}(ChantLayoutElement);
 	
 	var GlyphVisualizer = exports.GlyphVisualizer = function (_ChantLayoutElement4) {
@@ -3125,12 +3114,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.origin.x = this.glyphVisualizer.origin.x;
 	      this.origin.y = this.glyphVisualizer.origin.y;
-	
-	      for (var i = 0; i < this.markings.length; i++) {
-	        var marking = this.markings[i];
-	
-	        marking.performLayout(ctxt);
-	      }
 	
 	      //this.drawable.attr({onclick: "Audio.playNoteInt(" + this.pitch.toInt() + ');',
 	      //  "data-pitch": this.pitch.toInt()
@@ -5036,7 +5019,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	
 	        case '\'':
-	          note.markings.push(new Markings.Ictus(note));
+	          var mark = new Markings.Ictus(note);
+	          if (haveLookahead && lookahead == '1') mark.positionHint = _Exsurge.MarkingPositionHint.Above;else if (haveLookahead && lookahead == '0') mark.positionHint = _Exsurge.MarkingPositionHint.Below;
+	
+	          note.markings.push(mark);
 	          break;
 	
 	        //note shapes
@@ -5179,6 +5165,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.horizontalOffset = 0;
 	    _this.verticalOffset = 0;
 	    _this.positionHint = Exsurge.MarkingPositionHint.Default;
+	
+	    // each marking has its own visualizer
+	    _this.visualizer = null;
 	    return _this;
 	  }
 	
@@ -5199,7 +5188,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(AcuteAccent).call(this, note));
 	
 	    _this2.positionHint = Exsurge.MarkingPositionHint.Above;
-	    _this2.glyph = null;
 	    return _this2;
 	  }
 	
@@ -5207,20 +5195,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'performLayout',
 	    value: function performLayout(ctxt) {
 	
-	      this.glyph = new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.AcuteAccent);
-	
-	      this.glyph.performLayout(ctxt);
+	      this.visualizer = new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.AcuteAccent);
 	
 	      // fixme: acute markings might need to be positioned vertically over
 	      // the notation bounds of the chantline after everything has already
 	      // been laid out on the line...for now we just place them a
 	      // reasonable height above the staff line.
 	      this.verticalOffset = -ctxt.staffInterval * 5;
-	      this.horizontalOffset = -this.glyph.bounds.x; // center on the note itself
+	      this.horizontalOffset = -this.visualizer.bounds.x; // center on the note itself
 	
-	      this.bounds = this.glyph.bounds.clone();
-	      this.bounds.x += this.orizontalOffset;
+	      this.bounds = this.visualizer.bounds.clone();
+	      this.bounds.x += this.horizontalOffset;
 	      this.bounds.y += this.verticalOffset;
+	
+	      // position the visualizer too...
+	      this.visualizer.bounds.x = this.bounds.x;
+	      this.visualizer.bounds.y = this.bounds.y;
 	
 	      _get(Object.getPrototypeOf(AcuteAccent.prototype), 'performLayout', this).call(this, ctxt);
 	    }
@@ -5244,13 +5234,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  _createClass(HorizontalEpisema, [{
+	    key: 'updateY',
+	    value: function updateY(y) {
+	      this.bounds.y = y;
+	      this.visualizer.bounds.y = y;
+	    }
+	  }, {
+	    key: 'updateWidth',
+	    value: function updateWidth(width) {
+	      this.bounds.width = width;
+	      this.visualizer.bounds.width = width;
+	    }
+	  }, {
 	    key: 'performLayout',
 	    value: function performLayout(ctxt) {
 	      _get(Object.getPrototypeOf(HorizontalEpisema.prototype), 'performLayout', this).call(this, ctxt);
 	
-	      // the horizontal episema object is a little different from other markings in that it is a
-	      // logical object and doesn't do layout on its own. the layout for the episema happens in
-	      // Neume.finishLayout
+	      // following logic helps to keep the episemae away from staff lines if they get too close
+	      // The idea is this: since the staff lines are odd numbered multiples of ctxt.staffInterval,
+	      // Math.round(y / ctxt.staffInterval) % 2 tells us if we're closer to a space or a line.
+	      // If it's an odd number then we shift away from line by adding .5 to the step, which puts
+	      // us the closest we want to be to a line.
+	
+	      var y = 0;
+	      var minDistanceAway = ctxt.staffInterval * 0.4; // min distance from neume
+	
+	      if (this.positionHint == Exsurge.MarkingPositionHint.Below) {
+	        y = this.note.bounds.bottom() + minDistanceAway; // the highest the line could be at
+	
+	        var step = Math.round(y / ctxt.staffInterval);
+	
+	        // if it's an odd step, that means we're near a line, and therefore
+	        // need to shift down
+	        if (Math.abs(step % 2) === 1) y = (step + 0.5) * ctxt.staffInterval;
+	      } else {
+	        y = this.note.bounds.y - minDistanceAway; // the lowest the line could be at
+	
+	        var step = Math.round(y / ctxt.staffInterval);
+	
+	        // if it's an odd step, that means we're near a line, and therefore
+	        // need to shift up
+	        if (Math.abs(step % 2) === 1) y = (step - 0.5) * ctxt.staffInterval;
+	      }
+	
+	      this.bounds.x = this.note.bounds.x;
+	      this.bounds.y = y;
+	      this.bounds.width = this.note.bounds.width;
+	      this.bounds.height = ctxt.episemaLineWeight;
+	
+	      this.origin.x = 0;
+	      this.origin.y = 0;
+	
+	      this.visualizer = new _Exsurge2.HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, this.note.bounds.width);
 	    }
 	  }]);
 	
@@ -5268,10 +5303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Ictus(note) {
 	    _classCallCheck(this, Ictus);
 	
-	    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Ictus).call(this, note));
-	
-	    _this4.glyph = null;
-	    return _this4;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Ictus).call(this, note));
 	  }
 	
 	  _createClass(Ictus, [{
@@ -5279,7 +5311,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function performLayout(ctxt) {
 	
 	      var glyphCode;
-	      var staffPosition;
 	
 	      // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
 	
@@ -5289,14 +5320,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        glyphCode = _Exsurge2.GlyphCode.VerticalEpisemaBelow;
 	      }
 	
-	      staffPosition = this.note.staffPosition;
+	      var staffPosition = this.note.staffPosition;
 	
 	      this.horizontalOffset = this.note.bounds.width / 2;
 	      this.verticalOffset = 0;
 	
 	      switch (glyphCode) {
 	        case _Exsurge2.GlyphCode.VerticalEpisemaAbove:
-	          if (staffPosition % 2 == 0) this.verticalOffset -= ctxt.staffInterval * 1.5;else this.verticalOffset -= ctxt.staffInterval * .8;
+	          if (staffPosition % 2 == 0) this.verticalOffset -= ctxt.staffInterval * 1.5;else this.verticalOffset -= ctxt.staffInterval * .9;
 	          break;
 	
 	        case _Exsurge2.GlyphCode.VerticalEpisemaBelow:
@@ -5305,12 +5336,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	      }
 	
-	      this.glyph = new _Exsurge2.GlyphVisualizer(ctxt, glyphCode);
-	      this.glyph.setStaffPosition(ctxt, staffPosition);
+	      this.visualizer = new _Exsurge2.GlyphVisualizer(ctxt, glyphCode);
+	      this.visualizer.setStaffPosition(ctxt, staffPosition);
 	
-	      this.bounds = this.glyph.bounds.clone();
-	      this.bounds.x += this.note.bounds.x + this.horizontalOffset;
+	      this.bounds = this.visualizer.bounds.clone();
+	      this.bounds.x = this.note.bounds.x + this.horizontalOffset - this.visualizer.origin.x;
 	      this.bounds.y += this.verticalOffset;
+	
+	      this.visualizer.bounds.x = this.bounds.x;
+	      this.visualizer.bounds.y = this.bounds.y;
 	
 	      _get(Object.getPrototypeOf(Ictus.prototype), 'performLayout', this).call(this, ctxt);
 	    }
@@ -5330,10 +5364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Mora(note) {
 	    _classCallCheck(this, Mora);
 	
-	    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mora).call(this, note));
-	
-	    _this5.glyph = null;
-	    return _this5;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Mora).call(this, note));
 	  }
 	
 	  _createClass(Mora, [{
@@ -5342,8 +5373,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var staffPosition = this.note.staffPosition;
 	
-	      this.glyph = new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.Mora);
-	      this.glyph.setStaffPosition(ctxt, staffPosition);
+	      this.visualizer = new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.Mora);
+	      this.visualizer.setStaffPosition(ctxt, staffPosition);
 	
 	      this.verticalOffset = 0;
 	      switch (this.positionHint) {
@@ -5358,13 +5389,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	      }
 	
-	      this.bounds = this.glyph.bounds.clone();
+	      this.bounds = this.visualizer.bounds.clone();
 	      this.bounds.x += this.note.bounds.right() + this.horizontalOffset;
 	      this.bounds.y += this.verticalOffset;
 	
-	      // this.drawable = this.glyph.drawable;
-	      // this.drawable.classList.add('Mora');
-	      // QuickSvg.translate(this.drawable, this.bounds.x, this.bounds.y);
+	      this.visualizer.bounds.x = this.bounds.x;
+	      this.visualizer.bounds.y = this.bounds.y;
 	
 	      _get(Object.getPrototypeOf(Mora.prototype), 'performLayout', this).call(this, ctxt);
 	    }
@@ -5452,62 +5482,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'finishLayout',
 	        value: function finishLayout(ctxt) {
 	
-	            /*
-	                var startEpisema = null;
-	                var boundsToMark;
-	            
-	                var neume = this;
-	                var createEpisema = function() {
-	                  var line = new HorizontalEpisemaLineVisualizer(ctxt, boundsToMark, startEpisema.positionHint);
-	                  neume.drawable.appendChild(line.drawable);
-	                };
-	            
-	                // layout the markings of the notes
-	                for (var i = 0; i < this.notes.length; i++) {
-	                  var note = this.notes[i];
-	            
-	                  for (var j = 0; j < note.markings.length; j++) {
+	            var episemae = [];
+	
+	            // layout the markings of the notes
+	            for (var i = 0; i < this.notes.length; i++) {
+	                var note = this.notes[i];
+	
+	                for (var j = 0; j < note.markings.length; j++) {
 	                    var marking = note.markings[j];
-	            
-	                    // episemas we treat specially because we try to combine them when possible
-	                    if (marking.constructor.name == "HorizontalEpisema") {
-	            
-	                      if (startEpisema == null) {
-	                        // first one we've seen
-	                        startEpisema = marking;
-	                        boundsToMark = note.bounds.clone();
-	                      } else {
-	                        // try to continue the previous one if possible
-	                        if (marking.positionHint == startEpisema.positionHint) {
-	                          boundsToMark.union(note.bounds);
+	
+	                    marking.performLayout(ctxt);
+	                    this.addVisualizer(marking.visualizer);
+	
+	                    // Keep track of episemae here, and blend them together if it
+	                    // makes sense.
+	                    //
+	                    // fixme: All this works fine, but in fact doesn't allow us to have
+	                    // episemae that span multiple neumes, as seen so often in the Liber
+	                    // Hymnarius responsories, for example.
+	                    //
+	                    // A nice enhancement would be to move this logic outside of finishLayout
+	                    // for the neume, and blend episemae after the chant line layout and
+	                    // justify process has taken place. Then again, it will require yet
+	                    // another pass over the neumes/notes. Oh well, doesn't seem like a
+	                    // better way to do it really!
+	
+	                    if (marking.constructor.name === "HorizontalEpisema") {
+	                        // we try to blend the episema if we're able.
+	                        if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
+	                            // start a new set of episemae to potentially blend
+	                            episemae = [];
+	                            episemae.push(marking);
 	                        } else {
-	                          // can't combine them, terminate the previous one and start a new one.
-	                          createEpisema();
-	            
-	                          startEpisema = marking;
-	                          boundsToMark = note.bounds.clone();
+	                            // blend all previous with this one
+	                            var newY;
+	
+	                            if (marking.positionHint == Exsurge.MarkingPositionHint.Below) newY = Math.max(marking.bounds.y, episemae[0].bounds.y);else newY = Math.min(marking.bounds.y, episemae[0].bounds.y);
+	
+	                            if (marking.bounds.y != newY) marking.updateY(newY);else {
+	                                for (var i = 0; i < episemae.length; i++) {
+	                                    episemae[i].updateY(newY);
+	                                }
+	                            }
+	
+	                            // extend the last episema to meet the new one
+	                            episemae[episemae.length - 1].updateWidth(marking.bounds.x - episemae[episemae.length - 1].bounds.x);
+	                            episemae.push(marking);
 	                        }
-	                      }
-	                    } else {
-	            
-	                      if (marking.drawable != null) {
-	                        this.drawable.appendChild(marking.drawable);
-	            
-	                        QuickSvg.translate(marking.drawable, note.bounds.x + note.origin.x + marking.bounds.x, marking.bounds.y);
-	                      }
 	                    }
-	                  }
-	            
-	                  // end of the note processing...if we are the last one and we have an episema started, we need to terminate it here
-	                  if (i == this.notes.length - 1 && startEpisema != null)
-	                    createEpisema();
 	                }
-	            
-	                if (this.hasLyric()) {
-	                  // add ui support for note playback on click
-	                  this.lyric.svgText.setAttribute('onclick', "alert('Clicked lyric: " + this.lyric.text + "');");
-	                }
-	            */
+	            }
+	
 	            _get(Object.getPrototypeOf(Neume.prototype), 'finishLayout', this).call(this, ctxt);
 	        }
 	

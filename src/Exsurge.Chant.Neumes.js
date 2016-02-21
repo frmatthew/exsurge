@@ -45,15 +45,7 @@ export class Neume extends ChantNotationElement {
 
   finishLayout(ctxt) {
 
-/*
-    var startEpisema = null;
-    var boundsToMark;
-
-    var neume = this;
-    var createEpisema = function() {
-      var line = new HorizontalEpisemaLineVisualizer(ctxt, boundsToMark, startEpisema.positionHint);
-      neume.drawable.appendChild(line.drawable);
-    };
+    var episemae = [];
 
     // layout the markings of the notes
     for (var i = 0; i < this.notes.length; i++) {
@@ -62,45 +54,52 @@ export class Neume extends ChantNotationElement {
       for (var j = 0; j < note.markings.length; j++) {
         var marking = note.markings[j];
 
-        // episemas we treat specially because we try to combine them when possible
-        if (marking.constructor.name == "HorizontalEpisema") {
+        marking.performLayout(ctxt);
+        this.addVisualizer(marking.visualizer);
 
-          if (startEpisema == null) {
-            // first one we've seen
-            startEpisema = marking;
-            boundsToMark = note.bounds.clone();
+        // Keep track of episemae here, and blend them together if it
+        // makes sense.
+        //
+        // fixme: All this works fine, but in fact doesn't allow us to have
+        // episemae that span multiple neumes, as seen so often in the Liber
+        // Hymnarius responsories, for example.
+        //
+        // A nice enhancement would be to move this logic outside of finishLayout
+        // for the neume, and blend episemae after the chant line layout and
+        // justify process has taken place. Then again, it will require yet
+        // another pass over the neumes/notes. Oh well, doesn't seem like a
+        // better way to do it really!
+
+        if (marking.constructor.name === "HorizontalEpisema") {
+          // we try to blend the episema if we're able.
+          if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
+            // start a new set of episemae to potentially blend
+            episemae = [];
+            episemae.push(marking);
           } else {
-            // try to continue the previous one if possible
-            if (marking.positionHint == startEpisema.positionHint) {
-              boundsToMark.union(note.bounds);
-            } else {
-              // can't combine them, terminate the previous one and start a new one.
-              createEpisema();
+            // blend all previous with this one
+            var newY;
 
-              startEpisema = marking;
-              boundsToMark = note.bounds.clone();
+            if (marking.positionHint == Exsurge.MarkingPositionHint.Below)
+              newY = Math.max(marking.bounds.y, episemae[0].bounds.y);
+            else
+              newY = Math.min(marking.bounds.y, episemae[0].bounds.y);
+
+            if (marking.bounds.y != newY)
+              marking.updateY(newY);
+            else {
+              for (var i = 0; i < episemae.length; i++)
+                episemae[i].updateY(newY);
             }
-          }
-        } else {
 
-          if (marking.drawable != null) {
-            this.drawable.appendChild(marking.drawable);
-
-            QuickSvg.translate(marking.drawable, note.bounds.x + note.origin.x + marking.bounds.x, marking.bounds.y);
+            // extend the last episema to meet the new one
+            episemae[episemae.length - 1].updateWidth(marking.bounds.x - episemae[episemae.length - 1].bounds.x);
+            episemae.push(marking);
           }
         }
       }
-
-      // end of the note processing...if we are the last one and we have an episema started, we need to terminate it here
-      if (i == this.notes.length - 1 && startEpisema != null)
-        createEpisema();
     }
 
-    if (this.hasLyric()) {
-      // add ui support for note playback on click
-      this.lyric.svgText.setAttribute('onclick', "alert('Clicked lyric: " + this.lyric.text + "');");
-    }
-*/
     super.finishLayout(ctxt);
   }
 

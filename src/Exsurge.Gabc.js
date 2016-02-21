@@ -700,7 +700,13 @@ export var Gabc = {
           break;
 
         case '\'':
-          note.markings.push(new Markings.Ictus(note));
+          var mark = new Markings.Ictus(note);
+          if (haveLookahead && lookahead == '1')
+            mark.positionHint = MarkingPositionHint.Above;
+          else if (haveLookahead && lookahead == '0')
+            mark.positionHint = MarkingPositionHint.Below;
+
+          note.markings.push(mark);
           break;
 
           //note shapes

@@ -94,12 +94,6 @@ export class Note extends ChantLayoutElement {
     this.origin.x = this.glyphVisualizer.origin.x;
     this.origin.y = this.glyphVisualizer.origin.y;
 
-    for (var i = 0; i < this.markings.length; i++) {
-      var marking = this.markings[i];
-
-      marking.performLayout(ctxt);
-    }
-
     //this.drawable.attr({onclick: "Audio.playNoteInt(" + this.pitch.toInt() + ');',
     //  "data-pitch": this.pitch.toInt()
     //});

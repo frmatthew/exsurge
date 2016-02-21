@@ -424,33 +424,14 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
   }
 }
 
+export class HorizontalEpisemaVisualizer extends ChantLayoutElement {
 
-
-export class HorizontalEpisemaLineVisualizer extends ChantLayoutElement {
-
-  constructor(ctxt, boundsToMark, position) {
+  constructor(ctxt, x, y, width) {
     super();
 
-    var y = 0;
-    var minDistanceAway = ctxt.staffInterval * 0.4; // min distance both from neume and staff lines
-
-    if (position == MarkingPositionHint.Below) {
-      y = boundsToMark.y + boundsToMark.height + minDistanceAway; // the highest the line could be at
-
-      // now, just take a step or two up if we need to
-      if (Math.abs(y % ctxt.staffInterval) < minDistanceAway)
-        y += minDistanceAway - Math.abs(y % ctxt.staffInterval);
-    } else {
-      y = boundsToMark.y - minDistanceAway; // the lowest the line could be at
-
-      // now, just take a step or two up if we need to
-      if (Math.abs(y % ctxt.staffInterval) < minDistanceAway)
-        y -= minDistanceAway - Math.abs(y % ctxt.staffInterval);
-    }
-
-    this.bounds.x = boundsToMark.x;
-    this.bounds.y = y - ctxt.episemaLineWeight / 2;
-    this.bounds.width = boundsToMark.width;
+    this.bounds.x = x;
+    this.bounds.y = y;
+    this.bounds.width = width;
     this.bounds.height = ctxt.episemaLineWeight;
 
     this.origin.x = 0;
@@ -458,11 +439,15 @@ export class HorizontalEpisemaLineVisualizer extends ChantLayoutElement {
   }
 
   createDrawable(ctxt) {
-    // fixme: implement this
-    //this.drawable = QuickSvg.rect(this.bounds.width, this.bounds.height);
-    //QuickSvg.translate(this.drawable, this.bounds.x, this.bounds.y).classList.add('HorizontalEpisema');
 
-    return "";
+    return QuickSvg.createFragment('rect', {
+      'x': this.bounds.x,
+      'y': this.bounds.y,
+      'width': this.bounds.width,
+      'height': this.bounds.height,
+      'fill': ctxt.neumeLineColor,
+      'class': 'HorizontalEpisema'
+    });
   }
 }
 
