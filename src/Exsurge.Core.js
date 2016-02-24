@@ -140,7 +140,7 @@ export class Point {
   equals(point) {
     return this.x === point.x && this.y === point.y;
   }
-};
+}
 
 /*
  * Rect
@@ -229,7 +229,7 @@ export class Margins {
         this.right === margins.right &&
         this.bottom === margins.bottom;
   }
-};
+}
 
 /**
  * Size
@@ -249,7 +249,7 @@ export class Size {
   equals(size) {
     return this.width === size.width && this.height === size.height;
   }
-};
+}
 
 
 /*
@@ -312,7 +312,7 @@ export class Pitch {
 
     return __StaffOffsetToStep[offset % __StaffOffsetToStep.length];
   }
-};
+}
 
 // for positioning markings on notes
 export var MarkingPositionHint = {
@@ -321,8 +321,6 @@ export var MarkingPositionHint = {
   Below: 2
 };
 
-
-
 export function generateRandomGuid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -330,4 +328,4 @@ export function generateRandomGuid() {
       .substring(1);
   }
   return s4() + s4();
-};
+}

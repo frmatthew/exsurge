@@ -89,6 +89,7 @@ export class HorizontalEpisema extends Marking {
   updateY(y) {
     this.bounds.y = y;
     this.visualizer.bounds.y = y;
+    this.terminating = false; // indicates if this episema should terminate itself or not
   }
 
   updateWidth(width) {
@@ -105,13 +106,12 @@ export class HorizontalEpisema extends Marking {
     // If it's an odd number then we shift away from line by adding .5 to the step, which puts
     // us the closest we want to be to a line.
 
-    var y = 0;
+    var y = 0, step;
     var minDistanceAway = ctxt.staffInterval * 0.4; // min distance from neume
 
-    if (this.positionHint == Exsurge.MarkingPositionHint.Below) {
+    if (this.positionHint === Exsurge.MarkingPositionHint.Below) {
       y = this.note.bounds.bottom() + minDistanceAway; // the highest the line could be at
-
-      var step = Math.round(y / ctxt.staffInterval);
+      step = Math.round(y / ctxt.staffInterval);
 
       // if it's an odd step, that means we're near a line, and therefore
       // need to shift down
@@ -119,8 +119,7 @@ export class HorizontalEpisema extends Marking {
         y = (step + 0.5) * ctxt.staffInterval;
     } else {
       y = this.note.bounds.y - minDistanceAway; // the lowest the line could be at
-
-      var step = Math.round(y / ctxt.staffInterval);
+      step = Math.round(y / ctxt.staffInterval);
 
       // if it's an odd step, that means we're near a line, and therefore
       // need to shift up
@@ -168,7 +167,7 @@ export class Ictus extends Marking {
 
     // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
 
-    if (this.positionHint == Exsurge.MarkingPositionHint.Above) {
+    if (this.positionHint === Exsurge.MarkingPositionHint.Above) {
       glyphCode = GlyphCode.VerticalEpisemaAbove;
     } else {
       glyphCode = GlyphCode.VerticalEpisemaBelow;
@@ -181,7 +180,7 @@ export class Ictus extends Marking {
 
     switch (glyphCode) {
       case GlyphCode.VerticalEpisemaAbove:
-        if (staffPosition % 2 == 0)
+        if (staffPosition % 2 === 0)
           this.verticalOffset -= ctxt.staffInterval * 1.5;
         else
           this.verticalOffset -= ctxt.staffInterval * .9;
@@ -189,7 +188,7 @@ export class Ictus extends Marking {
 
       case GlyphCode.VerticalEpisemaBelow:
       default:
-        if (staffPosition % 2 == 0)
+        if (staffPosition % 2 === 0)
           this.verticalOffset += ctxt.staffInterval * 1.5;
         else
           this.verticalOffset += ctxt.staffInterval * .8;
@@ -215,8 +214,10 @@ export class Ictus extends Marking {
  */
 export class Mora extends Marking {
 
-  constructor(note) {
+  constructor(note, horizontalOffset) {
     super(note);
+
+    this.horizontalOffset = horizontalOffset;
   }
 
   performLayout(ctxt) {
@@ -229,7 +230,7 @@ export class Mora extends Marking {
     this.verticalOffset = 0;
     switch (this.positionHint) {
       case Exsurge.MarkingPositionHint.Below:
-        if (staffPosition % 2 == 0)
+        if (staffPosition % 2 === 0)
           this.verticalOffset += ctxt.staffInterval / 3.0;
         else
           this.verticalOffset += (ctxt.staffInterval * 2) / 3.0;
@@ -238,7 +239,7 @@ export class Mora extends Marking {
       case Exsurge.MarkingPositionHint.Default:
       case Exsurge.MarkingPositionHint.Above:
       default:
-        if (staffPosition % 2 == 0)
+        if (staffPosition % 2 === 0)
           this.verticalOffset -= ctxt.staffInterval / 3.0;
         else
           this.verticalOffset -= (ctxt.staffInterval * 2) / 3.0;

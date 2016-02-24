@@ -44,7 +44,7 @@ export var NoteShape = {
   Apostropha: 7,
 
   AscLiquescent: 8,
-  DesLiquescent: 9,
+  DesLiquescent: 9
 };
 
 /**
@@ -79,7 +79,7 @@ export class Note extends ChantLayoutElement {
 
   performLayout(ctxt) {
 
-    if (this.glyphVisualizer == null) {
+    if (this.glyphVisualizer === null) {
       console.log("Tried to perform layout on a note with no glyphCode assigned!");
     }
 
@@ -93,10 +93,6 @@ export class Note extends ChantLayoutElement {
 
     this.origin.x = this.glyphVisualizer.origin.x;
     this.origin.y = this.glyphVisualizer.origin.y;
-
-    //this.drawable.attr({onclick: "Audio.playNoteInt(" + this.pitch.toInt() + ');',
-    //  "data-pitch": this.pitch.toInt()
-    //});
   }
 
   draw(ctxt) {
@@ -131,14 +127,13 @@ export class Clef extends ChantNotationElement {
     this.activeAccidental = this.defaultAccidental;
   }
 
-  updateChantLogic() {
-    super.updateChantLogic();
-
-    ctxt.activeClef = this;
-  }
-
   pitchToStaffPosition(pitch) {
 
+  }
+
+  performLayout(ctxt) {
+    ctxt.activeClef = this;
+    super.performLayout(ctxt);
   }
 }
 
@@ -162,7 +157,7 @@ export class DoClef extends Clef {
 
     var step = Pitch.staffOffsetToStep(offset);
 
-    if (this.defaultAccidental != null && step == this.defaultAccidental.step)
+    if (this.defaultAccidental !== null && step === this.defaultAccidental.step)
       step += this.defaultAccidental.accidentalType;
 
     return new Pitch(step, this.octave + octaveOffset);
@@ -217,7 +212,7 @@ export class FaClef extends Clef {
 
     var step = Pitch.staffOffsetToStep(offset);
 
-    if (step == Step.Ti && this.defaultAccidental == AccidentalType.Flat)
+    if (step === Step.Ti && this.defaultAccidental === AccidentalType.Flat)
       step = Step.Te;
 
     return new Pitch(step, this.octave + octaveOffset);
@@ -283,6 +278,8 @@ export class ChantLine extends ChantLayoutElement {
     this.custod = null;
 
     this.justify = true;
+
+    this.ledgerLines = [];
 
     this.startingClef = null; // necessary for the layout process
 
@@ -358,10 +355,10 @@ export class ChantLine extends ChantLayoutElement {
     var inner = "";
 
     // add the chant lines
-    var x1 = this.staffLeft, x2 = this.staffRight;
+    var i, x1 = this.staffLeft, x2 = this.staffRight;
 
     // create the staff lines
-    for (var i = -3; i <= 3; i += 2) {
+    for (i = -3; i <= 3; i += 2) {
 
       inner += QuickSvg.createFragment('line', {
         'x1': x1,
@@ -370,7 +367,24 @@ export class ChantLine extends ChantLayoutElement {
         'y2': ctxt.staffInterval * i,
         'stroke': ctxt.staffLineColor,
         'stroke-width': ctxt.staffLineWeight,
-        'class': 'StaffLine'
+        'class': 'staffLine'
+      });
+    }
+
+    // create the ledger lines
+    for (i = 0; i < this.ledgerLines.length; i++) {
+
+      var ledgerLine = this.ledgerLines[i];
+      var y = ctxt.calculateHeightFromStaffPosition(ledgerLine.staffPosition);
+
+      inner += QuickSvg.createFragment('line', {
+        'x1': ledgerLine.x1,
+        'y1': y,
+        'x2': ledgerLine.x2,
+        'y2': y,
+        'stroke': ctxt.staffLineColor,
+        'stroke-width': ctxt.staffLineWeight,
+        'class': 'ledgerLine'
       });
     }
 
@@ -385,11 +399,11 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // add all of the notations
-    for (var i = 0; i < this.notations.length; i++)
+    for (i = 0; i < this.notations.length; i++)
       inner += this.notations[i].createDrawable(ctxt);
 
     return QuickSvg.createFragment('g', {
-      'class': 'ChantLine',
+      'class': 'chantLine',
       'transform': 'translate(' + this.bounds.x + ',' + this.bounds.y + ')'
     }, inner);
   }
@@ -411,7 +425,7 @@ export class ChantLine extends ChantLayoutElement {
 
     // If this is the first chant line, then we have to make room for a
     // drop cap and/or annotation, if present
-    if (this.scoreNotationStart == 0) {
+    if (this.scoreNotationStart === 0) {
 
       var padding = 0;
 
@@ -437,9 +451,9 @@ export class ChantLine extends ChantLayoutElement {
     var rightBoundary = this.staffRight - Glyphs.CustodLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custod on the line
 
     // todo: iterate through the notations, fittng what we can on this line
-    var scoreNotations = this.score.notations;
+    var i, scoreNotations = this.score.notations;
 
-    for (var i = newElementStart; i < scoreNotations.length; i++) {
+    for (i = newElementStart; i < scoreNotations.length; i++) {
 
       if (current.hasLyric())
         previousWithLyric = current;
@@ -472,16 +486,16 @@ export class ChantLine extends ChantLayoutElement {
       this.scoreNotationCount++;
 
       // line breaks are a special case indicating to stop processing here
-      if (current.constructor.name == 'ChantLineBreak' && width > 0) {
+      if (current.constructor.name === 'ChantLineBreak' && width > 0) {
         this.justify = current.justify;
         break;
       }
     }
 
-    var extraSpace = 0;
+    var last, extraSpace = 0;
 
     if (this.notations.length > 0) {
-      var last = this.notations[this.notations.length - 1];
+      last = this.notations[this.notations.length - 1];
 
       if (last.hasLyric() && last.getLyricRight() > (last.bounds.right() + last.trailingSpace))
         extraSpace = this.staffRight - last.getLyricRight();
@@ -491,7 +505,7 @@ export class ChantLine extends ChantLayoutElement {
 
     // create the custod at the end of the line (if we need it!)
     // if we find an element following this one that is a neume, we create a custod for it
-    for (var i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
+    for (i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
       var notation = this.score.notations[i];
 
       if ('notes' in notation && notation.notes.length > 0) {
@@ -502,7 +516,7 @@ export class ChantLine extends ChantLayoutElement {
         custod.performLayout(ctxt);
 
         if (this.notations.length > 0) {
-          var last = this.notations[this.notations.length - 1];
+          last = this.notations[this.notations.length - 1];
           custod.bounds.x = last.bounds.x + last.bounds.width;
         }
 
@@ -522,51 +536,54 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // Justify the line if we are not the last one
-    if (this.justify === true && width > 0 && this.scoreNotationStart + this.scoreNotationCount < this.score.notations.length && extraSpace > 0)
+    if (this.justify === true && width > 0 &&
+        this.scoreNotationStart + this.scoreNotationCount < this.score.notations.length &&
+        extraSpace > 0)
       this.justifyElements(extraSpace);
-  }
 
+    this.finishLayout(ctxt);
+  }
 
   justifyElements(extraSpace) {
 
     var indices = [];
 
-    var prev = null, curr = null, prevWithLyrics = null;
+    var i, prev = null, curr = null, prevWithLyrics = null;
 
     // if we have a custod, place it at the end of the line
-    if (this.custod != null) 
+    if (this.custod !== null) 
       this.custod.bounds.x = this.staffRight - this.custod.bounds.width - this.custod.leadingSpace;
 
     // first pass: determine the neumes we can space apart
     // start at 1 to skip the clef
-    for (var i = 1; i < this.notations.length - 1; i++) {
+    for (i = 1; i < this.notations.length - 1; i++) {
 
-      if (curr != null && curr.hasLyric())
+      if (curr !== null && curr.hasLyric())
         prevWithLyrics = curr;
 
       prev = curr;
       curr = this.notations[i];
 
-      if (prev != null && prev.keepWithNext === true)
+      if (prev !== null && prev.keepWithNext === true)
         continue;
 
-      if (prevWithLyrics != null && prevWithLyrics.lyric.allowsConnector() && !prevWithLyrics.lyric.needsConnector)
+      if (prevWithLyrics !== null && prevWithLyrics.lyric.allowsConnector() && !prevWithLyrics.lyric.needsConnector)
         continue;
 
-      if (curr.constructor.name == 'ChantLineBreak')
+      if (curr.constructor.name === 'ChantLineBreak')
         continue;
 
       // otherwise, we can add space before this element
       indices.push(i);
     }
 
-    if (indices.length == 0)
+    if (indices.length === 0)
       return;
 
     var offset = 0;
     var increment = extraSpace / indices.length;
-    var lastIndex = (this.notations[this.notations.length - 1].constructor.name == 'Custod') ? this.notations.length - 1 : this.notations.length;
-    for (var i = 1; i < lastIndex; i++) {
+    var lastIndex = (this.notations[this.notations.length - 1].constructor.name === 'Custod') ? this.notations.length - 1 : this.notations.length;
+    for (i = 1; i < lastIndex; i++) {
 
       curr = this.notations[i];
 
@@ -580,6 +597,108 @@ export class ChantLine extends ChantLayoutElement {
     offset = offset;
   }
 
+  finishLayout(ctxt) {
+
+    this.ledgerLines = []; // clear any existing ledger lines
+
+    var epismata = []; // keep track of epismata in case we can connect some
+
+    // make a final pass over all of the notes to add any necessary
+    // ledger lines and to smooth out epismata
+    for (var i = 0; i < this.notations.length; i++) {
+
+      // if it's not a neume, then skip over it, right?
+      if (typeof this.notations[i].notes === 'undefined')
+        continue;
+
+      var neume = this.notations[i];
+
+      for (var j = 0; j < neume.notes.length; j++) {
+        var note = neume.notes[j];
+
+        // do we need a ledger line for this note?
+        var staffPosition = note.staffPosition;
+
+        if (staffPosition >= 5 || staffPosition <= -5) {
+
+          var x1 = neume.bounds.x + note.bounds.x - ctxt.staffInterval;
+          var x2 = neume.bounds.x + note.bounds.x + note.bounds.width + ctxt.staffInterval;
+
+          // round the staffPosition to the nearest line
+          if (staffPosition > 0)
+            staffPosition = staffPosition - (staffPosition - 1) % 2;
+          else
+            staffPosition = staffPosition - (staffPosition + 1) % 2;
+
+          // if we have a ledger line close by, then average out the distance between the two
+          var minLedgerSeperation = ctxt.staffInterval * 5;
+
+          if (this.ledgerLines.length > 0 &&
+              this.ledgerLines[this.ledgerLines.length - 1].x2 + minLedgerSeperation >= x1) {
+
+            // average out the distance
+            var half = (x1 - this.ledgerLines[this.ledgerLines.length - 1].x2) / 2;
+            this.ledgerLines[this.ledgerLines.length - 1].x2 += half;
+            x1 -= half;
+          }
+
+          // finally, add the ledger line
+          this.ledgerLines.push({
+            x1: x1,
+            x2: x2,
+            staffPosition: staffPosition
+          });
+        }
+
+        // blend epismata as we're able
+        for (var k = 0; k < note.markings.length; k++) {
+
+          if (note.markings[k].constructor.name !== "HorizontalEpisema")
+            continue;
+
+          var episema = note.markings[k];
+
+          // we try to blend the episema if we're able.
+          if (epismata.length === 0 ||
+              epismata[0].episema.positionHint !== episema.positionHint ||
+              epismata[0].episema.terminating === true) {
+
+            // start a new set of epismata to potentially blend
+            epismata = [];
+            epismata.push({
+              episema: episema,
+              neume: neume
+            });
+          } else {
+            // blend all previous with this one
+            var newY;
+
+            if (episema.positionHint === Exsurge.MarkingPositionHint.Below)
+              newY = Math.max(episema.bounds.y, epismata[0].episema.bounds.y);
+            else
+              newY = Math.min(episema.bounds.y, epismata[0].episema.bounds.y);
+
+            if (episema.bounds.y !== newY)
+              episema.updateY(newY);
+            else {
+              for (var l = 0; l < epismata.length; l++)
+                epismata[l].episema.updateY(newY);
+            }
+
+            // extend the last episema to meet the new one
+            var newWidth = (neume.bounds.x + episema.bounds.x) - (epismata[epismata.length - 1].neume.bounds.x + epismata[epismata.length - 1].episema.bounds.x);
+            epismata[epismata.length - 1].episema.updateWidth(newWidth);
+
+            epismata.push({
+              episema: episema,
+              neume: neume
+            });
+          }
+        }
+      }
+    }
+  }
+
 
   // this is where the real core of positioning neumes takes place
   // returns true if positioning was able to fit the neume before rightBoundary.
@@ -591,7 +710,7 @@ export class ChantLine extends ChantLayoutElement {
     // irrespective of lyrics.
     curr.bounds.x = prev.bounds.right() + prev.trailingSpace;
 
-    if (prevWithLyric == null) {
+    if (prevWithLyric === null) {
 
       var maxRight = curr.bounds.right() + curr.trailingSpace;
 
@@ -667,7 +786,7 @@ export class ChantLine extends ChantLayoutElement {
     // and mark the previous lyric as connecting if needed.
     // curr.bounds.x = this.startingClef.bounds.right();
 
-    if (prevWithLyric.lyric != null && prevWithLyric.lyric.allowsConnector())
+    if (prevWithLyric.lyric !== null && prevWithLyric.lyric.allowsConnector())
       prevWithLyric.lyric.setNeedsConnector(true);
 
     return false;
@@ -749,7 +868,7 @@ export class ChantScore {
     var y = 0;
     var currIndex = 0;
 
-    if (ctxt.activeClef == null)
+    if (ctxt.activeClef === null)
       ctxt.activeClef = this.startingClef;
 
     do {
@@ -779,15 +898,16 @@ export class ChantScore {
 
   createDrawable(ctxt) {
 
-    var drawable = "";
+    var i, drawable = "";
 
     // create defs section
     for (var def in ctxt.defs)
-      drawable += ctxt.defs[def];
+      if (ctxt.defs.hasOwnProperty(def))
+        drawable += ctxt.defs[def];
 
     drawable = QuickSvg.createFragment('defs', {}, drawable);
 
-    for (var i = 0; i < this.lines.length; i++)
+    for (i = 0; i < this.lines.length; i++)
       drawable += this.lines[i].createDrawable(ctxt);
 
     drawable = QuickSvg.createFragment('g', {}, drawable);
@@ -804,42 +924,16 @@ export class ChantScore {
     return drawable;
   }
 
-  prepareNotesForAudio() {
-
-    this.notes = [];
-
-    // run through all of the notations...
-    var prevNeume = null;
-    var currNotation = null;
-    for (var i = 0; i < this.notations.length; i++) {
-      var currNotation = this.notations[i];
-
-      if (typeof currNotation.notes !== 'undefined') {
-
-        // copy the notes to the score for playback
-        for (var j = 0; j < currNotation.notes.length; j++)
-          this.notes.push(currNotation.notes[j]);
-
-        prevNeume = currNotation;
-      } else {
-        // not a neume...if it's a full bar or a double bar, we can lengthen the notes here
-        if (prevNeume != null && currNotation.constructor.name == 'FullBar' || currNotation.constructor.name == 'DoubleBar') {
-
-        }
-      }
-    }
-  }
-
   unserializeFromJson(data) {
     this.autoColoring = data['auto-coloring'];
 
-    if (data.annotation != null && data.annotation != "") {
+    if (data.annotation !== null && data.annotation !== "") {
       // create the annotation
       this.annotation = new Annotation(ctxt, data.annotation);
     } else
       this.annotation = null;
 
-    var createDropCap = data['drop-cap'] == 'auto' ? true : false;
+    var createDropCap = data['drop-cap'] === 'auto' ? true : false;
 
     Gabc.parseChantNotations(data.notations, this, createDropCap);
   }
@@ -850,7 +944,7 @@ export class ChantScore {
     data['type'] = "score";
     data['auto-coloring'] = true;
 
-    if (this.annotation != null)
+    if (this.annotation !== null)
       data.annotation = this.annotation.unsanitizedText;
     else
       data.annotation = "";
@@ -877,10 +971,10 @@ export class ChantDocument {
           'margin-left': 0,
           'margin-top': 0,
           'margin-right': 0,
-          'margin-bottom': 0,
+          'margin-bottom': 0
         }
       },
-      scores: [],
+      scores: []
     };
 
     // default layout
@@ -903,7 +997,7 @@ export class ChantDocument {
         'margin-left': from.layout.page['margin-left'],
         'margin-top': from.layout.page['margin-top'],
         'margin-right': from.layout.page['margin-right'],
-        'margin-bottom': from.layout.page['margin-bottom'],
+        'margin-bottom': from.layout.page['margin-bottom']
       }
     };
   }

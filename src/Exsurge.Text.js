@@ -41,7 +41,7 @@ export class Language {
 
     var parsedWords = [];
 
-    if (text == undefined || text == "")
+    if (typeof text === 'undefined' || text === "")
       return parsedWords;
 
     // Divide the text into words separated by whitespace
@@ -93,7 +93,7 @@ export class Latin extends Language {
   // c must be lowercase!
   isVowel(c) {
     for (var i = 0, end = this.vowels.length; i < end; i++)
-      if (this.vowels[i] == c)
+      if (this.vowels[i] === c)
         return true;
 
     return false;
@@ -108,7 +108,7 @@ export class Latin extends Language {
    */
   isMuteConsonantOrF(c) {
     for (var i = 0, end = this.muteConsonantsAndF.length; i < end; i++)
-      if (this.muteConsonantsAndF[i] == c)
+      if (this.muteConsonantsAndF[i] === c)
         return true;
 
     return false;
@@ -121,7 +121,7 @@ export class Latin extends Language {
    */
   isLiquidConsonant(c) {
     for (var i = 0, end = this.liquidConsonants.length; i < end; i++)
-      if (this.liquidConsonants[i] == c)
+      if (this.liquidConsonants[i] === c)
         return true;
 
     return false;
@@ -134,7 +134,7 @@ export class Latin extends Language {
    */
   isDiphthong(s) {
     for (var i = 0, end = this.diphthongs.length; i < end; i++)
-      if (this.diphthongs[i] == s)
+      if (this.diphthongs[i] === s)
         return true;
 
     return false;
@@ -195,15 +195,15 @@ export class Latin extends Language {
       // i is a special case for a vowel. when i is at the beginning
       // of the word (Iesu) or i is between vowels (alleluia),
       // then the i is treated as a consonant (y)
-      if (c == 'i') {
-        if (i == 0 && haveLookahead && this.isVowel(lookahead))
+      if (c === 'i') {
+        if (i === 0 && haveLookahead && this.isVowel(lookahead))
           cIsVowel = false;
         else if (previousWasVowel && haveLookahead && this.isVowel(lookahead)) {
           cIsVowel = false;
         }
       }
 
-      if (c == '-') {
+      if (c === '-') {
 
         // a hyphen forces a syllable break, which effectively resets
         // the logic...
@@ -227,8 +227,8 @@ export class Latin extends Language {
 
       } else if (haveLookahead) {
 
-        if ((c == 'q' && lookahead == 'u') ||
-                 (lookahead == 'h' && (c == 'c' || c == 'p' || c == 't'))) {
+        if ((c === 'q' && lookahead === 'u') ||
+            (lookahead === 'h' && (c === 'c' || c === 'p' || c === 't'))) {
           // handle wheelock's exceptions for qu, ch, ph and th
           makeSyllable(i - startSyllable);
           i++; // skip over the 'h' or 'u'
@@ -303,7 +303,7 @@ export class Spanish extends Language {
 
     this.weakVowels = ['i', 'u', 'ü', 'y'];
 
-    this.strongVowels = ['a', 'e', 'o', 'á', 'é', 'í', 'ó', 'ú', ];
+    this.strongVowels = ['a', 'e', 'o', 'á', 'é', 'í', 'ó', 'ú'];
 
 
     this.dipthongs = ["ai", "ei", "oi", "ui", "ia", "ie", "io", "iu", "au", "eu", "ou", "ua", "ue", "uo",
@@ -316,7 +316,7 @@ export class Spanish extends Language {
   // c must be lowercase!
   isVowel(c) {
     for (var i = 0, end = this.vowels.length; i < end; i++)
-      if (this.vowels[i] == c)
+      if (this.vowels[i] === c)
         return true;
 
     return false;
@@ -328,7 +328,7 @@ export class Spanish extends Language {
    */
   isWeakVowel(c) {
     for (var i = 0, end = this.weakVowels.length; i < end; i++)
-      if (this.weakVowels[i] == c)
+      if (this.weakVowels[i] === c)
         return true;
 
     return false;
@@ -340,7 +340,7 @@ export class Spanish extends Language {
    */
   isStrongVowel(c) {
     for (var i = 0, end = this.strongVowels.length; i < end; i++)
-      if (this.strongVowels[i] == c)
+      if (this.strongVowels[i] === c)
         return true;
 
     return false;
@@ -353,7 +353,7 @@ export class Spanish extends Language {
    */
   isDiphthong(s) {
     for (var i = 0, end = this.diphthongs.length; i < end; i++)
-      if (this.diphthongs[i] == s)
+      if (this.diphthongs[i] === s)
         return true;
 
     return false;
@@ -429,13 +429,13 @@ export class Spanish extends Language {
         } else {
 
           // handle explicit syllable breaks
-          if (word[i] == '-') {
+          if (word[i] === '-') {
             // start new syllable
             syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
             startSyllable = ++i;
           } else {
 
-            var numberOfConsonants = 1;
+            var numberOfConsonants = 1, consonant2;
 
             // count how many more consonants there are
             for (j = i + 1; j < word.length; j++) {
@@ -444,14 +444,14 @@ export class Spanish extends Language {
               numberOfConsonants++;
             }
 
-            if (numberOfConsonants == 1) {
+            if (numberOfConsonants === 1) {
               // start new syllable
               syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
               startSyllable = i;
 
-            } else if (numberOfConsonants == 2) {
-              var consonant2 = word[i + 1].toLowerCase();
-              if (consonant2 == 'l' || consonant2 == 'r' || (c == 'c' && consonant2 == 'h')) {
+            } else if (numberOfConsonants === 2) {
+              consonant2 = word[i + 1].toLowerCase();
+              if (consonant2 === 'l' || consonant2 === 'r' || (c === 'c' && consonant2 === 'h')) {
                 // split before the consonant pair
                 syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
                 startSyllable = i++;
@@ -461,20 +461,19 @@ export class Spanish extends Language {
                 startSyllable = i;
               }
 
-            } else if (numberOfConsonants == 3) {
-              var consonant2 = word[i + 1].toLowerCase();
+            } else if (numberOfConsonants === 3) {
+              consonant2 = word[i + 1].toLowerCase();
 
               // if second consonant is s, divide cc-c, otherwise divide c-cc
-              if (consonant2 == 's') {
+              if (consonant2 === 's') {
                 i += 2;
                 syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
-              } else {
+              } else
                 syllables.push(this.createSyllable(word.substr(startSyllable, ++i - startSyllable)));
-              }
 
               startSyllable = i;
 
-            } else if (numberOfConsonants == 4) {
+            } else if (numberOfConsonants === 4) {
               // four always get split cc-cc
               syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable + 2)));
               startSyllable = i + 2;
@@ -496,7 +495,7 @@ export class Spanish extends Language {
       syllables.push(word.substr(startSyllable));
     else if (startSyllable > 0)
       syllables[syllables.length - 1] += word.substr(startSyllable);
-    else if (syllables.length == 0)
+    else if (syllables.length === 0)
       syllables.push(this.createSyllable(word))
 
     return syllables;
@@ -520,11 +519,11 @@ export class Spanish extends Language {
       if (index >= 0) {
 
         // check the exceptions...
-        if (d[0] == 'u' && index > 0) {
+        if (d[0] === 'u' && index > 0) {
           var tripthong = s.substr(index - 1, 3).toLowerCase();
 
           for (j = 0, endj = this.uDipthongExpections.length; i < endj; j++) {
-            if (tripthong == this.uDipthongExpections[j]) {
+            if (tripthong === this.uDipthongExpections[j]) {
               // search from after the u...
               return this.findVowelSegment(s, index + 1);
             }

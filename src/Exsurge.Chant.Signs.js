@@ -43,10 +43,10 @@ export class Custod extends ChantNotationElement {
     var staffPosition = 0; // a default value just to make sure we don't fail rebuilding
     var glyphCode;
 
-    if (this.referringNeume != null) {
+    if (this.referringNeume !== null) {
       if (this.referringNeume.notes.length > 0)
         staffPosition = this.referringNeume.notes[0].staffPosition;
-    } else if (note != null)
+    } else if (note !== null)
       staffPosition = this.note.staffPosition;
 
     glyphCode = Custod.getGlyphCode(staffPosition);
@@ -63,14 +63,14 @@ export class Custod extends ChantNotationElement {
     if (staffPosition <= 2) {
 
       // ascending custodes
-      if (Math.abs(staffPosition) % 2 == 1)
+      if (Math.abs(staffPosition) % 2 === 1)
         return GlyphCode.CustodLong;
       else
         return GlyphCode.CustodShort;
     } else {
 
       // descending custodes
-      if (Math.abs(staffPosition) % 2 == 1)
+      if (Math.abs(staffPosition) % 2 === 1)
         return GlyphCode.CustodDescLong;
       else
         return GlyphCode.CustodDescShort;
@@ -162,7 +162,7 @@ export class DoubleBar extends DividingLine {
 export const AccidentalType = {
   Flat: -1,
   Natural: 0,
-  Sharp: 1,
+  Sharp: 1
 };
 
 /*
@@ -207,18 +207,18 @@ export class Accidental extends ChantNotationElement {
   adjustStep(step) {
     switch (this.accidentalType) {
       case AccidentalType.Flat:
-        if (step == Step.Ti) return Step.Te;
-        if (step == Step.Mi) return Step.Me;
+        if (step === Step.Ti) return Step.Te;
+        if (step === Step.Mi) return Step.Me;
         break;
       case AccidentalType.Sharp:
-        if (step == Step.Do) return Step.Du;
-        if (step == Step.Fa) return Step.Fu;
+        if (step === Step.Do) return Step.Du;
+        if (step === Step.Fa) return Step.Fu;
         break;
       case AccidentalType.Natural:
-        if (step == Step.Te) return Step.Ti;
-        if (step == Step.Me) return Step.Mi;
-        if (step == Step.Du) return Step.Do;
-        if (step == Step.Fu) return Step.Fa;
+        if (step === Step.Te) return Step.Ti;
+        if (step === Step.Me) return Step.Mi;
+        if (step === Step.Du) return Step.Do;
+        if (step === Step.Fu) return Step.Fa;
         break;
     }
 
@@ -231,7 +231,7 @@ export class Accidental extends ChantNotationElement {
     // fixme: this is broken since we changed to staff positions
 
     // no adjusment needed
-    if (this.octave != pitch.octave)
+    if (this.octave !== pitch.octave)
       return;
 
     pitch.step = this.adjustStep(pitch.step);

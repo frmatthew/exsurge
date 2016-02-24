@@ -46,8 +46,6 @@ export var Gabc = {
     // fixme: no dropcap until the text engine is working again
     this.parseChantNotations(ctxt, gabcNotations, score, createDropCap);
 
-    score.prepareNotesForAudio();
-
     return score;
   },
 
@@ -67,14 +65,14 @@ export var Gabc = {
 
       var currSyllable = 0;
 
-      if (word == '')
+      if (word === '')
         continue;
 
       word = word.trim()
 
       var matches = [];
       
-      while (match = __syllablesRegex.exec(word))
+      while ((match = __syllablesRegex.exec(word)))
         matches.push(match);
 
       for (var j = 0; j < matches.length; j++) {
@@ -85,24 +83,24 @@ export var Gabc = {
 
         var items = this.createNotations(ctxt, score, notationData, passByRef);
 
-        if (items.length == 0)
+        if (items.length === 0)
           continue;
 
         // if we are to create a dropCap and we haven't done so yet, do it now
-        if (createDropCap && score.dropCap == null && lyricText != "") {
+        if (createDropCap && score.dropCap === null && lyricText !== "") {
           score.dropCap = new DropCap(ctxt, lyricText.substring(0, 1));
           lyricText = lyricText.substring(1);
         }
 
         // create lyric if we have it...
-        if (lyricText != "") {
+        if (lyricText !== "") {
 
           var lyricType;
-          if (currSyllable == 0 && matches.length == 1)
+          if (currSyllable === 0 && matches.length === 1)
             lyricType = LyricType.SingleSyllable;
-          else if (currSyllable == 0 && matches.length > 1)
+          else if (currSyllable === 0 && matches.length > 1)
             lyricType = LyricType.BeginningSyllable;
-          else if (currSyllable == matches.length - 1)
+          else if (currSyllable === matches.length - 1)
             lyricType = LyricType.EndingSyllable;
           else
             lyricType = LyricType.MiddleSyllable;
@@ -111,7 +109,7 @@ export var Gabc = {
           var notationWithLyrics = null;
           for (var k = 0; k < items.length; k++) {
             var cne = items[k];
-            if (cne.constructor.name == "Accidental")
+            if (cne.constructor.name === "Accidental")
               continue;
 
             notationWithLyrics = cne;
@@ -119,14 +117,14 @@ export var Gabc = {
           }
 
           // if it's not a neume then make the lyric a directive
-          if (notationWithLyrics.notes == null)
+          if (notationWithLyrics.notes === null)
             lyricType = LyricType.Directive;
 
           var lyric = this.makeLyric(ctxt, lyricText, lyricType);
 
           // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
-          if (lyric.lyricType == LyricType.BeginningSyllable ||
-            lyric.lyricType == LyricType.SingleSyllable)
+          if (lyric.lyricType === LyricType.BeginningSyllable ||
+            lyric.lyricType === LyricType.SingleSyllable)
             passByRef.activeClef.resetAccidentals();
 
           // fixme: lyrics are broken! for now, just ignore them
@@ -142,17 +140,17 @@ export var Gabc = {
 
   makeLyric: function (ctxt, text, lyricType) {
 
-    if (text.length > 1 && text[text.length - 1] == '-') {
-      if (lyricType == LyricType.EndingSyllable)
+    if (text.length > 1 && text[text.length - 1] === '-') {
+      if (lyricType === LyricType.EndingSyllable)
         lyricType = LyricType.MiddleSyllable;
-      else if (lyricType == LyricType.SingleSyllable)
+      else if (lyricType === LyricType.SingleSyllable)
         lyricType = LyricType.BeginningSyllable;
 
       text = text.substring(0, text.length - 1);
     }
 
     var elides = false;
-    if (text.length > 1 && text[text.length - 1] == '_') {
+    if (text.length > 1 && text[text.length - 1] === '_') {
       // must be an elision
       elides = true;
       text = text.substring(0, text.length - 1);
@@ -203,10 +201,10 @@ export var Gabc = {
 
       // then, if we're passed a notation, let's add it
       // also, perform chant logic here
-      if (notation != null) {
+      if (notation !== null) {
 
         if (notation.isClef) {
-          if (score.startingClef == null) {
+          if (score.startingClef === null) {
             score.startingClef = notation;
             return;
           }
@@ -315,7 +313,7 @@ export var Gabc = {
 
           default:
             // might be a custod, might be an accidental, or might be a note
-            if (atom.length > 1 && atom[1] == '+') {
+            if (atom.length > 1 && atom[1] === '+') {
               // custod
               var custod = new Custod();
 
@@ -323,7 +321,7 @@ export var Gabc = {
 
               addNotation(custod);
 
-            } else if (atom.length > 1 && (atom[1] == 'x' || atom[1] == 'y' || atom[1] == '#')) {
+            } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
 
               var accidentalType;
 
@@ -339,7 +337,7 @@ export var Gabc = {
                   break;
               }
 
-              var note = this.createNoteFromData(passByRef.activeClef, atom);
+              var note = this.createNoteFromData(ctxt, passByRef.activeClef, atom);
               var accidental = new Signs.Accidental(note.staffPosition, accidentalType);
               accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
 
@@ -349,11 +347,11 @@ export var Gabc = {
             } else {
 
               // to make our interpreter more robust, make sure we have a clef to work with
-              if (passByRef.activeClef == null)
+              if (passByRef.activeClef === null)
                 passByRef.activeClef = new DoClef(1, 2);
 
               // looks like it's a note
-              notes.push(this.createNoteFromData(passByRef.activeClef, atom));
+              notes.push(this.createNoteFromData(ctxt, passByRef.activeClef, atom));
             }
             break;
       }
@@ -433,7 +431,7 @@ export var Gabc = {
         if (currNote.staffPosition > prevNote.staffPosition)
           return podatusState;
         else if (currNote.staffPosition < prevNote.staffPosition) {
-          if (currNote.shape == NoteShape.Inclinatum)
+          if (currNote.shape === NoteShape.Inclinatum)
             return climacusState;
           else
             return clivisState;
@@ -448,7 +446,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
           return podatusState;
         else
           // stand alone oriscus
@@ -465,7 +463,7 @@ export var Gabc = {
         if (currNote.staffPosition > prevNote.staffPosition) {
           return scandicusState;
         } else if (currNote.staffPosition < prevNote.staffPosition) {
-          if (currNote.shape == NoteShape.Inclinatum)
+          if (currNote.shape === NoteShape.Inclinatum)
             return pesSubpunctisState;
           else
             return torculusState;
@@ -480,7 +478,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
 
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
           return porrectusState;
         else
           return createNeume(new Neumes.Clivis(), false);
@@ -492,7 +490,7 @@ export var Gabc = {
         return new Neumes.Climacus();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.shape != NoteShape.Inclinatum)
+        if (currNote.shape !== NoteShape.Inclinatum)
           return createNeume(this.neume(), false);
         else
           return state;
@@ -505,7 +503,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
 
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
           return createNeume(new Neumes.PorrectusFlexus(), true);
         else
           return createNeume(new Neumes.Porrectus(), false);
@@ -518,7 +516,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
     
-        if (currNote.shape != NoteShape.Inclinatum)
+        if (currNote.shape !== NoteShape.Inclinatum)
           return createNeume(new Neumes.PesSubpunctis(), false);
         else
           return state;
@@ -531,7 +529,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
 
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
           return scandicusFlexusState;
         else
           return createNeume(new Neumes.Scandicus(), false);
@@ -553,9 +551,9 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
     
-        if (currNote.shape == NoteShape.Inclinatum && currNote.staffPosition < prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Inclinatum && currNote.staffPosition < prevNote.staffPosition)
           return climacusState;
-        else if (currNote.shape == NoteShape.Virga && currNote.staffPosition == prevNote.staffPosition)
+        else if (currNote.shape === NoteShape.Virga && currNote.staffPosition === prevNote.staffPosition)
           return bivirgaState;
         else
           return createNeume(new Neumes.Virga(), false);
@@ -568,7 +566,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
     
-        if (currNote.shape == NoteShape.Virga && currNote.staffPosition == prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Virga && currNote.staffPosition === prevNote.staffPosition)
           return createNeume(new Neumes.Trivirga(), false);
         else
           return createNeume(new Neumes.Bivirga(), false);
@@ -580,7 +578,7 @@ export var Gabc = {
         return new Neumes.Apostropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition == prevNote.staffPosition && currNote.shape == NoteShape.Apostropha)
+        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Apostropha)
           return distrophaState;
         else
           return createNeume(new Neumes.Apostropha(), false);
@@ -592,7 +590,7 @@ export var Gabc = {
         return new Neumes.Distropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition == prevNote.staffPosition && currNote.shape == NoteShape.Apostropha)
+        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Apostropha)
           return createNeume(new Neumes.Tristropha(), true);
         else
           return createNeume(new Neumes.Distropha(), false);
@@ -604,7 +602,7 @@ export var Gabc = {
         return new Neumes.Torculus();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
           return torculusResupinusState;
         else
           return createNeume(new Neumes.Torculus(), false);
@@ -616,7 +614,7 @@ export var Gabc = {
         return new Neumes.TorculusResupinus();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.shape == NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
           return createNeume(new Neumes.TorculusResupinusFlexus(), true);
         else
           return createNeume(new Neumes.TorculusResupinus(), false);
@@ -633,7 +631,7 @@ export var Gabc = {
       state = state.handle(currNote, prevNote);
 
       // if we are on the last note, then try to create a neume if we need to.
-      if (currNoteIndex == notes.length - 1 && state != unknownState)
+      if (currNoteIndex === notes.length - 1 && state !== unknownState)
         createNeume(state.neume(), true);
 
       currNoteIndex++;
@@ -649,14 +647,14 @@ export var Gabc = {
     return neumes;
   },
 
-  createNoteFromData: function (clef, data) {
+  createNoteFromData: function (ctxt, clef, data) {
 
     var note = new Note();
 
     if (data.length < 1)
       throw 'Invalid note data: ' + data;
 
-    if (data[0] == '-') { // liquescent
+    if (data[0] === '-') { // liquescent
       note.isLiquescent = true;
       data = data.substring(1);
     }
@@ -667,11 +665,13 @@ export var Gabc = {
     // the next char is always the pitch
     var pitch = this.convertGabcStaffPositionToScribamPitch(clef, data[0]);
 
-    if (data[0] == data[0].toUpperCase())
+    if (data[0] === data[0].toUpperCase())
       note.shape = NoteShape.Inclinatum;
 
     note.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(clef, data[0]);
     note.pitch = pitch;
+
+    var mark;
 
     // process the modifiers
     for (var i = 1; i < data.length; i++) {
@@ -687,23 +687,39 @@ export var Gabc = {
 
         // rhythmic markings
         case '.':
-          note.markings.push(new Markings.Mora(note));
+          mark = new Markings.Mora(note, ctxt.staffInterval / 4.0);
+          if (haveLookahead && lookahead === '1')
+            mark.positionHint = MarkingPositionHint.Above;
+          else if (haveLookahead && lookahead === '0')
+            mark.positionHint = MarkingPositionHint.Below;
+          
+          note.markings.push(mark);
           break;
 
         case '_':
-          var mark = new Markings.HorizontalEpisema(note);
-          if (haveLookahead && lookahead == '0') {
-            mark.positionHint = MarkingPositionHint.Below;
-            i++;
+          mark = new Markings.HorizontalEpisema(note);
+          if (haveLookahead) {
+            if (lookahead === '0')
+              mark.positionHint = MarkingPositionHint.Below;
+            else if (lookahead === '1')
+              mark.positionHint = MarkingPositionHint.Above;
+            else if (lookahead === '2')
+              mark.terminating = true;
+
+            // check for another lookahead...
+            if (++i + 1 < data.length && data[i + 1] === '2') {
+              mark.terminating = true;
+              i++;
+            }
           }
           note.markings.push(mark);
           break;
 
         case '\'':
-          var mark = new Markings.Ictus(note);
-          if (haveLookahead && lookahead == '1')
+          mark = new Markings.Ictus(note);
+          if (haveLookahead && lookahead === '1')
             mark.positionHint = MarkingPositionHint.Above;
-          else if (haveLookahead && lookahead == '0')
+          else if (haveLookahead && lookahead === '0')
             mark.positionHint = MarkingPositionHint.Below;
 
           note.markings.push(mark);
@@ -711,7 +727,7 @@ export var Gabc = {
 
           //note shapes
         case 'r':
-          if (haveLookahead && lookahead == '1') {
+          if (haveLookahead && lookahead === '1') {
             note.markings.push(new Markings.AcuteAccent(note));
             i++;
           } else
@@ -727,10 +743,10 @@ export var Gabc = {
           break;
 
         case 'o':
-          if (haveLookahead && lookahead == '<') {
+          if (haveLookahead && lookahead === '<') {
             note.shape = NoteShape.OriscusAscending;
             i++;
-          } else if (haveLookahead && lookahead == '>') {
+          } else if (haveLookahead && lookahead === '>') {
             note.shape = NoteShape.OriscusDescending;
             i++;
           } else
@@ -752,25 +768,25 @@ export var Gabc = {
 
         // accidentals
         case 'x':
-          if (note.pitch.step == Step.Mi)
+          if (note.pitch.step === Step.Mi)
             note.pitch.step = Step.Me;
-          else if (note.pitch.step == Step.Ti)
+          else if (note.pitch.step === Step.Ti)
             note.pitch.step = Step.Te;
           break;
         case 'y':
-          if (note.pitch.step == Step.Te)
+          if (note.pitch.step === Step.Te)
             note.pitch.step = Step.Ti;
-          else if (note.pitch.step == Step.Me)
+          else if (note.pitch.step === Step.Me)
             note.pitch.step = Step.Mi;
-          else if (note.pitch.step == Step.Du)
+          else if (note.pitch.step === Step.Du)
             note.pitch.step = Step.Do;
-          else if (note.pitch.step == Step.Fu)
+          else if (note.pitch.step === Step.Fu)
             note.pitch.step = Step.Fa;
           break;
         case '#':
-          if (note.pitch.step == Step.Do)
+          if (note.pitch.step === Step.Do)
             note.pitch.step = Step.Du;
-          else if (note.pitch.step == Step.Fa)
+          else if (note.pitch.step === Step.Fa)
             note.pitch.step = Step.Fu;
           break;
       }
@@ -790,11 +806,11 @@ export var Gabc = {
 
     var pitch = clef.staffPositionToPitch(scribamStaffPosition);
 
-    if (clef.activeAccidental != null)
+    if (clef.activeAccidental !== null)
       clef.activeAccidental.applyToPitch(pitch);
 
     return pitch;
-  },
+  }
 };
 
 //export default Gabc;

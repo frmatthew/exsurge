@@ -175,8 +175,10 @@ export var QuickSvg = {
 
     var fragment = '<' + name + ' ';
 
-    for (var attr in attributes)
-      fragment += attr + '="' + attributes[attr] + '" ';
+    for (var attr in attributes) {
+      if (attributes.hasOwnProperty(attr))
+        fragment += attr + '="' + attributes[attr] + '" ';
+    }
 
     fragment += '>' + child + '</' + name + '>';
 
@@ -380,7 +382,7 @@ export class DividerLineVisualizer extends ChantLayoutElement {
       'width': ctxt.dividerLineWeight,
       'height': this.bounds.height,
       'fill': ctxt.dividerLineColor,
-      'class': 'DividerLine'
+      'class': 'dividerLine'
     });
   }
 }
@@ -419,7 +421,7 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
       'width': ctxt.neumeLineWeight,
       'height': this.bounds.height,
       'fill': ctxt.neumeLineColor,
-      'class': 'NeumeLine'
+      'class': 'neumeLine'
     });
   }
 }
@@ -446,7 +448,7 @@ export class HorizontalEpisemaVisualizer extends ChantLayoutElement {
       'width': this.bounds.width,
       'height': this.bounds.height,
       'fill': ctxt.neumeLineColor,
-      'class': 'HorizontalEpisema'
+      'class': 'horizontalEpisema'
     });
   }
 }
@@ -464,10 +466,10 @@ export class GlyphVisualizer extends ChantLayoutElement {
 
   setGlyphShape(ctxt, glyphCode) {
 
-    if (this.glyphCode == glyphCode)
+    if (this.glyphCode === glyphCode)
       return;
 
-    if (typeof glyphCode === 'undefined' || glyphCode == null || glyphCode == "")
+    if (typeof glyphCode === 'undefined' || glyphCode === null || glyphCode === "")
       this.glyphCode = GlyphCode.None;
     else
       this.glyphCode = glyphCode;
@@ -490,7 +492,7 @@ export class GlyphVisualizer extends ChantLayoutElement {
     this.origin.x = this.glyph.origin.x * ctxt.glyphScaling;
     this.origin.y = this.glyph.origin.y * ctxt.glyphScaling;
 
-    this.bounds.x = -this.origin.x;
+    this.bounds.x = 0;
     this.bounds.y = -this.origin.y;
     this.bounds.width = this.glyph.bounds.width * ctxt.glyphScaling;
     this.bounds.height = this.glyph.bounds.height * ctxt.glyphScaling;
@@ -590,9 +592,11 @@ export class TextElement extends ChantLayoutElement {
     var markupStack = [];
     var spanStartIndex = 0;
 
+    var filterFrames = (frame, symbol) => frame.Symbol === symbol;
+
     var that = this;
     var closeSpan = function (spanText, extraProperties) {
-      if (spanText == "")
+      if (spanText === "")
         return;
 
       that.text += spanText;
@@ -610,26 +614,26 @@ export class TextElement extends ChantLayoutElement {
     var markupRegex = /(\*|_|\^|%|[ARVarv]\/\.)/g;
 
     var match = null;
-    while (match = markupRegex.exec(text)) {
+    while ((match = markupRegex.exec(text))) {
 
       var markupSymbol = match[0];
 
       // non-matching symbols first
-      if (markupSymbol == "A/." || markupSymbol == "R/." || markupSymbol == "V/." ||
-          markupSymbol == "a/." || markupSymbol == "r/." || markupSymbol == "v/.") {
+      if (markupSymbol === "A/." || markupSymbol === "R/." || markupSymbol === "V/." ||
+          markupSymbol === "a/." || markupSymbol === "r/." || markupSymbol === "v/.") {
         closeSpan(text[match.index] + ".", "font-family:'Exsurge Characters';fill:#f00;");
-      } else if (markupStack.length == 0) {
+      } else if (markupStack.length === 0) {
         // otherwise we're dealing with matching markup delimeters
         // if this is our first markup frame, then just create an inline for preceding text and push the stack frame
         closeSpan(text.substring(spanStartIndex, match.index));
         markupStack.push(MarkupStackFrame.createStackFrame(markupSymbol, match.index));
       } else {
 
-        if (markupStack[markupStack.length - 1].symbol == markupSymbol) {
+        if (markupStack[markupStack.length - 1].symbol === markupSymbol) {
           // group close
           closeSpan(text.substring(spanStartIndex, match.index));
           markupStack.pop();
-        } else if (markupStack.filter((frame) => frame.Symbol == markupSymbol).length > 0) {
+        } else if (markupStack.filter(filterFrames).length > 0) {
           // trying to open a recursive group (or forgot to close a previous group)
           // in either case, we just unwind to the previous stack frame
           spanStartIndex = markupStack[markupStack.length - 1].startIndex;
@@ -652,7 +656,7 @@ export class TextElement extends ChantLayoutElement {
 
     // if after all of that we still didn't create any runs, then just add the entire text
     // string itself as a run
-    if (this.spans.length == 0)
+    if (this.spans.length === 0)
       closeSpan(text);
   }
 
@@ -724,7 +728,7 @@ export class Lyric extends TextElement {
 
     this.cssClasses += " Lyric";
 
-    if (typeof lyricType === 'undefined' || lyricType == null || lyricType == "")
+    if (typeof lyricType === 'undefined' || lyricType === null || lyricType === "")
       this.lyricType = LyricType.SingleSyllable;
     else
       this.lyricType = lyricType;
@@ -733,8 +737,8 @@ export class Lyric extends TextElement {
   }
 
   allowsConnector() {
-    return this.lyricType == LyricType.BeginningSyllable ||
-            this.lyricType == LyricType.MiddleSyllable;
+    return this.lyricType === LyricType.BeginningSyllable ||
+            this.lyricType === LyricType.MiddleSyllable;
   }
 
   setNeedsConnector(needs) {
@@ -779,7 +783,7 @@ export class Lyric extends TextElement {
     // and offset the rect that much
     var offset = 0;
 
-    if (this.lyricType != LyricType.Directive) {
+    if (this.lyricType !== LyricType.Directive) {
 
       // Non-directive elements are lined up to the chant notation based on vowel segments.
       // First we determine the vowel segment of the text, then we calculate the center point
@@ -817,7 +821,7 @@ export class Lyric extends TextElement {
 
     var classes = "lyric ";
 
-    if (this.lyricType == LyricType.Directive)
+    if (this.lyricType === LyricType.Directive)
       classes += "directive ";
 
     return classes + super.getCssClasses();
@@ -826,7 +830,7 @@ export class Lyric extends TextElement {
   getExtraStyleProperties(ctxt) {
     var props = super.getExtraStyleProperties();
 
-    if (this.lyricType == LyricType.Directive && ctxt.autoColor === true)
+    if (this.lyricType === LyricType.Directive && ctxt.autoColor === true)
       props += "fill:#f00;";
 
     return props;
@@ -897,7 +901,7 @@ export class ChantNotationElement extends ChantLayoutElement {
   }
 
   hasLyric() {
-    if (this.lyric != null)
+    if (this.lyric !== null)
       return true;
     else
       return false;
@@ -921,6 +925,18 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.visualizers.push(chantLayoutElement);
   }
 
+  // same as addVisualizer, except the element is unshifted to the front
+  // of the visualizer array rather than the end. This way, some
+  // visualizers can be placed behind the others...ledge lines for example.
+  prependVisualizer(chantLayoutElement) {
+    if (this.bounds.isEmpty())
+      this.bounds = chantLayoutElement.bounds.clone();
+    else
+      this.bounds.union(chantLayoutElement.bounds);
+
+    this.visualizers.unshift(chantLayoutElement);
+  }
+
   // chant notation elements are given an opportunity to perform their layout via this function.
   // subclasses should call this function first in overrides of this function.
   // on completion, exsurge presumes that the bounds, the origin, and the drawable objects are
@@ -940,9 +956,8 @@ export class ChantNotationElement extends ChantLayoutElement {
 
   // a helper function for subclasses to call after they are done performing layout...
   finishLayout(ctxt) {
-    this.origin.x -= -this.bounds.x;
+    //this.origin.x -= -this.bounds.x;
     this.bounds.x = 0;
-    //this.bounds.y = 0;
 
     // add the lyric and line it up
     if (this.hasLyric())

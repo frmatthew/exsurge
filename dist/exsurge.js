@@ -158,7 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_ret4 === 'continue') continue;
 	}
 	
-	var _Exsurge5 = __webpack_require__(5);
+	var _Exsurge5 = __webpack_require__(6);
 	
 	var _loop5 = function _loop5(_key14) {
 	  if (_key14 === "default") return 'continue';
@@ -176,7 +176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_ret5 === 'continue') continue;
 	}
 	
-	var _ExsurgeChant = __webpack_require__(8);
+	var _ExsurgeChant = __webpack_require__(9);
 	
 	var _loop6 = function _loop6(_key15) {
 	  if (_key15 === "default") return 'continue';
@@ -194,7 +194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_ret6 === 'continue') continue;
 	}
 	
-	var _ExsurgeChant2 = __webpack_require__(6);
+	var _ExsurgeChant2 = __webpack_require__(7);
 	
 	var _loop7 = function _loop7(_key16) {
 	  if (_key16 === "default") return 'continue';
@@ -212,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_ret7 === 'continue') continue;
 	}
 	
-	var _ExsurgeChant3 = __webpack_require__(9);
+	var _ExsurgeChant3 = __webpack_require__(10);
 	
 	var _loop8 = function _loop8(_key17) {
 	  if (_key17 === "default") return 'continue';
@@ -230,7 +230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_ret8 === 'continue') continue;
 	}
 	
-	var _Exsurge6 = __webpack_require__(7);
+	var _Exsurge6 = __webpack_require__(8);
 	
 	var _loop9 = function _loop9(_key18) {
 	  if (_key18 === "default") return 'continue';
@@ -282,9 +282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	};
 	
-	ChantVisualElementPrototype.attachedCallback = function () {
-	  console.log("Attached a chant-visual");
-	};
+	ChantVisualElementPrototype.attachedCallback = function () {};
 	
 	// register the custom element
 	var ChantVisualElement = exports.ChantVisualElement = document.registerElement('chant-visual', {
@@ -470,11 +468,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Point;
 	}();
 	
-	;
-	
 	/*
 	 * Rect
 	 */
+	
 	
 	var Rect = exports.Rect = function () {
 	  function Rect(x, y, width, height) {
@@ -577,13 +574,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Margins;
 	}();
 	
-	;
-	
 	/**
 	 * Size
 	 *
 	 * @class
 	 */
+	
 	
 	var Size = exports.Size = function () {
 	  function Size(width, height) {
@@ -608,11 +604,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Size;
 	}();
 	
-	;
-	
 	/*
 	 * Pitches, notes
 	 */
+	
+	
 	var Step = exports.Step = {
 	  Do: 0,
 	  Du: 1,
@@ -682,9 +678,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Pitch;
 	}();
 	
-	;
-	
 	// for positioning markings on notes
+	
+	
 	var MarkingPositionHint = exports.MarkingPositionHint = {
 	  Default: 0,
 	  Above: 1,
@@ -696,7 +692,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
 	  }
 	  return s4() + s4();
-	};
+	}
 
 /***/ },
 /* 2 */
@@ -769,7 +765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var parsedWords = [];
 	
-	      if (text == undefined || text == "") return parsedWords;
+	      if (typeof text === 'undefined' || text === "") return parsedWords;
 	
 	      // Divide the text into words separated by whitespace
 	      var words = text.split(/[\s]+/);
@@ -831,7 +827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isVowel',
 	    value: function isVowel(c) {
 	      for (var i = 0, end = this.vowels.length; i < end; i++) {
-	        if (this.vowels[i] == c) return true;
+	        if (this.vowels[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -847,7 +843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isMuteConsonantOrF',
 	    value: function isMuteConsonantOrF(c) {
 	      for (var i = 0, end = this.muteConsonantsAndF.length; i < end; i++) {
-	        if (this.muteConsonantsAndF[i] == c) return true;
+	        if (this.muteConsonantsAndF[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -861,7 +857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isLiquidConsonant',
 	    value: function isLiquidConsonant(c) {
 	      for (var i = 0, end = this.liquidConsonants.length; i < end; i++) {
-	        if (this.liquidConsonants[i] == c) return true;
+	        if (this.liquidConsonants[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -875,7 +871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isDiphthong',
 	    value: function isDiphthong(s) {
 	      for (var i = 0, end = this.diphthongs.length; i < end; i++) {
-	        if (this.diphthongs[i] == s) return true;
+	        if (this.diphthongs[i] === s) return true;
 	      }return false;
 	    }
 	
@@ -936,13 +932,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // i is a special case for a vowel. when i is at the beginning
 	        // of the word (Iesu) or i is between vowels (alleluia),
 	        // then the i is treated as a consonant (y)
-	        if (c == 'i') {
-	          if (i == 0 && haveLookahead && this.isVowel(lookahead)) cIsVowel = false;else if (previousWasVowel && haveLookahead && this.isVowel(lookahead)) {
+	        if (c === 'i') {
+	          if (i === 0 && haveLookahead && this.isVowel(lookahead)) cIsVowel = false;else if (previousWasVowel && haveLookahead && this.isVowel(lookahead)) {
 	            cIsVowel = false;
 	          }
 	        }
 	
-	        if (c == '-') {
+	        if (c === '-') {
 	
 	          // a hyphen forces a syllable break, which effectively resets
 	          // the logic...
@@ -964,7 +960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          previousWasVowel = true;
 	        } else if (haveLookahead) {
 	
-	          if (c == 'q' && lookahead == 'u' || lookahead == 'h' && (c == 'c' || c == 'p' || c == 't')) {
+	          if (c === 'q' && lookahead === 'u' || lookahead === 'h' && (c === 'c' || c === 'p' || c === 't')) {
 	            // handle wheelock's exceptions for qu, ch, ph and th
 	            makeSyllable(i - startSyllable);
 	            i++; // skip over the 'h' or 'u'
@@ -1058,7 +1054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isVowel',
 	    value: function isVowel(c) {
 	      for (var i = 0, end = this.vowels.length; i < end; i++) {
-	        if (this.vowels[i] == c) return true;
+	        if (this.vowels[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -1071,7 +1067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isWeakVowel',
 	    value: function isWeakVowel(c) {
 	      for (var i = 0, end = this.weakVowels.length; i < end; i++) {
-	        if (this.weakVowels[i] == c) return true;
+	        if (this.weakVowels[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -1084,7 +1080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isStrongVowel',
 	    value: function isStrongVowel(c) {
 	      for (var i = 0, end = this.strongVowels.length; i < end; i++) {
-	        if (this.strongVowels[i] == c) return true;
+	        if (this.strongVowels[i] === c) return true;
 	      }return false;
 	    }
 	
@@ -1098,7 +1094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'isDiphthong',
 	    value: function isDiphthong(s) {
 	      for (var i = 0, end = this.diphthongs.length; i < end; i++) {
-	        if (this.diphthongs[i] == s) return true;
+	        if (this.diphthongs[i] === s) return true;
 	      }return false;
 	    }
 	  }, {
@@ -1175,13 +1171,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	
 	              // handle explicit syllable breaks
-	              if (word[i] == '-') {
+	              if (word[i] === '-') {
 	                // start new syllable
 	                syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
 	                startSyllable = ++i;
 	              } else {
 	
-	                var numberOfConsonants = 1;
+	                var numberOfConsonants = 1,
+	                    consonant2;
 	
 	                // count how many more consonants there are
 	                for (j = i + 1; j < word.length; j++) {
@@ -1189,13 +1186,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  numberOfConsonants++;
 	                }
 	
-	                if (numberOfConsonants == 1) {
+	                if (numberOfConsonants === 1) {
 	                  // start new syllable
 	                  syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
 	                  startSyllable = i;
-	                } else if (numberOfConsonants == 2) {
-	                  var consonant2 = word[i + 1].toLowerCase();
-	                  if (consonant2 == 'l' || consonant2 == 'r' || c == 'c' && consonant2 == 'h') {
+	                } else if (numberOfConsonants === 2) {
+	                  consonant2 = word[i + 1].toLowerCase();
+	                  if (consonant2 === 'l' || consonant2 === 'r' || c === 'c' && consonant2 === 'h') {
 	                    // split before the consonant pair
 	                    syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
 	                    startSyllable = i++;
@@ -1204,19 +1201,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    syllables.push(this.createSyllable(word.substr(startSyllable, ++i - startSyllable)));
 	                    startSyllable = i;
 	                  }
-	                } else if (numberOfConsonants == 3) {
-	                  var consonant2 = word[i + 1].toLowerCase();
+	                } else if (numberOfConsonants === 3) {
+	                  consonant2 = word[i + 1].toLowerCase();
 	
 	                  // if second consonant is s, divide cc-c, otherwise divide c-cc
-	                  if (consonant2 == 's') {
+	                  if (consonant2 === 's') {
 	                    i += 2;
 	                    syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable)));
-	                  } else {
-	                    syllables.push(this.createSyllable(word.substr(startSyllable, ++i - startSyllable)));
-	                  }
+	                  } else syllables.push(this.createSyllable(word.substr(startSyllable, ++i - startSyllable)));
 	
 	                  startSyllable = i;
-	                } else if (numberOfConsonants == 4) {
+	                } else if (numberOfConsonants === 4) {
 	                  // four always get split cc-cc
 	                  syllables.push(this.createSyllable(word.substr(startSyllable, i - startSyllable + 2)));
 	                  startSyllable = i + 2;
@@ -1233,7 +1228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // if we have a complete syllable, we can add it as a new one. Otherwise
 	      // we tack the remaining characters onto the last syllable.
-	      if (haveCompleteSyllable) syllables.push(word.substr(startSyllable));else if (startSyllable > 0) syllables[syllables.length - 1] += word.substr(startSyllable);else if (syllables.length == 0) syllables.push(this.createSyllable(word));
+	      if (haveCompleteSyllable) syllables.push(word.substr(startSyllable));else if (startSyllable > 0) syllables[syllables.length - 1] += word.substr(startSyllable);else if (syllables.length === 0) syllables.push(this.createSyllable(word));
 	
 	      return syllables;
 	    }
@@ -1259,11 +1254,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (index >= 0) {
 	
 	          // check the exceptions...
-	          if (d[0] == 'u' && index > 0) {
+	          if (d[0] === 'u' && index > 0) {
 	            var tripthong = s.substr(index - 1, 3).toLowerCase();
 	
 	            for (j = 0, endj = this.uDipthongExpections.length; i < endj; j++) {
-	              if (tripthong == this.uDipthongExpections[j]) {
+	              if (tripthong === this.uDipthongExpections[j]) {
 	                // search from after the u...
 	                return this.findVowelSegment(s, index + 1);
 	              }
@@ -1976,7 +1971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	// load in the web font for special chant characters here:
-	var __exsurgeCharactersFont = __webpack_require__(10);
+	var __exsurgeCharactersFont = __webpack_require__(5);
 	
 	var GlyphCode = exports.GlyphCode = {
 	
@@ -2121,8 +2116,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var fragment = '<' + name + ' ';
 	
 	    for (var attr in attributes) {
-	      fragment += attr + '="' + attributes[attr] + '" ';
-	    }fragment += '>' + child + '</' + name + '>';
+	      if (attributes.hasOwnProperty(attr)) fragment += attr + '="' + attributes[attr] + '" ';
+	    }
+	
+	    fragment += '>' + child + '</' + name + '>';
 	
 	    return fragment;
 	  },
@@ -2344,7 +2341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'width': ctxt.dividerLineWeight,
 	        'height': this.bounds.height,
 	        'fill': ctxt.dividerLineColor,
-	        'class': 'DividerLine'
+	        'class': 'dividerLine'
 	      });
 	    }
 	  }]);
@@ -2391,7 +2388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'width': ctxt.neumeLineWeight,
 	        'height': this.bounds.height,
 	        'fill': ctxt.neumeLineColor,
-	        'class': 'NeumeLine'
+	        'class': 'neumeLine'
 	      });
 	    }
 	  }]);
@@ -2427,7 +2424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'width': this.bounds.width,
 	        'height': this.bounds.height,
 	        'fill': ctxt.neumeLineColor,
-	        'class': 'HorizontalEpisema'
+	        'class': 'horizontalEpisema'
 	      });
 	    }
 	  }]);
@@ -2453,9 +2450,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'setGlyphShape',
 	    value: function setGlyphShape(ctxt, glyphCode) {
 	
-	      if (this.glyphCode == glyphCode) return;
+	      if (this.glyphCode === glyphCode) return;
 	
-	      if (typeof glyphCode === 'undefined' || glyphCode == null || glyphCode == "") this.glyphCode = GlyphCode.None;else this.glyphCode = glyphCode;
+	      if (typeof glyphCode === 'undefined' || glyphCode === null || glyphCode === "") this.glyphCode = GlyphCode.None;else this.glyphCode = glyphCode;
 	
 	      this.glyph = _Exsurge2.Glyphs[this.glyphCode];
 	
@@ -2474,7 +2471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.origin.x = this.glyph.origin.x * ctxt.glyphScaling;
 	      this.origin.y = this.glyph.origin.y * ctxt.glyphScaling;
 	
-	      this.bounds.x = -this.origin.x;
+	      this.bounds.x = 0;
 	      this.bounds.y = -this.origin.y;
 	      this.bounds.width = this.glyph.bounds.width * ctxt.glyphScaling;
 	      this.bounds.height = this.glyph.bounds.height * ctxt.glyphScaling;
@@ -2584,9 +2581,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var markupStack = [];
 	      var spanStartIndex = 0;
 	
+	      var filterFrames = function filterFrames(frame, symbol) {
+	        return frame.Symbol === symbol;
+	      };
+	
 	      var that = this;
 	      var closeSpan = function closeSpan(spanText, extraProperties) {
-	        if (spanText == "") return;
+	        if (spanText === "") return;
 	
 	        that.text += spanText;
 	
@@ -2606,22 +2607,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var markupSymbol = match[0];
 	
 	        // non-matching symbols first
-	        if (markupSymbol == "A/." || markupSymbol == "R/." || markupSymbol == "V/." || markupSymbol == "a/." || markupSymbol == "r/." || markupSymbol == "v/.") {
+	        if (markupSymbol === "A/." || markupSymbol === "R/." || markupSymbol === "V/." || markupSymbol === "a/." || markupSymbol === "r/." || markupSymbol === "v/.") {
 	          closeSpan(text[match.index] + ".", "font-family:'Exsurge Characters';fill:#f00;");
-	        } else if (markupStack.length == 0) {
+	        } else if (markupStack.length === 0) {
 	          // otherwise we're dealing with matching markup delimeters
 	          // if this is our first markup frame, then just create an inline for preceding text and push the stack frame
 	          closeSpan(text.substring(spanStartIndex, match.index));
 	          markupStack.push(MarkupStackFrame.createStackFrame(markupSymbol, match.index));
 	        } else {
 	
-	          if (markupStack[markupStack.length - 1].symbol == markupSymbol) {
+	          if (markupStack[markupStack.length - 1].symbol === markupSymbol) {
 	            // group close
 	            closeSpan(text.substring(spanStartIndex, match.index));
 	            markupStack.pop();
-	          } else if (markupStack.filter(function (frame) {
-	            return frame.Symbol == markupSymbol;
-	          }).length > 0) {
+	          } else if (markupStack.filter(filterFrames).length > 0) {
 	            // trying to open a recursive group (or forgot to close a previous group)
 	            // in either case, we just unwind to the previous stack frame
 	            spanStartIndex = markupStack[markupStack.length - 1].startIndex;
@@ -2643,7 +2642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // if after all of that we still didn't create any runs, then just add the entire text
 	      // string itself as a run
-	      if (this.spans.length == 0) closeSpan(text);
+	      if (this.spans.length === 0) closeSpan(text);
 	    }
 	  }, {
 	    key: 'recalculateMetrics',
@@ -2721,7 +2720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this6.cssClasses += " Lyric";
 	
-	    if (typeof lyricType === 'undefined' || lyricType == null || lyricType == "") _this6.lyricType = LyricType.SingleSyllable;else _this6.lyricType = lyricType;
+	    if (typeof lyricType === 'undefined' || lyricType === null || lyricType === "") _this6.lyricType = LyricType.SingleSyllable;else _this6.lyricType = lyricType;
 	
 	    _this6.needsConnector = false;
 	    return _this6;
@@ -2730,7 +2729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Lyric, [{
 	    key: 'allowsConnector',
 	    value: function allowsConnector() {
-	      return this.lyricType == LyricType.BeginningSyllable || this.lyricType == LyricType.MiddleSyllable;
+	      return this.lyricType === LyricType.BeginningSyllable || this.lyricType === LyricType.MiddleSyllable;
 	    }
 	  }, {
 	    key: 'setNeedsConnector',
@@ -2776,7 +2775,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // and offset the rect that much
 	      var offset = 0;
 	
-	      if (this.lyricType != LyricType.Directive) {
+	      if (this.lyricType !== LyricType.Directive) {
 	
 	        // Non-directive elements are lined up to the chant notation based on vowel segments.
 	        // First we determine the vowel segment of the text, then we calculate the center point
@@ -2813,7 +2812,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var classes = "lyric ";
 	
-	      if (this.lyricType == LyricType.Directive) classes += "directive ";
+	      if (this.lyricType === LyricType.Directive) classes += "directive ";
 	
 	      return classes + _get(Object.getPrototypeOf(Lyric.prototype), 'getCssClasses', this).call(this);
 	    }
@@ -2822,7 +2821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function getExtraStyleProperties(ctxt) {
 	      var props = _get(Object.getPrototypeOf(Lyric.prototype), 'getExtraStyleProperties', this).call(this);
 	
-	      if (this.lyricType == LyricType.Directive && ctxt.autoColor === true) props += "fill:#f00;";
+	      if (this.lyricType === LyricType.Directive && ctxt.autoColor === true) props += "fill:#f00;";
 	
 	      return props;
 	    }
@@ -2919,7 +2918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(ChantNotationElement, [{
 	    key: 'hasLyric',
 	    value: function hasLyric() {
-	      if (this.lyric != null) return true;else return false;
+	      if (this.lyric !== null) return true;else return false;
 	    }
 	  }, {
 	    key: 'getLyricLeft',
@@ -2940,6 +2939,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.bounds.isEmpty()) this.bounds = chantLayoutElement.bounds.clone();else this.bounds.union(chantLayoutElement.bounds);
 	
 	      this.visualizers.push(chantLayoutElement);
+	    }
+	
+	    // same as addVisualizer, except the element is unshifted to the front
+	    // of the visualizer array rather than the end. This way, some
+	    // visualizers can be placed behind the others...ledge lines for example.
+	
+	  }, {
+	    key: 'prependVisualizer',
+	    value: function prependVisualizer(chantLayoutElement) {
+	      if (this.bounds.isEmpty()) this.bounds = chantLayoutElement.bounds.clone();else this.bounds.union(chantLayoutElement.bounds);
+	
+	      this.visualizers.unshift(chantLayoutElement);
 	    }
 	
 	    // chant notation elements are given an opportunity to perform their layout via this function.
@@ -2965,9 +2976,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'finishLayout',
 	    value: function finishLayout(ctxt) {
-	      this.origin.x -= -this.bounds.x;
+	      //this.origin.x -= -this.bounds.x;
 	      this.bounds.x = 0;
-	      //this.bounds.y = 0;
 	
 	      // add the lyric and line it up
 	      if (this.hasLyric()) this.lyric.bounds.x = this.origin.x - this.lyric.origin.x;
@@ -2993,6 +3003,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	module.exports = "data:font/opentype;base64,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eHN1cmdlIENoYXJhY3RlcnM6VmVyc2lvbiAxLjAwVmVyc2lvbiAxLjAwIEZlYnJ1YXJ5IDE4LCAyMDE2LCBpbml0aWFsIHJlbGVhc2VFeHN1cmdlQ2hhcmFjdGVyc1RoaXMgRm9udCBTb2Z0d2FyZSBpcyBsaWNlbnNlZCB1bmRlciB0aGUgU0lMIE9wZW4gRm9udCBMaWNlbnNlLCBWZXJzaW9uIDEuMS4gVGhpcyBsaWNlbnNlIGlzIGNvcGllZCBiZWxvdywgYW5kIGlzIGFsc28gYXZhaWxhYmxlIHdpdGggYSBGQVEgYXQ6IGh0dHA6Ly9zY3JpcHRzLnNpbC5vcmcvT0ZMDQoNCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClNJTCBPUEVOIEZPTlQgTElDRU5TRSBWZXJzaW9uIDEuMSAtIDI2IEZlYnJ1YXJ5IDIwMDcNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNClBSRUFNQkxFDQpUaGUgZ29hbHMgb2YgdGhlIE9wZW4gRm9udCBMaWNlbnNlIChPRkwpIGFyZSB0byBzdGltdWxhdGUgd29ybGR3aWRlIGRldmVsb3BtZW50IG9mIGNvbGxhYm9yYXRpdmUgZm9udCBwcm9qZWN0cywgdG8gc3VwcG9ydCB0aGUgZm9udCBjcmVhdGlvbiBlZmZvcnRzIG9mIGFjYWRlbWljIGFuZCBsaW5ndWlzdGljIGNvbW11bml0aWVzLCBhbmQgdG8gcHJvdmlkZSBhIGZyZWUgYW5kIG9wZW4gZnJhbWV3b3JrIGluIHdoaWNoIGZvbnRzIG1heSBiZSBzaGFyZWQgYW5kIGltcHJvdmVkIGluIHBhcnRuZXJzaGlwIHdpdGggb3RoZXJzLg0KDQpUaGUgT0ZMIGFsbG93cyB0aGUgbGljZW5zZWQgZm9udHMgdG8gYmUgdXNlZCwgc3R1ZGllZCwgbW9kaWZpZWQgYW5kIHJlZGlzdHJpYnV0ZWQgZnJlZWx5IGFzIGxvbmcgYXMgdGhleSBhcmUgbm90IHNvbGQgYnkgdGhlbXNlbHZlcy4gVGhlIGZvbnRzLCBpbmNsdWRpbmcgYW55IGRlcml2YXRpdmUgd29ya3MsIGNhbiBiZSBidW5kbGVkLCBlbWJlZGRlZCwgcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSBwcm92aWRlZCB0aGF0IGFueSByZXNlcnZlZCBuYW1lcyBhcmUgbm90IHVzZWQgYnkgZGVyaXZhdGl2ZSB3b3Jrcy4gVGhlIGZvbnRzIGFuZCBkZXJpdmF0aXZlcywgaG93ZXZlciwgY2Fubm90IGJlIHJlbGVhc2VkIHVuZGVyIGFueSBvdGhlciB0eXBlIG9mIGxpY2Vuc2UuIFRoZSByZXF1aXJlbWVudCBmb3IgZm9udHMgdG8gcmVtYWluIHVuZGVyIHRoaXMgbGljZW5zZSBkb2VzIG5vdCBhcHBseSB0byBhbnkgZG9jdW1lbnQgY3JlYXRlZCB1c2luZyB0aGUgZm9udHMgb3IgdGhlaXIgZGVyaXZhdGl2ZXMuDQoNCkRFRklOSVRJT05TDQoiRm9udCBTb2Z0d2FyZSIgcmVmZXJzIHRvIHRoZSBzZXQgb2YgZmlsZXMgcmVsZWFzZWQgYnkgdGhlIENvcHlyaWdodCBIb2xkZXIocykgdW5kZXIgdGhpcyBsaWNlbnNlIGFuZCBjbGVhcmx5IG1hcmtlZCBhcyBzdWNoLiBUaGlzIG1heSBpbmNsdWRlIHNvdXJjZSBmaWxlcywgYnVpbGQgc2NyaXB0cyBhbmQgZG9jdW1lbnRhdGlvbi4NCg0KIlJlc2VydmVkIEZvbnQgTmFtZSIgcmVmZXJzIHRvIGFueSBuYW1lcyBzcGVjaWZpZWQgYXMgc3VjaCBhZnRlciB0aGUgY29weXJpZ2h0IHN0YXRlbWVudChzKS4NCg0KIk9yaWdpbmFsIFZlcnNpb24iIHJlZmVycyB0byB0aGUgY29sbGVjdGlvbiBvZiBGb250IFNvZnR3YXJlIGNvbXBvbmVudHMgYXMgZGlzdHJpYnV0ZWQgYnkgdGhlIENvcHlyaWdodCBIb2xkZXIocykuDQoNCiJNb2RpZmllZCBWZXJzaW9uIiByZWZlcnMgdG8gYW55IGRlcml2YXRpdmUgbWFkZSBieSBhZGRpbmcgdG8sIGRlbGV0aW5nLCBvciBzdWJzdGl0dXRpbmcgLS0gaW4gcGFydCBvciBpbiB3aG9sZSAtLSBhbnkgb2YgdGhlIGNvbXBvbmVudHMgb2YgdGhlIE9yaWdpbmFsIFZlcnNpb24sIGJ5IGNoYW5naW5nIGZvcm1hdHMgb3IgYnkgcG9ydGluZyB0aGUgRm9udCBTb2Z0d2FyZSB0byBhIG5ldyBlbnZpcm9ubWVudC4NCg0KIkF1dGhvciIgcmVmZXJzIHRvIGFueSBkZXNpZ25lciwgZW5naW5lZXIsIHByb2dyYW1tZXIsIHRlY2huaWNhbCB3cml0ZXIgb3Igb3RoZXIgcGVyc29uIHdobyBjb250cmlidXRlZCB0byB0aGUgRm9udCBTb2Z0d2FyZS4NCg0KUEVSTUlTU0lPTiAmIENPTkRJVElPTlMNClBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVyc29uIG9idGFpbmluZyBhIGNvcHkgb2YgdGhlIEZvbnQgU29mdHdhcmUsIHRvIHVzZSwgc3R1ZHksIGNvcHksIG1lcmdlLCBlbWJlZCwgbW9kaWZ5LCByZWRpc3RyaWJ1dGUsIGFuZCBzZWxsIG1vZGlmaWVkIGFuZCB1bm1vZGlmaWVkIGNvcGllcyBvZiB0aGUgRm9udCBTb2Z0d2FyZSwgc3ViamVjdCB0byB0aGUgZm9sbG93aW5nIGNvbmRpdGlvbnM6DQoNCjEpIE5laXRoZXIgdGhlIEZvbnQgU29mdHdhcmUgbm9yIGFueSBvZiBpdHMgaW5kaXZpZHVhbCBjb21wb25lbnRzLCBpbiBPcmlnaW5hbCBvciBNb2RpZmllZCBWZXJzaW9ucywgbWF5IGJlIHNvbGQgYnkgaXRzZWxmLg0KDQoyKSBPcmlnaW5hbCBvciBNb2RpZmllZCBWZXJzaW9ucyBvZiB0aGUgRm9udCBTb2Z0d2FyZSBtYXkgYmUgYnVuZGxlZCwgcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSwgcHJvdmlkZWQgdGhhdCBlYWNoIGNvcHkgY29udGFpbnMgdGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgbGljZW5zZS4gVGhlc2UgY2FuIGJlIGluY2x1ZGVkIGVpdGhlciBhcyBzdGFuZC1hbG9uZSB0ZXh0IGZpbGVzLCBodW1hbi1yZWFkYWJsZSBoZWFkZXJzIG9yIGluIHRoZSBhcHByb3ByaWF0ZSBtYWNoaW5lLXJlYWRhYmxlIG1ldGFkYXRhIGZpZWxkcyB3aXRoaW4gdGV4dCBvciBiaW5hcnkgZmlsZXMgYXMgbG9uZyBhcyB0aG9zZSBmaWVsZHMgY2FuIGJlIGVhc2lseSB2aWV3ZWQgYnkgdGhlIHVzZXIuDQoNCjMpIE5vIE1vZGlmaWVkIFZlcnNpb24gb2YgdGhlIEZvbnQgU29mdHdhcmUgbWF5IHVzZSB0aGUgUmVzZXJ2ZWQgRm9udCBOYW1lKHMpIHVubGVzcyBleHBsaWNpdCB3cml0dGVuIHBlcm1pc3Npb24gaXMgZ3JhbnRlZCBieSB0aGUgY29ycmVzcG9uZGluZyBDb3B5cmlnaHQgSG9sZGVyLiBUaGlzIHJlc3RyaWN0aW9uIG9ubHkgYXBwbGllcyB0byB0aGUgcHJpbWFyeSBmb250IG5hbWUgYXMgcHJlc2VudGVkIHRvIHRoZSB1c2Vycy4NCg0KNCkgVGhlIG5hbWUocykgb2YgdGhlIENvcHlyaWdodCBIb2xkZXIocykgb3IgdGhlIEF1dGhvcihzKSBvZiB0aGUgRm9udCBTb2Z0d2FyZSBzaGFsbCBub3QgYmUgdXNlZCB0byBwcm9tb3RlLCBlbmRvcnNlIG9yIGFkdmVydGlzZSBhbnkgTW9kaWZpZWQgVmVyc2lvbiwgZXhjZXB0IHRvIGFja25vd2xlZGdlIHRoZSBjb250cmlidXRpb24ocykgb2YgdGhlIENvcHlyaWdodCBIb2xkZXIocykgYW5kIHRoZSBBdXRob3Iocykgb3Igd2l0aCB0aGVpciBleHBsaWNpdCB3cml0dGVuIHBlcm1pc3Npb24uDQoNCjUpIFRoZSBGb250IFNvZnR3YXJlLCBtb2RpZmllZCBvciB1bm1vZGlmaWVkLCBpbiBwYXJ0IG9yIGluIHdob2xlLCBtdXN0IGJlIGRpc3RyaWJ1dGVkIGVudGlyZWx5IHVuZGVyIHRoaXMgbGljZW5zZSwgYW5kIG11c3Qgbm90IGJlIGRpc3RyaWJ1dGVkIHVuZGVyIGFueSBvdGhlciBsaWNlbnNlLiBUaGUgcmVxdWlyZW1lbnQgZm9yIGZvbnRzIHRvIHJlbWFpbiB1bmRlciB0aGlzIGxpY2Vuc2UgZG9lcyBub3QgYXBwbHkgdG8gYW55IGRvY3VtZW50IGNyZWF0ZWQgdXNpbmcgdGhlIEZvbnQgU29mdHdhcmUuDQoNClRFUk1JTkFUSU9ODQpUaGlzIGxpY2Vuc2UgYmVjb21lcyBudWxsIGFuZCB2b2lkIGlmIGFueSBvZiB0aGUgYWJvdmUgY29uZGl0aW9ucyBhcmUgbm90IG1ldC4NCg0KRElTQ0xBSU1FUg0KVEhFIEZPTlQgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUiBJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIEFOWSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVCBPRiBDT1BZUklHSFQsIFBBVEVOVCwgVFJBREVNQVJLLCBPUiBPVEhFUiBSSUdIVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFIENPUFlSSUdIVCBIT0xERVIgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIgTElBQklMSVRZLCBJTkNMVURJTkcgQU5ZIEdFTkVSQUwsIFNQRUNJQUwsIElORElSRUNULCBJTkNJREVOVEFMLCBPUiBDT05TRVFVRU5USUFMIERBTUFHRVMsIFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORyBGUk9NLCBPVVQgT0YgVEhFIFVTRSBPUiBJTkFCSUxJVFkgVE8gVVNFIFRIRSBGT05UIFNPRlRXQVJFIE9SIEZST00gT1RIRVIgREVBTElOR1MgSU4gVEhFIEZPTlQgU09GVFdBUkUuAEMAbwBwAHkAcgBpAGcAaAB0ACAAKABjACkAIAAyADAAMQA2ACAARgByAC4AIABNAGEAdAB0AGgAZQB3ACAAUwBwAGUAbgBjAGUAcgAsACAATwAuAFMALgBKAC4AUgBlAGcAdQBsAGEAcgBFAHgAcwB1AHIAZwBlACAAQwBoAGEAcgBhAGMAdABlAHIAcwA6AFYAZQByAHMAaQBvAG4AIAAxAC4AMAAwAFYAZQByAHMAaQBvAG4AIAAxAC4AMAAwACAARgBlAGIAcgB1AGEAcgB5ACAAMQA4ACwAIAAyADAAMQA2ACwAIABpAG4AaQB0AGkAYQBsACAAcgBlAGwAZQBhAHMAZQBFAHgAcwB1AHIAZwBlAEMAaABhAHIAYQBjAHQAZQByAHMAVABoAGkAcwAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABpAHMAIABsAGkAYwBlAG4AcwBlAGQAIAB1AG4AZABlAHIAIAB0AGgAZQAgAFMASQBMACAATwBwAGUAbgAgAEYAbwBuAHQAIABMAGkAYwBlAG4AcwBlACwAIABWAGUAcgBzAGkAbwBuACAAMQAuADEALgAgAFQAaABpAHMAIABsAGkAYwBlAG4AcwBlACAAaQBzACAAYwBvAHAAaQBlAGQAIABiAGUAbABvAHcALAAgAGEAbgBkACAAaQBzACAAYQBsAHMAbwAgAGEAdgBhAGkAbABhAGIAbABlACAAdwBpAHQAaAAgAGEAIABGAEEAUQAgAGEAdAA6ACAAaAB0AHQAcAA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAA0ACgANAAoADQAKAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQANAAoAUwBJAEwAIABPAFAARQBOACAARgBPAE4AVAAgAEwASQBDAEUATgBTAEUAIABWAGUAcgBzAGkAbwBuACAAMQAuADEAIAAtACAAMgA2ACAARgBlAGIAcgB1AGEAcgB5ACAAMgAwADAANwANAAoALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAA0ACgANAAoAUABSAEUAQQBNAEIATABFAA0ACgBUAGgAZQAgAGcAbwBhAGwAcwAgAG8AZgAgAHQAaABlACAATwBwAGUAbgAgAEYAbwBuAHQAIABMAGkAYwBlAG4AcwBlACAAKABPAEYATAApACAAYQByAGUAIAB0AG8AIABzAHQAaQBtAHUAbABhAHQAZQAgAHcAbwByAGwAZAB3AGkAZABlACAAZABlAHYAZQBsAG8AcABtAGUAbgB0ACAAbwBmACAAYwBvAGwAbABhAGIAbwByAGEAdABpAHYAZQAgAGYAbwBuAHQAIABwAHIAbwBqAGUAYwB0AHMALAAgAHQAbwAgAHMAdQBwAHAAbwByAHQAIAB0AGgAZQAgAGYAbwBuAHQAIABjAHIAZQBhAHQAaQBvAG4AIABlAGYAZgBvAHIAdABzACAAbwBmACAAYQBjAGEAZABlAG0AaQBjACAAYQBuAGQAIABsAGkAbgBnAHUAaQBzAHQAaQBjACAAYwBvAG0AbQB1AG4AaQB0AGkAZQBzACwAIABhAG4AZAAgAHQAbwAgAHAAcgBvAHYAaQBkAGUAIABhACAAZgByAGUAZQAgAGEAbgBkACAAbwBwAGUAbgAgAGYAcgBhAG0AZQB3AG8AcgBrACAAaQBuACAAdwBoAGkAYwBoACAAZgBvAG4AdABzACAAbQBhAHkAIABiAGUAIABzAGgAYQByAGUAZAAgAGEAbgBkACAAaQBtAHAAcgBvAHYAZQBkACAAaQBuACAAcABhAHIAdABuAGUAcgBzAGgAaQBwACAAdwBpAHQAaAAgAG8AdABoAGUAcgBzAC4ADQAKAA0ACgBUAGgAZQAgAE8ARgBMACAAYQBsAGwAbwB3AHMAIAB0AGgAZQAgAGwAaQBjAGUAbgBzAGUAZAAgAGYAbwBuAHQAcwAgAHQAbwAgAGIAZQAgAHUAcwBlAGQALAAgAHMAdAB1AGQAaQBlAGQALAAgAG0AbwBkAGkAZgBpAGUAZAAgAGEAbgBkACAAcgBlAGQAaQBzAHQAcgBpAGIAdQB0AGUAZAAgAGYAcgBlAGUAbAB5ACAAYQBzACAAbABvAG4AZwAgAGEAcwAgAHQAaABlAHkAIABhAHIAZQAgAG4AbwB0ACAAcwBvAGwAZAAgAGIAeQAgAHQAaABlAG0AcwBlAGwAdgBlAHMALgAgAFQAaABlACAAZgBvAG4AdABzACwAIABpAG4AYwBsAHUAZABpAG4AZwAgAGEAbgB5ACAAZABlAHIAaQB2AGEAdABpAHYAZQAgAHcAbwByAGsAcwAsACAAYwBhAG4AIABiAGUAIABiAHUAbgBkAGwAZQBkACwAIABlAG0AYgBlAGQAZABlAGQALAAgAHIAZQBkAGkAcwB0AHIAaQBiAHUAdABlAGQAIABhAG4AZAAvAG8AcgAgAHMAbwBsAGQAIAB3AGkAdABoACAAYQBuAHkAIABzAG8AZgB0AHcAYQByAGUAIABwAHIAbwB2AGkAZABlAGQAIAB0AGgAYQB0ACAAYQBuAHkAIAByAGUAcwBlAHIAdgBlAGQAIABuAGEAbQBlAHMAIABhAHIAZQAgAG4AbwB0ACAAdQBzAGUAZAAgAGIAeQAgAGQAZQByAGkAdgBhAHQAaQB2AGUAIAB3AG8AcgBrAHMALgAgAFQAaABlACAAZgBvAG4AdABzACAAYQBuAGQAIABkAGUAcgBpAHYAYQB0AGkAdgBlAHMALAAgAGgAbwB3AGUAdgBlAHIALAAgAGMAYQBuAG4AbwB0ACAAYgBlACAAcgBlAGwAZQBhAHMAZQBkACAAdQBuAGQAZQByACAAYQBuAHkAIABvAHQAaABlAHIAIAB0AHkAcABlACAAbwBmACAAbABpAGMAZQBuAHMAZQAuACAAVABoAGUAIAByAGUAcQB1AGkAcgBlAG0AZQBuAHQAIABmAG8AcgAgAGYAbwBuAHQAcwAgAHQAbwAgAHIAZQBtAGEAaQBuACAAdQBuAGQAZQByACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUAIABkAG8AZQBzACAAbgBvAHQAIABhAHAAcABsAHkAIAB0AG8AIABhAG4AeQAgAGQAbwBjAHUAbQBlAG4AdAAgAGMAcgBlAGEAdABlAGQAIAB1AHMAaQBuAGcAIAB0AGgAZQAgAGYAbwBuAHQAcwAgAG8AcgAgAHQAaABlAGkAcgAgAGQAZQByAGkAdgBhAHQAaQB2AGUAcwAuAA0ACgANAAoARABFAEYASQBOAEkAVABJAE8ATgBTAA0ACgAiAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAdABoAGUAIABzAGUAdAAgAG8AZgAgAGYAaQBsAGUAcwAgAHIAZQBsAGUAYQBzAGUAZAAgAGIAeQAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAHUAbgBkAGUAcgAgAHQAaABpAHMAIABsAGkAYwBlAG4AcwBlACAAYQBuAGQAIABjAGwAZQBhAHIAbAB5ACAAbQBhAHIAawBlAGQAIABhAHMAIABzAHUAYwBoAC4AIABUAGgAaQBzACAAbQBhAHkAIABpAG4AYwBsAHUAZABlACAAcwBvAHUAcgBjAGUAIABmAGkAbABlAHMALAAgAGIAdQBpAGwAZAAgAHMAYwByAGkAcAB0AHMAIABhAG4AZAAgAGQAbwBjAHUAbQBlAG4AdABhAHQAaQBvAG4ALgANAAoADQAKACIAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAYQBuAHkAIABuAGEAbQBlAHMAIABzAHAAZQBjAGkAZgBpAGUAZAAgAGEAcwAgAHMAdQBjAGgAIABhAGYAdABlAHIAIAB0AGgAZQAgAGMAbwBwAHkAcgBpAGcAaAB0ACAAcwB0AGEAdABlAG0AZQBuAHQAKABzACkALgANAAoADQAKACIATwByAGkAZwBpAG4AYQBsACAAVgBlAHIAcwBpAG8AbgAiACAAcgBlAGYAZQByAHMAIAB0AG8AIAB0AGgAZQAgAGMAbwBsAGwAZQBjAHQAaQBvAG4AIABvAGYAIABGAG8AbgB0ACAAUwBvAGYAdAB3AGEAcgBlACAAYwBvAG0AcABvAG4AZQBuAHQAcwAgAGEAcwAgAGQAaQBzAHQAcgBpAGIAdQB0AGUAZAAgAGIAeQAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAuAA0ACgANAAoAIgBNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuACIAIAByAGUAZgBlAHIAcwAgAHQAbwAgAGEAbgB5ACAAZABlAHIAaQB2AGEAdABpAHYAZQAgAG0AYQBkAGUAIABiAHkAIABhAGQAZABpAG4AZwAgAHQAbwAsACAAZABlAGwAZQB0AGkAbgBnACwAIABvAHIAIABzAHUAYgBzAHQAaQB0AHUAdABpAG4AZwAgAC0ALQAgAGkAbgAgAHAAYQByAHQAIABvAHIAIABpAG4AIAB3AGgAbwBsAGUAIAAtAC0AIABhAG4AeQAgAG8AZgAgAHQAaABlACAAYwBvAG0AcABvAG4AZQBuAHQAcwAgAG8AZgAgAHQAaABlACAATwByAGkAZwBpAG4AYQBsACAAVgBlAHIAcwBpAG8AbgAsACAAYgB5ACAAYwBoAGEAbgBnAGkAbgBnACAAZgBvAHIAbQBhAHQAcwAgAG8AcgAgAGIAeQAgAHAAbwByAHQAaQBuAGcAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIAB0AG8AIABhACAAbgBlAHcAIABlAG4AdgBpAHIAbwBuAG0AZQBuAHQALgANAAoADQAKACIAQQB1AHQAaABvAHIAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAYQBuAHkAIABkAGUAcwBpAGcAbgBlAHIALAAgAGUAbgBnAGkAbgBlAGUAcgAsACAAcAByAG8AZwByAGEAbQBtAGUAcgAsACAAdABlAGMAaABuAGkAYwBhAGwAIAB3AHIAaQB0AGUAcgAgAG8AcgAgAG8AdABoAGUAcgAgAHAAZQByAHMAbwBuACAAdwBoAG8AIABjAG8AbgB0AHIAaQBiAHUAdABlAGQAIAB0AG8AIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUALgANAAoADQAKAFAARQBSAE0ASQBTAFMASQBPAE4AIAAmACAAQwBPAE4ARABJAFQASQBPAE4AUwANAAoAUABlAHIAbQBpAHMAcwBpAG8AbgAgAGkAcwAgAGgAZQByAGUAYgB5ACAAZwByAGEAbgB0AGUAZAAsACAAZgByAGUAZQAgAG8AZgAgAGMAaABhAHIAZwBlACwAIAB0AG8AIABhAG4AeQAgAHAAZQByAHMAbwBuACAAbwBiAHQAYQBpAG4AaQBuAGcAIABhACAAYwBvAHAAeQAgAG8AZgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAsACAAdABvACAAdQBzAGUALAAgAHMAdAB1AGQAeQAsACAAYwBvAHAAeQAsACAAbQBlAHIAZwBlACwAIABlAG0AYgBlAGQALAAgAG0AbwBkAGkAZgB5ACwAIAByAGUAZABpAHMAdAByAGkAYgB1AHQAZQAsACAAYQBuAGQAIABzAGUAbABsACAAbQBvAGQAaQBmAGkAZQBkACAAYQBuAGQAIAB1AG4AbQBvAGQAaQBmAGkAZQBkACAAYwBvAHAAaQBlAHMAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUALAAgAHMAdQBiAGoAZQBjAHQAIAB0AG8AIAB0AGgAZQAgAGYAbwBsAGwAbwB3AGkAbgBnACAAYwBvAG4AZABpAHQAaQBvAG4AcwA6AA0ACgANAAoAMQApACAATgBlAGkAdABoAGUAcgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAgAG4AbwByACAAYQBuAHkAIABvAGYAIABpAHQAcwAgAGkAbgBkAGkAdgBpAGQAdQBhAGwAIABjAG8AbQBwAG8AbgBlAG4AdABzACwAIABpAG4AIABPAHIAaQBnAGkAbgBhAGwAIABvAHIAIABNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuAHMALAAgAG0AYQB5ACAAYgBlACAAcwBvAGwAZAAgAGIAeQAgAGkAdABzAGUAbABmAC4ADQAKAA0ACgAyACkAIABPAHIAaQBnAGkAbgBhAGwAIABvAHIAIABNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuAHMAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABtAGEAeQAgAGIAZQAgAGIAdQBuAGQAbABlAGQALAAgAHIAZQBkAGkAcwB0AHIAaQBiAHUAdABlAGQAIABhAG4AZAAvAG8AcgAgAHMAbwBsAGQAIAB3AGkAdABoACAAYQBuAHkAIABzAG8AZgB0AHcAYQByAGUALAAgAHAAcgBvAHYAaQBkAGUAZAAgAHQAaABhAHQAIABlAGEAYwBoACAAYwBvAHAAeQAgAGMAbwBuAHQAYQBpAG4AcwAgAHQAaABlACAAYQBiAG8AdgBlACAAYwBvAHAAeQByAGkAZwBoAHQAIABuAG8AdABpAGMAZQAgAGEAbgBkACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUALgAgAFQAaABlAHMAZQAgAGMAYQBuACAAYgBlACAAaQBuAGMAbAB1AGQAZQBkACAAZQBpAHQAaABlAHIAIABhAHMAIABzAHQAYQBuAGQALQBhAGwAbwBuAGUAIAB0AGUAeAB0ACAAZgBpAGwAZQBzACwAIABoAHUAbQBhAG4ALQByAGUAYQBkAGEAYgBsAGUAIABoAGUAYQBkAGUAcgBzACAAbwByACAAaQBuACAAdABoAGUAIABhAHAAcAByAG8AcAByAGkAYQB0AGUAIABtAGEAYwBoAGkAbgBlAC0AcgBlAGEAZABhAGIAbABlACAAbQBlAHQAYQBkAGEAdABhACAAZgBpAGUAbABkAHMAIAB3AGkAdABoAGkAbgAgAHQAZQB4AHQAIABvAHIAIABiAGkAbgBhAHIAeQAgAGYAaQBsAGUAcwAgAGEAcwAgAGwAbwBuAGcAIABhAHMAIAB0AGgAbwBzAGUAIABmAGkAZQBsAGQAcwAgAGMAYQBuACAAYgBlACAAZQBhAHMAaQBsAHkAIAB2AGkAZQB3AGUAZAAgAGIAeQAgAHQAaABlACAAdQBzAGUAcgAuAA0ACgANAAoAMwApACAATgBvACAATQBvAGQAaQBmAGkAZQBkACAAVgBlAHIAcwBpAG8AbgAgAG8AZgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAgAG0AYQB5ACAAdQBzAGUAIAB0AGgAZQAgAFIAZQBzAGUAcgB2AGUAZAAgAEYAbwBuAHQAIABOAGEAbQBlACgAcwApACAAdQBuAGwAZQBzAHMAIABlAHgAcABsAGkAYwBpAHQAIAB3AHIAaQB0AHQAZQBuACAAcABlAHIAbQBpAHMAcwBpAG8AbgAgAGkAcwAgAGcAcgBhAG4AdABlAGQAIABiAHkAIAB0AGgAZQAgAGMAbwByAHIAZQBzAHAAbwBuAGQAaQBuAGcAIABDAG8AcAB5AHIAaQBnAGgAdAAgAEgAbwBsAGQAZQByAC4AIABUAGgAaQBzACAAcgBlAHMAdAByAGkAYwB0AGkAbwBuACAAbwBuAGwAeQAgAGEAcABwAGwAaQBlAHMAIAB0AG8AIAB0AGgAZQAgAHAAcgBpAG0AYQByAHkAIABmAG8AbgB0ACAAbgBhAG0AZQAgAGEAcwAgAHAAcgBlAHMAZQBuAHQAZQBkACAAdABvACAAdABoAGUAIAB1AHMAZQByAHMALgANAAoADQAKADQAKQAgAFQAaABlACAAbgBhAG0AZQAoAHMAKQAgAG8AZgAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAG8AcgAgAHQAaABlACAAQQB1AHQAaABvAHIAKABzACkAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABzAGgAYQBsAGwAIABuAG8AdAAgAGIAZQAgAHUAcwBlAGQAIAB0AG8AIABwAHIAbwBtAG8AdABlACwAIABlAG4AZABvAHIAcwBlACAAbwByACAAYQBkAHYAZQByAHQAaQBzAGUAIABhAG4AeQAgAE0AbwBkAGkAZgBpAGUAZAAgAFYAZQByAHMAaQBvAG4ALAAgAGUAeABjAGUAcAB0ACAAdABvACAAYQBjAGsAbgBvAHcAbABlAGQAZwBlACAAdABoAGUAIABjAG8AbgB0AHIAaQBiAHUAdABpAG8AbgAoAHMAKQAgAG8AZgAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAGEAbgBkACAAdABoAGUAIABBAHUAdABoAG8AcgAoAHMAKQAgAG8AcgAgAHcAaQB0AGgAIAB0AGgAZQBpAHIAIABlAHgAcABsAGkAYwBpAHQAIAB3AHIAaQB0AHQAZQBuACAAcABlAHIAbQBpAHMAcwBpAG8AbgAuAA0ACgANAAoANQApACAAVABoAGUAIABGAG8AbgB0ACAAUwBvAGYAdAB3AGEAcgBlACwAIABtAG8AZABpAGYAaQBlAGQAIABvAHIAIAB1AG4AbQBvAGQAaQBmAGkAZQBkACwAIABpAG4AIABwAGEAcgB0ACAAbwByACAAaQBuACAAdwBoAG8AbABlACwAIABtAHUAcwB0ACAAYgBlACAAZABpAHMAdAByAGkAYgB1AHQAZQBkACAAZQBuAHQAaQByAGUAbAB5ACAAdQBuAGQAZQByACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUALAAgAGEAbgBkACAAbQB1AHMAdAAgAG4AbwB0ACAAYgBlACAAZABpAHMAdAByAGkAYgB1AHQAZQBkACAAdQBuAGQAZQByACAAYQBuAHkAIABvAHQAaABlAHIAIABsAGkAYwBlAG4AcwBlAC4AIABUAGgAZQAgAHIAZQBxAHUAaQByAGUAbQBlAG4AdAAgAGYAbwByACAAZgBvAG4AdABzACAAdABvACAAcgBlAG0AYQBpAG4AIAB1AG4AZABlAHIAIAB0AGgAaQBzACAAbABpAGMAZQBuAHMAZQAgAGQAbwBlAHMAIABuAG8AdAAgAGEAcABwAGwAeQAgAHQAbwAgAGEAbgB5ACAAZABvAGMAdQBtAGUAbgB0ACAAYwByAGUAYQB0AGUAZAAgAHUAcwBpAG4AZwAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAuAA0ACgANAAoAVABFAFIATQBJAE4AQQBUAEkATwBOAA0ACgBUAGgAaQBzACAAbABpAGMAZQBuAHMAZQAgAGIAZQBjAG8AbQBlAHMAIABuAHUAbABsACAAYQBuAGQAIAB2AG8AaQBkACAAaQBmACAAYQBuAHkAIABvAGYAIAB0AGgAZQAgAGEAYgBvAHYAZQAgAGMAbwBuAGQAaQB0AGkAbwBuAHMAIABhAHIAZQAgAG4AbwB0ACAAbQBlAHQALgANAAoADQAKAEQASQBTAEMATABBAEkATQBFAFIADQAKAFQASABFACAARgBPAE4AVAAgAFMATwBGAFQAVwBBAFIARQAgAEkAUwAgAFAAUgBPAFYASQBEAEUARAAgACIAQQBTACAASQBTACIALAAgAFcASQBUAEgATwBVAFQAIABXAEEAUgBSAEEATgBUAFkAIABPAEYAIABBAE4AWQAgAEsASQBOAEQALAAgAEUAWABQAFIARQBTAFMAIABPAFIAIABJAE0AUABMAEkARQBEACwAIABJAE4AQwBMAFUARABJAE4ARwAgAEIAVQBUACAATgBPAFQAIABMAEkATQBJAFQARQBEACAAVABPACAAQQBOAFkAIABXAEEAUgBSAEEATgBUAEkARQBTACAATwBGACAATQBFAFIAQwBIAEEATgBUAEEAQgBJAEwASQBUAFkALAAgAEYASQBUAE4ARQBTAFMAIABGAE8AUgAgAEEAIABQAEEAUgBUAEkAQwBVAEwAQQBSACAAUABVAFIAUABPAFMARQAgAEEATgBEACAATgBPAE4ASQBOAEYAUgBJAE4ARwBFAE0ARQBOAFQAIABPAEYAIABDAE8AUABZAFIASQBHAEgAVAAsACAAUABBAFQARQBOAFQALAAgAFQAUgBBAEQARQBNAEEAUgBLACwAIABPAFIAIABPAFQASABFAFIAIABSAEkARwBIAFQALgAgAEkATgAgAE4ATwAgAEUAVgBFAE4AVAAgAFMASABBAEwATAAgAFQASABFACAAQwBPAFAAWQBSAEkARwBIAFQAIABIAE8ATABEAEUAUgAgAEIARQAgAEwASQBBAEIATABFACAARgBPAFIAIABBAE4AWQAgAEMATABBAEkATQAsACAARABBAE0AQQBHAEUAUwAgAE8AUgAgAE8AVABIAEUAUgAgAEwASQBBAEIASQBMAEkAVABZACwAIABJAE4AQwBMAFUARABJAE4ARwAgAEEATgBZACAARwBFAE4ARQBSAEEATAAsACAAUwBQAEUAQwBJAEEATAAsACAASQBOAEQASQBSAEUAQwBUACwAIABJAE4AQwBJAEQARQBOAFQAQQBMACwAIABPAFIAIABDAE8ATgBTAEUAUQBVAEUATgBUAEkAQQBMACAARABBAE0AQQBHAEUAUwAsACAAVwBIAEUAVABIAEUAUgAgAEkATgAgAEEATgAgAEEAQwBUAEkATwBOACAATwBGACAAQwBPAE4AVABSAEEAQwBUACwAIABUAE8AUgBUACAATwBSACAATwBUAEgARQBSAFcASQBTAEUALAAgAEEAUgBJAFMASQBOAEcAIABGAFIATwBNACwAIABPAFUAVAAgAE8ARgAgAFQASABFACAAVQBTAEUAIABPAFIAIABJAE4AQQBCAEkATABJAFQAWQAgAFQATwAgAFUAUwBFACAAVABIAEUAIABGAE8ATgBUACAAUwBPAEYAVABXAEEAUgBFACAATwBSACAARgBSAE8ATQAgAE8AVABIAEUAUgAgAEQARQBBAEwASQBOAEcAUwAgAEkATgAgAFQASABFACAARgBPAE4AVAAgAFMATwBGAFQAVwBBAFIARQAuAAAAAgAAAAAAAP8GAGQAAAAAAAAAAAAAAAAAAAAAAAAAAABfAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQAAAAMACAACABAAAf//AAIAAAABAAAAAAABAAAADgAAAAAAAAAAAAIAAQAAAF4AAQABAAAACgBKAGQAAmN5cmwADmxhdG4AGAAEAAAAAP//AAAAEAACSVBBIAAaVklUIAAiAAD//wACAAEAAAAA//8AAQABAAD//wAAAAJrZXJuAA5tYXJrABQAAAABAAEAAAABAAAAAgAGAA4ABAAEAAEAEAACAAAAAQAsAAEADAAQAAAAIAAiAAIAAAABAAYAIQAyADYAQQBSAFYAAAAGAAEAjgAEAAAABgAWADAASgBkAHIAgAAGAA7/nAAhADYAQQA2ADIADQA2//IAUgAXAAYADv+cACEAWABBAFgAMgChADYAvQBSAE8ABgAO/nAAIf6TAEH+kwAy//kANgAOAFL/YQADAA7/nABSABcAVv/VAAMADv+cAFIANgBWAEwAAwAO/nAAUgAJAFYAGQABAAYAIQAyADYAQQBSAFYAAQAAAAoATgBoAAJjeXJsAA5sYXRuABoABAAAAAD//wABAAAAEAACSVBBIAAaVklUIAAiAAD//wACAAAAAQAA//8AAQAAAAD//wABAAAAAmFhbHQADnNtY3AAFAAAAAEAAAAAAAEAAAABAAQAAwAAAAEACAABABgAAwAMABAAFAABAEEAAQBSAAEAVgABAAMAIQAyADYAAA=="
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3014,9 +3030,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Exsurge3 = __webpack_require__(3);
 	
-	var _ExsurgeChant = __webpack_require__(6);
+	var _ExsurgeChant = __webpack_require__(7);
 	
-	var _Exsurge4 = __webpack_require__(7);
+	var _Exsurge4 = __webpack_require__(8);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -3100,7 +3116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'performLayout',
 	    value: function performLayout(ctxt) {
 	
-	      if (this.glyphVisualizer == null) {
+	      if (this.glyphVisualizer === null) {
 	        console.log("Tried to perform layout on a note with no glyphCode assigned!");
 	      }
 	
@@ -3114,10 +3130,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.origin.x = this.glyphVisualizer.origin.x;
 	      this.origin.y = this.glyphVisualizer.origin.y;
-	
-	      //this.drawable.attr({onclick: "Audio.playNoteInt(" + this.pitch.toInt() + ');',
-	      //  "data-pitch": this.pitch.toInt()
-	      //});
 	    }
 	  }, {
 	    key: 'draw',
@@ -3163,15 +3175,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.activeAccidental = this.defaultAccidental;
 	    }
 	  }, {
-	    key: 'updateChantLogic',
-	    value: function updateChantLogic() {
-	      _get(Object.getPrototypeOf(Clef.prototype), 'updateChantLogic', this).call(this);
-	
-	      _Exsurge2.ctxt.activeClef = this;
-	    }
-	  }, {
 	    key: 'pitchToStaffPosition',
 	    value: function pitchToStaffPosition(pitch) {}
+	  }, {
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      ctxt.activeClef = this;
+	      _get(Object.getPrototypeOf(Clef.prototype), 'performLayout', this).call(this, ctxt);
+	    }
 	  }]);
 	
 	  return Clef;
@@ -3202,7 +3213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var step = _Exsurge.Pitch.staffOffsetToStep(offset);
 	
-	      if (this.defaultAccidental != null && step == this.defaultAccidental.step) step += this.defaultAccidental.accidentalType;
+	      if (this.defaultAccidental !== null && step === this.defaultAccidental.step) step += this.defaultAccidental.accidentalType;
 	
 	      return new _Exsurge.Pitch(step, this.octave + octaveOffset);
 	    }
@@ -3264,7 +3275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var step = _Exsurge.Pitch.staffOffsetToStep(offset);
 	
-	      if (step == _Exsurge.Step.Ti && this.defaultAccidental == AccidentalType.Flat) step = _Exsurge.Step.Te;
+	      if (step === _Exsurge.Step.Ti && this.defaultAccidental === AccidentalType.Flat) step = _Exsurge.Step.Te;
 	
 	      return new _Exsurge.Pitch(step, this.octave + octaveOffset);
 	    }
@@ -3349,6 +3360,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this6.justify = true;
 	
+	    _this6.ledgerLines = [];
+	
 	    _this6.startingClef = null; // necessary for the layout process
 	
 	    _this6.nextLine = null;
@@ -3425,11 +3438,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var inner = "";
 	
 	      // add the chant lines
-	      var x1 = this.staffLeft,
+	      var i,
+	          x1 = this.staffLeft,
 	          x2 = this.staffRight;
 	
 	      // create the staff lines
-	      for (var i = -3; i <= 3; i += 2) {
+	      for (i = -3; i <= 3; i += 2) {
 	
 	        inner += _Exsurge2.QuickSvg.createFragment('line', {
 	          'x1': x1,
@@ -3438,7 +3452,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	          'y2': ctxt.staffInterval * i,
 	          'stroke': ctxt.staffLineColor,
 	          'stroke-width': ctxt.staffLineWeight,
-	          'class': 'StaffLine'
+	          'class': 'staffLine'
+	        });
+	      }
+	
+	      // create the ledger lines
+	      for (i = 0; i < this.ledgerLines.length; i++) {
+	
+	        var ledgerLine = this.ledgerLines[i];
+	        var y = ctxt.calculateHeightFromStaffPosition(ledgerLine.staffPosition);
+	
+	        inner += _Exsurge2.QuickSvg.createFragment('line', {
+	          'x1': ledgerLine.x1,
+	          'y1': y,
+	          'x2': ledgerLine.x2,
+	          'y2': y,
+	          'stroke': ctxt.staffLineColor,
+	          'stroke-width': ctxt.staffLineWeight,
+	          'class': 'ledgerLine'
 	        });
 	      }
 	
@@ -3451,10 +3482,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      // add all of the notations
-	      for (var i = 0; i < this.notations.length; i++) {
+	      for (i = 0; i < this.notations.length; i++) {
 	        inner += this.notations[i].createDrawable(ctxt);
 	      }return _Exsurge2.QuickSvg.createFragment('g', {
-	        'class': 'ChantLine',
+	        'class': 'chantLine',
 	        'transform': 'translate(' + this.bounds.x + ',' + this.bounds.y + ')'
 	      }, inner);
 	    }
@@ -3473,7 +3504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // If this is the first chant line, then we have to make room for a
 	      // drop cap and/or annotation, if present
-	      if (this.scoreNotationStart == 0) {
+	      if (this.scoreNotationStart === 0) {
 	
 	        var padding = 0;
 	
@@ -3499,9 +3530,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var rightBoundary = this.staffRight - _Exsurge3.Glyphs.CustodLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custod on the line
 	
 	      // todo: iterate through the notations, fittng what we can on this line
-	      var scoreNotations = this.score.notations;
+	      var i,
+	          scoreNotations = this.score.notations;
 	
-	      for (var i = newElementStart; i < scoreNotations.length; i++) {
+	      for (i = newElementStart; i < scoreNotations.length; i++) {
 	
 	        if (current.hasLyric()) previousWithLyric = current;
 	
@@ -3532,23 +3564,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.scoreNotationCount++;
 	
 	        // line breaks are a special case indicating to stop processing here
-	        if (current.constructor.name == 'ChantLineBreak' && width > 0) {
+	        if (current.constructor.name === 'ChantLineBreak' && width > 0) {
 	          this.justify = current.justify;
 	          break;
 	        }
 	      }
 	
-	      var extraSpace = 0;
+	      var last,
+	          extraSpace = 0;
 	
 	      if (this.notations.length > 0) {
-	        var last = this.notations[this.notations.length - 1];
+	        last = this.notations[this.notations.length - 1];
 	
 	        if (last.hasLyric() && last.getLyricRight() > last.bounds.right() + last.trailingSpace) extraSpace = this.staffRight - last.getLyricRight();else extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
 	      }
 	
 	      // create the custod at the end of the line (if we need it!)
 	      // if we find an element following this one that is a neume, we create a custod for it
-	      for (var i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
+	      for (i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
 	        var notation = this.score.notations[i];
 	
 	        if ('notes' in notation && notation.notes.length > 0) {
@@ -3559,7 +3592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          custod.performLayout(ctxt);
 	
 	          if (this.notations.length > 0) {
-	            var last = this.notations[this.notations.length - 1];
+	            last = this.notations[this.notations.length - 1];
 	            custod.bounds.x = last.bounds.x + last.bounds.width;
 	          }
 	
@@ -3580,6 +3613,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // Justify the line if we are not the last one
 	      if (this.justify === true && width > 0 && this.scoreNotationStart + this.scoreNotationCount < this.score.notations.length && extraSpace > 0) this.justifyElements(extraSpace);
+	
+	      this.finishLayout(ctxt);
 	    }
 	  }, {
 	    key: 'justifyElements',
@@ -3587,38 +3622,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var indices = [];
 	
-	      var prev = null,
+	      var i,
+	          prev = null,
 	          curr = null,
 	          prevWithLyrics = null;
 	
 	      // if we have a custod, place it at the end of the line
-	      if (this.custod != null) this.custod.bounds.x = this.staffRight - this.custod.bounds.width - this.custod.leadingSpace;
+	      if (this.custod !== null) this.custod.bounds.x = this.staffRight - this.custod.bounds.width - this.custod.leadingSpace;
 	
 	      // first pass: determine the neumes we can space apart
 	      // start at 1 to skip the clef
-	      for (var i = 1; i < this.notations.length - 1; i++) {
+	      for (i = 1; i < this.notations.length - 1; i++) {
 	
-	        if (curr != null && curr.hasLyric()) prevWithLyrics = curr;
+	        if (curr !== null && curr.hasLyric()) prevWithLyrics = curr;
 	
 	        prev = curr;
 	        curr = this.notations[i];
 	
-	        if (prev != null && prev.keepWithNext === true) continue;
+	        if (prev !== null && prev.keepWithNext === true) continue;
 	
-	        if (prevWithLyrics != null && prevWithLyrics.lyric.allowsConnector() && !prevWithLyrics.lyric.needsConnector) continue;
+	        if (prevWithLyrics !== null && prevWithLyrics.lyric.allowsConnector() && !prevWithLyrics.lyric.needsConnector) continue;
 	
-	        if (curr.constructor.name == 'ChantLineBreak') continue;
+	        if (curr.constructor.name === 'ChantLineBreak') continue;
 	
 	        // otherwise, we can add space before this element
 	        indices.push(i);
 	      }
 	
-	      if (indices.length == 0) return;
+	      if (indices.length === 0) return;
 	
 	      var offset = 0;
 	      var increment = extraSpace / indices.length;
-	      var lastIndex = this.notations[this.notations.length - 1].constructor.name == 'Custod' ? this.notations.length - 1 : this.notations.length;
-	      for (var i = 1; i < lastIndex; i++) {
+	      var lastIndex = this.notations[this.notations.length - 1].constructor.name === 'Custod' ? this.notations.length - 1 : this.notations.length;
+	      for (i = 1; i < lastIndex; i++) {
 	
 	        curr = this.notations[i];
 	
@@ -3629,6 +3665,97 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      offset = offset;
+	    }
+	  }, {
+	    key: 'finishLayout',
+	    value: function finishLayout(ctxt) {
+	
+	      this.ledgerLines = []; // clear any existing ledger lines
+	
+	      var epismata = []; // keep track of epismata in case we can connect some
+	
+	      // make a final pass over all of the notes to add any necessary
+	      // ledger lines and to smooth out epismata
+	      for (var i = 0; i < this.notations.length; i++) {
+	
+	        // if it's not a neume, then skip over it, right?
+	        if (typeof this.notations[i].notes === 'undefined') continue;
+	
+	        var neume = this.notations[i];
+	
+	        for (var j = 0; j < neume.notes.length; j++) {
+	          var note = neume.notes[j];
+	
+	          // do we need a ledger line for this note?
+	          var staffPosition = note.staffPosition;
+	
+	          if (staffPosition >= 5 || staffPosition <= -5) {
+	
+	            var x1 = neume.bounds.x + note.bounds.x - ctxt.staffInterval;
+	            var x2 = neume.bounds.x + note.bounds.x + note.bounds.width + ctxt.staffInterval;
+	
+	            // round the staffPosition to the nearest line
+	            if (staffPosition > 0) staffPosition = staffPosition - (staffPosition - 1) % 2;else staffPosition = staffPosition - (staffPosition + 1) % 2;
+	
+	            // if we have a ledger line close by, then average out the distance between the two
+	            var minLedgerSeperation = ctxt.staffInterval * 5;
+	
+	            if (this.ledgerLines.length > 0 && this.ledgerLines[this.ledgerLines.length - 1].x2 + minLedgerSeperation >= x1) {
+	
+	              // average out the distance
+	              var half = (x1 - this.ledgerLines[this.ledgerLines.length - 1].x2) / 2;
+	              this.ledgerLines[this.ledgerLines.length - 1].x2 += half;
+	              x1 -= half;
+	            }
+	
+	            // finally, add the ledger line
+	            this.ledgerLines.push({
+	              x1: x1,
+	              x2: x2,
+	              staffPosition: staffPosition
+	            });
+	          }
+	
+	          // blend epismata as we're able
+	          for (var k = 0; k < note.markings.length; k++) {
+	
+	            if (note.markings[k].constructor.name !== "HorizontalEpisema") continue;
+	
+	            var episema = note.markings[k];
+	
+	            // we try to blend the episema if we're able.
+	            if (epismata.length === 0 || epismata[0].episema.positionHint !== episema.positionHint || epismata[0].episema.terminating === true) {
+	
+	              // start a new set of epismata to potentially blend
+	              epismata = [];
+	              epismata.push({
+	                episema: episema,
+	                neume: neume
+	              });
+	            } else {
+	              // blend all previous with this one
+	              var newY;
+	
+	              if (episema.positionHint === Exsurge.MarkingPositionHint.Below) newY = Math.max(episema.bounds.y, epismata[0].episema.bounds.y);else newY = Math.min(episema.bounds.y, epismata[0].episema.bounds.y);
+	
+	              if (episema.bounds.y !== newY) episema.updateY(newY);else {
+	                for (var l = 0; l < epismata.length; l++) {
+	                  epismata[l].episema.updateY(newY);
+	                }
+	              }
+	
+	              // extend the last episema to meet the new one
+	              var newWidth = neume.bounds.x + episema.bounds.x - (epismata[epismata.length - 1].neume.bounds.x + epismata[epismata.length - 1].episema.bounds.x);
+	              epismata[epismata.length - 1].episema.updateWidth(newWidth);
+	
+	              epismata.push({
+	                episema: episema,
+	                neume: neume
+	              });
+	            }
+	          }
+	        }
+	      }
 	    }
 	
 	    // this is where the real core of positioning neumes takes place
@@ -3644,7 +3771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // irrespective of lyrics.
 	      curr.bounds.x = prev.bounds.right() + prev.trailingSpace;
 	
-	      if (prevWithLyric == null) {
+	      if (prevWithLyric === null) {
 	
 	        var maxRight = curr.bounds.right() + curr.trailingSpace;
 	
@@ -3709,7 +3836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // and mark the previous lyric as connecting if needed.
 	      // curr.bounds.x = this.startingClef.bounds.right();
 	
-	      if (prevWithLyric.lyric != null && prevWithLyric.lyric.allowsConnector()) prevWithLyric.lyric.setNeedsConnector(true);
+	      if (prevWithLyric.lyric !== null && prevWithLyric.lyric.allowsConnector()) prevWithLyric.lyric.setNeedsConnector(true);
 	
 	      return false;
 	    }
@@ -3798,7 +3925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var y = 0;
 	      var currIndex = 0;
 	
-	      if (ctxt.activeClef == null) ctxt.activeClef = this.startingClef;
+	      if (ctxt.activeClef === null) ctxt.activeClef = this.startingClef;
 	
 	      do {
 	
@@ -3826,14 +3953,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createDrawable',
 	    value: function createDrawable(ctxt) {
 	
-	      var drawable = "";
+	      var i,
+	          drawable = "";
 	
 	      // create defs section
 	      for (var def in ctxt.defs) {
-	        drawable += ctxt.defs[def];
+	        if (ctxt.defs.hasOwnProperty(def)) drawable += ctxt.defs[def];
 	      }drawable = _Exsurge2.QuickSvg.createFragment('defs', {}, drawable);
 	
-	      for (var i = 0; i < this.lines.length; i++) {
+	      for (i = 0; i < this.lines.length; i++) {
 	        drawable += this.lines[i].createDrawable(ctxt);
 	      }drawable = _Exsurge2.QuickSvg.createFragment('g', {}, drawable);
 	
@@ -3849,40 +3977,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return drawable;
 	    }
 	  }, {
-	    key: 'prepareNotesForAudio',
-	    value: function prepareNotesForAudio() {
-	
-	      this.notes = [];
-	
-	      // run through all of the notations...
-	      var prevNeume = null;
-	      var currNotation = null;
-	      for (var i = 0; i < this.notations.length; i++) {
-	        var currNotation = this.notations[i];
-	
-	        if (typeof currNotation.notes !== 'undefined') {
-	
-	          // copy the notes to the score for playback
-	          for (var j = 0; j < currNotation.notes.length; j++) {
-	            this.notes.push(currNotation.notes[j]);
-	          }prevNeume = currNotation;
-	        } else {
-	          // not a neume...if it's a full bar or a double bar, we can lengthen the notes here
-	          if (prevNeume != null && currNotation.constructor.name == 'FullBar' || currNotation.constructor.name == 'DoubleBar') {}
-	        }
-	      }
-	    }
-	  }, {
 	    key: 'unserializeFromJson',
 	    value: function unserializeFromJson(data) {
 	      this.autoColoring = data['auto-coloring'];
 	
-	      if (data.annotation != null && data.annotation != "") {
+	      if (data.annotation !== null && data.annotation !== "") {
 	        // create the annotation
 	        this.annotation = new _Exsurge2.Annotation(_Exsurge2.ctxt, data.annotation);
 	      } else this.annotation = null;
 	
-	      var createDropCap = data['drop-cap'] == 'auto' ? true : false;
+	      var createDropCap = data['drop-cap'] === 'auto' ? true : false;
 	
 	      _Exsurge4.Gabc.parseChantNotations(data.notations, this, createDropCap);
 	    }
@@ -3894,7 +3998,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      data['type'] = "score";
 	      data['auto-coloring'] = true;
 	
-	      if (this.annotation != null) data.annotation = this.annotation.unsanitizedText;else data.annotation = "";
+	      if (this.annotation !== null) data.annotation = this.annotation.unsanitizedText;else data.annotation = "";
 	
 	      return data;
 	    }
@@ -3988,7 +4092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4064,9 +4168,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var staffPosition = 0; // a default value just to make sure we don't fail rebuilding
 	      var glyphCode;
 	
-	      if (this.referringNeume != null) {
+	      if (this.referringNeume !== null) {
 	        if (this.referringNeume.notes.length > 0) staffPosition = this.referringNeume.notes[0].staffPosition;
-	      } else if (note != null) staffPosition = this.note.staffPosition;
+	      } else if (note !== null) staffPosition = this.note.staffPosition;
 	
 	      glyphCode = Custod.getGlyphCode(staffPosition);
 	
@@ -4083,11 +4187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (staffPosition <= 2) {
 	
 	        // ascending custodes
-	        if (Math.abs(staffPosition) % 2 == 1) return _Exsurge2.GlyphCode.CustodLong;else return _Exsurge2.GlyphCode.CustodShort;
+	        if (Math.abs(staffPosition) % 2 === 1) return _Exsurge2.GlyphCode.CustodLong;else return _Exsurge2.GlyphCode.CustodShort;
 	      } else {
 	
 	        // descending custodes
-	        if (Math.abs(staffPosition) % 2 == 1) return _Exsurge2.GlyphCode.CustodDescLong;else return _Exsurge2.GlyphCode.CustodDescShort;
+	        if (Math.abs(staffPosition) % 2 === 1) return _Exsurge2.GlyphCode.CustodDescLong;else return _Exsurge2.GlyphCode.CustodDescShort;
 	      }
 	    }
 	  }]);
@@ -4297,18 +4401,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function adjustStep(step) {
 	      switch (this.accidentalType) {
 	        case AccidentalType.Flat:
-	          if (step == Step.Ti) return Step.Te;
-	          if (step == Step.Mi) return Step.Me;
+	          if (step === Step.Ti) return Step.Te;
+	          if (step === Step.Mi) return Step.Me;
 	          break;
 	        case AccidentalType.Sharp:
-	          if (step == Step.Do) return Step.Du;
-	          if (step == Step.Fa) return Step.Fu;
+	          if (step === Step.Do) return Step.Du;
+	          if (step === Step.Fa) return Step.Fu;
 	          break;
 	        case AccidentalType.Natural:
-	          if (step == Step.Te) return Step.Ti;
-	          if (step == Step.Me) return Step.Mi;
-	          if (step == Step.Du) return Step.Do;
-	          if (step == Step.Fu) return Step.Fa;
+	          if (step === Step.Te) return Step.Ti;
+	          if (step === Step.Me) return Step.Mi;
+	          if (step === Step.Du) return Step.Do;
+	          if (step === Step.Fu) return Step.Fa;
 	          break;
 	      }
 	
@@ -4322,7 +4426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // fixme: this is broken since we changed to staff positions
 	
 	      // no adjusment needed
-	      if (this.octave != pitch.octave) return;
+	      if (this.octave !== pitch.octave) return;
 	
 	      pitch.step = this.adjustStep(pitch.step);
 	    }
@@ -4373,7 +4477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_Exsurge2.ChantNotationElement);
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4387,17 +4491,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Exsurge2 = __webpack_require__(4);
 	
-	var _Exsurge3 = __webpack_require__(5);
+	var _Exsurge3 = __webpack_require__(6);
 	
-	var _ExsurgeChant = __webpack_require__(8);
+	var _ExsurgeChant = __webpack_require__(9);
 	
 	var Markings = _interopRequireWildcard(_ExsurgeChant);
 	
-	var _ExsurgeChant2 = __webpack_require__(6);
+	var _ExsurgeChant2 = __webpack_require__(7);
 	
 	var Signs = _interopRequireWildcard(_ExsurgeChant2);
 	
-	var _ExsurgeChant3 = __webpack_require__(9);
+	var _ExsurgeChant3 = __webpack_require__(10);
 	
 	var Neumes = _interopRequireWildcard(_ExsurgeChant3);
 	
@@ -4440,8 +4544,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // fixme: no dropcap until the text engine is working again
 	    this.parseChantNotations(ctxt, gabcNotations, score, createDropCap);
 	
-	    score.prepareNotesForAudio();
-	
 	    return score;
 	  },
 	
@@ -4461,7 +4563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var currSyllable = 0;
 	
-	      if (word == '') continue;
+	      if (word === '') continue;
 	
 	      word = word.trim();
 	
@@ -4477,37 +4579,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var items = this.createNotations(ctxt, score, notationData, passByRef);
 	
-	        if (items.length == 0) continue;
+	        if (items.length === 0) continue;
 	
 	        // if we are to create a dropCap and we haven't done so yet, do it now
-	        if (createDropCap && score.dropCap == null && lyricText != "") {
+	        if (createDropCap && score.dropCap === null && lyricText !== "") {
 	          score.dropCap = new _Exsurge2.DropCap(ctxt, lyricText.substring(0, 1));
 	          lyricText = lyricText.substring(1);
 	        }
 	
 	        // create lyric if we have it...
-	        if (lyricText != "") {
+	        if (lyricText !== "") {
 	
 	          var lyricType;
-	          if (currSyllable == 0 && matches.length == 1) lyricType = _Exsurge2.LyricType.SingleSyllable;else if (currSyllable == 0 && matches.length > 1) lyricType = _Exsurge2.LyricType.BeginningSyllable;else if (currSyllable == matches.length - 1) lyricType = _Exsurge2.LyricType.EndingSyllable;else lyricType = _Exsurge2.LyricType.MiddleSyllable;
+	          if (currSyllable === 0 && matches.length === 1) lyricType = _Exsurge2.LyricType.SingleSyllable;else if (currSyllable === 0 && matches.length > 1) lyricType = _Exsurge2.LyricType.BeginningSyllable;else if (currSyllable === matches.length - 1) lyricType = _Exsurge2.LyricType.EndingSyllable;else lyricType = _Exsurge2.LyricType.MiddleSyllable;
 	
 	          // add the lyrics to the first notation that makes sense...
 	          var notationWithLyrics = null;
 	          for (var k = 0; k < items.length; k++) {
 	            var cne = items[k];
-	            if (cne.constructor.name == "Accidental") continue;
+	            if (cne.constructor.name === "Accidental") continue;
 	
 	            notationWithLyrics = cne;
 	            break;
 	          }
 	
 	          // if it's not a neume then make the lyric a directive
-	          if (notationWithLyrics.notes == null) lyricType = _Exsurge2.LyricType.Directive;
+	          if (notationWithLyrics.notes === null) lyricType = _Exsurge2.LyricType.Directive;
 	
 	          var lyric = this.makeLyric(ctxt, lyricText, lyricType);
 	
 	          // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
-	          if (lyric.lyricType == _Exsurge2.LyricType.BeginningSyllable || lyric.lyricType == _Exsurge2.LyricType.SingleSyllable) passByRef.activeClef.resetAccidentals();
+	          if (lyric.lyricType === _Exsurge2.LyricType.BeginningSyllable || lyric.lyricType === _Exsurge2.LyricType.SingleSyllable) passByRef.activeClef.resetAccidentals();
 	
 	          // fixme: lyrics are broken! for now, just ignore them
 	          notationWithLyrics.lyric = lyric;
@@ -4522,14 +4624,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  makeLyric: function makeLyric(ctxt, text, lyricType) {
 	
-	    if (text.length > 1 && text[text.length - 1] == '-') {
-	      if (lyricType == _Exsurge2.LyricType.EndingSyllable) lyricType = _Exsurge2.LyricType.MiddleSyllable;else if (lyricType == _Exsurge2.LyricType.SingleSyllable) lyricType = _Exsurge2.LyricType.BeginningSyllable;
+	    if (text.length > 1 && text[text.length - 1] === '-') {
+	      if (lyricType === _Exsurge2.LyricType.EndingSyllable) lyricType = _Exsurge2.LyricType.MiddleSyllable;else if (lyricType === _Exsurge2.LyricType.SingleSyllable) lyricType = _Exsurge2.LyricType.BeginningSyllable;
 	
 	      text = text.substring(0, text.length - 1);
 	    }
 	
 	    var elides = false;
-	    if (text.length > 1 && text[text.length - 1] == '_') {
+	    if (text.length > 1 && text[text.length - 1] === '_') {
 	      // must be an elision
 	      elides = true;
 	      text = text.substring(0, text.length - 1);
@@ -4578,10 +4680,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // then, if we're passed a notation, let's add it
 	      // also, perform chant logic here
-	      if (notation != null) {
+	      if (notation !== null) {
 	
 	        if (notation.isClef) {
-	          if (score.startingClef == null) {
+	          if (score.startingClef === null) {
 	            score.startingClef = notation;
 	            return;
 	          }
@@ -4687,14 +4789,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        default:
 	          // might be a custod, might be an accidental, or might be a note
-	          if (atom.length > 1 && atom[1] == '+') {
+	          if (atom.length > 1 && atom[1] === '+') {
 	            // custod
 	            var custod = new Custod();
 	
 	            custod.note = new _Exsurge3.Note(this.convertGabcStaffPositionToScribamPitch(passByRef.activeClef, data[0]));
 	
 	            addNotation(custod);
-	          } else if (atom.length > 1 && (atom[1] == 'x' || atom[1] == 'y' || atom[1] == '#')) {
+	          } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
 	
 	            var accidentalType;
 	
@@ -4710,7 +4812,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	
-	            var note = this.createNoteFromData(passByRef.activeClef, atom);
+	            var note = this.createNoteFromData(ctxt, passByRef.activeClef, atom);
 	            var accidental = new Signs.Accidental(note.staffPosition, accidentalType);
 	            accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
 	
@@ -4720,10 +4822,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	
 	            // to make our interpreter more robust, make sure we have a clef to work with
-	            if (passByRef.activeClef == null) passByRef.activeClef = new _Exsurge3.DoClef(1, 2);
+	            if (passByRef.activeClef === null) passByRef.activeClef = new _Exsurge3.DoClef(1, 2);
 	
 	            // looks like it's a note
-	            notes.push(this.createNoteFromData(passByRef.activeClef, atom));
+	            notes.push(this.createNoteFromData(ctxt, passByRef.activeClef, atom));
 	          }
 	          break;
 	      }
@@ -4801,7 +4903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      handle: function handle(currNote, prevNote) {
 	
 	        if (currNote.staffPosition > prevNote.staffPosition) return podatusState;else if (currNote.staffPosition < prevNote.staffPosition) {
-	          if (currNote.shape == _Exsurge3.NoteShape.Inclinatum) return climacusState;else return clivisState;
+	          if (currNote.shape === _Exsurge3.NoteShape.Inclinatum) return climacusState;else return clivisState;
 	        } else return distrophaState;
 	      }
 	    };
@@ -4812,7 +4914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return podatusState;else
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return podatusState;else
 	          // stand alone oriscus
 	          return createNeume(new Neumes.Oriscus(), true);
 	      }
@@ -4827,7 +4929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (currNote.staffPosition > prevNote.staffPosition) {
 	          return scandicusState;
 	        } else if (currNote.staffPosition < prevNote.staffPosition) {
-	          if (currNote.shape == _Exsurge3.NoteShape.Inclinatum) return pesSubpunctisState;else return torculusState;
+	          if (currNote.shape === _Exsurge3.NoteShape.Inclinatum) return pesSubpunctisState;else return torculusState;
 	        } else return createNeume(new Neumes.Podatus(), false);
 	      }
 	    };
@@ -4838,7 +4940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return porrectusState;else return createNeume(new Neumes.Clivis(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return porrectusState;else return createNeume(new Neumes.Clivis(), false);
 	      }
 	    };
 	
@@ -4847,7 +4949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Climacus();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.shape != _Exsurge3.NoteShape.Inclinatum) return createNeume(this.neume(), false);else return state;
+	        if (currNote.shape !== _Exsurge3.NoteShape.Inclinatum) return createNeume(this.neume(), false);else return state;
 	      }
 	    };
 	
@@ -4857,7 +4959,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return createNeume(new Neumes.PorrectusFlexus(), true);else return createNeume(new Neumes.Porrectus(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return createNeume(new Neumes.PorrectusFlexus(), true);else return createNeume(new Neumes.Porrectus(), false);
 	      }
 	    };
 	
@@ -4867,7 +4969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape != _Exsurge3.NoteShape.Inclinatum) return createNeume(new Neumes.PesSubpunctis(), false);else return state;
+	        if (currNote.shape !== _Exsurge3.NoteShape.Inclinatum) return createNeume(new Neumes.PesSubpunctis(), false);else return state;
 	      }
 	    };
 	
@@ -4877,7 +4979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return scandicusFlexusState;else return createNeume(new Neumes.Scandicus(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return scandicusFlexusState;else return createNeume(new Neumes.Scandicus(), false);
 	      }
 	    };
 	
@@ -4896,7 +4998,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Inclinatum && currNote.staffPosition < prevNote.staffPosition) return climacusState;else if (currNote.shape == _Exsurge3.NoteShape.Virga && currNote.staffPosition == prevNote.staffPosition) return bivirgaState;else return createNeume(new Neumes.Virga(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Inclinatum && currNote.staffPosition < prevNote.staffPosition) return climacusState;else if (currNote.shape === _Exsurge3.NoteShape.Virga && currNote.staffPosition === prevNote.staffPosition) return bivirgaState;else return createNeume(new Neumes.Virga(), false);
 	      }
 	    };
 	
@@ -4906,7 +5008,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape == _Exsurge3.NoteShape.Virga && currNote.staffPosition == prevNote.staffPosition) return createNeume(new Neumes.Trivirga(), false);else return createNeume(new Neumes.Bivirga(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Virga && currNote.staffPosition === prevNote.staffPosition) return createNeume(new Neumes.Trivirga(), false);else return createNeume(new Neumes.Bivirga(), false);
 	      }
 	    };
 	
@@ -4915,7 +5017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Apostropha();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.staffPosition == prevNote.staffPosition && currNote.shape == _Exsurge3.NoteShape.Apostropha) return distrophaState;else return createNeume(new Neumes.Apostropha(), false);
+	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Apostropha) return distrophaState;else return createNeume(new Neumes.Apostropha(), false);
 	      }
 	    };
 	
@@ -4924,7 +5026,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Distropha();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.staffPosition == prevNote.staffPosition && currNote.shape == _Exsurge3.NoteShape.Apostropha) return createNeume(new Neumes.Tristropha(), true);else return createNeume(new Neumes.Distropha(), false);
+	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Apostropha) return createNeume(new Neumes.Tristropha(), true);else return createNeume(new Neumes.Distropha(), false);
 	      }
 	    };
 	
@@ -4933,7 +5035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Torculus();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return torculusResupinusState;else return createNeume(new Neumes.Torculus(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return torculusResupinusState;else return createNeume(new Neumes.Torculus(), false);
 	      }
 	    };
 	
@@ -4942,7 +5044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.TorculusResupinus();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.shape == _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return createNeume(new Neumes.TorculusResupinusFlexus(), true);else return createNeume(new Neumes.TorculusResupinus(), false);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition < prevNote.staffPosition) return createNeume(new Neumes.TorculusResupinusFlexus(), true);else return createNeume(new Neumes.TorculusResupinus(), false);
 	      }
 	    };
 	
@@ -4956,7 +5058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      state = state.handle(currNote, prevNote);
 	
 	      // if we are on the last note, then try to create a neume if we need to.
-	      if (currNoteIndex == notes.length - 1 && state != unknownState) createNeume(state.neume(), true);
+	      if (currNoteIndex === notes.length - 1 && state !== unknownState) createNeume(state.neume(), true);
 	
 	      currNoteIndex++;
 	    }
@@ -4971,13 +5073,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return neumes;
 	  },
 	
-	  createNoteFromData: function createNoteFromData(clef, data) {
+	  createNoteFromData: function createNoteFromData(ctxt, clef, data) {
 	
 	    var note = new _Exsurge3.Note();
 	
 	    if (data.length < 1) throw 'Invalid note data: ' + data;
 	
-	    if (data[0] == '-') {
+	    if (data[0] === '-') {
 	      // liquescent
 	      note.isLiquescent = true;
 	      data = data.substring(1);
@@ -4988,10 +5090,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // the next char is always the pitch
 	    var pitch = this.convertGabcStaffPositionToScribamPitch(clef, data[0]);
 	
-	    if (data[0] == data[0].toUpperCase()) note.shape = _Exsurge3.NoteShape.Inclinatum;
+	    if (data[0] === data[0].toUpperCase()) note.shape = _Exsurge3.NoteShape.Inclinatum;
 	
 	    note.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(clef, data[0]);
 	    note.pitch = pitch;
+	
+	    var mark;
 	
 	    // process the modifiers
 	    for (var i = 1; i < data.length; i++) {
@@ -5006,28 +5110,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // rhythmic markings
 	        case '.':
-	          note.markings.push(new Markings.Mora(note));
+	          mark = new Markings.Mora(note, ctxt.staffInterval / 4.0);
+	          if (haveLookahead && lookahead === '1') mark.positionHint = _Exsurge.MarkingPositionHint.Above;else if (haveLookahead && lookahead === '0') mark.positionHint = _Exsurge.MarkingPositionHint.Below;
+	
+	          note.markings.push(mark);
 	          break;
 	
 	        case '_':
-	          var mark = new Markings.HorizontalEpisema(note);
-	          if (haveLookahead && lookahead == '0') {
-	            mark.positionHint = _Exsurge.MarkingPositionHint.Below;
-	            i++;
+	          mark = new Markings.HorizontalEpisema(note);
+	          if (haveLookahead) {
+	            if (lookahead === '0') mark.positionHint = _Exsurge.MarkingPositionHint.Below;else if (lookahead === '1') mark.positionHint = _Exsurge.MarkingPositionHint.Above;else if (lookahead === '2') mark.terminating = true;
+	
+	            // check for another lookahead...
+	            if (++i + 1 < data.length && data[i + 1] === '2') {
+	              mark.terminating = true;
+	              i++;
+	            }
 	          }
 	          note.markings.push(mark);
 	          break;
 	
 	        case '\'':
-	          var mark = new Markings.Ictus(note);
-	          if (haveLookahead && lookahead == '1') mark.positionHint = _Exsurge.MarkingPositionHint.Above;else if (haveLookahead && lookahead == '0') mark.positionHint = _Exsurge.MarkingPositionHint.Below;
+	          mark = new Markings.Ictus(note);
+	          if (haveLookahead && lookahead === '1') mark.positionHint = _Exsurge.MarkingPositionHint.Above;else if (haveLookahead && lookahead === '0') mark.positionHint = _Exsurge.MarkingPositionHint.Below;
 	
 	          note.markings.push(mark);
 	          break;
 	
 	        //note shapes
 	        case 'r':
-	          if (haveLookahead && lookahead == '1') {
+	          if (haveLookahead && lookahead === '1') {
 	            note.markings.push(new Markings.AcuteAccent(note));
 	            i++;
 	          } else note.shape = _Exsurge3.NoteShape.Cavum;
@@ -5042,10 +5154,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	
 	        case 'o':
-	          if (haveLookahead && lookahead == '<') {
+	          if (haveLookahead && lookahead === '<') {
 	            note.shape = _Exsurge3.NoteShape.OriscusAscending;
 	            i++;
-	          } else if (haveLookahead && lookahead == '>') {
+	          } else if (haveLookahead && lookahead === '>') {
 	            note.shape = _Exsurge3.NoteShape.OriscusDescending;
 	            i++;
 	          } else note.shape = _Exsurge3.NoteShape.OriscusAscending;
@@ -5066,13 +5178,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // accidentals
 	        case 'x':
-	          if (note.pitch.step == _Exsurge.Step.Mi) note.pitch.step = _Exsurge.Step.Me;else if (note.pitch.step == _Exsurge.Step.Ti) note.pitch.step = _Exsurge.Step.Te;
+	          if (note.pitch.step === _Exsurge.Step.Mi) note.pitch.step = _Exsurge.Step.Me;else if (note.pitch.step === _Exsurge.Step.Ti) note.pitch.step = _Exsurge.Step.Te;
 	          break;
 	        case 'y':
-	          if (note.pitch.step == _Exsurge.Step.Te) note.pitch.step = _Exsurge.Step.Ti;else if (note.pitch.step == _Exsurge.Step.Me) note.pitch.step = _Exsurge.Step.Mi;else if (note.pitch.step == _Exsurge.Step.Du) note.pitch.step = _Exsurge.Step.Do;else if (note.pitch.step == _Exsurge.Step.Fu) note.pitch.step = _Exsurge.Step.Fa;
+	          if (note.pitch.step === _Exsurge.Step.Te) note.pitch.step = _Exsurge.Step.Ti;else if (note.pitch.step === _Exsurge.Step.Me) note.pitch.step = _Exsurge.Step.Mi;else if (note.pitch.step === _Exsurge.Step.Du) note.pitch.step = _Exsurge.Step.Do;else if (note.pitch.step === _Exsurge.Step.Fu) note.pitch.step = _Exsurge.Step.Fa;
 	          break;
 	        case '#':
-	          if (note.pitch.step == _Exsurge.Step.Do) note.pitch.step = _Exsurge.Step.Du;else if (note.pitch.step == _Exsurge.Step.Fa) note.pitch.step = _Exsurge.Step.Fu;
+	          if (note.pitch.step === _Exsurge.Step.Do) note.pitch.step = _Exsurge.Step.Du;else if (note.pitch.step === _Exsurge.Step.Fa) note.pitch.step = _Exsurge.Step.Fu;
 	          break;
 	      }
 	    }
@@ -5091,7 +5203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var pitch = clef.staffPositionToPitch(scribamStaffPosition);
 	
-	    if (clef.activeAccidental != null) clef.activeAccidental.applyToPitch(pitch);
+	    if (clef.activeAccidental !== null) clef.activeAccidental.applyToPitch(pitch);
 	
 	    return pitch;
 	  }
@@ -5100,7 +5212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//export default Gabc;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5120,7 +5232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Exsurge2 = __webpack_require__(4);
 	
-	var _Exsurge3 = __webpack_require__(5);
+	var _Exsurge3 = __webpack_require__(6);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5238,6 +5350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function updateY(y) {
 	      this.bounds.y = y;
 	      this.visualizer.bounds.y = y;
+	      this.terminating = false; // indicates if this episema should terminate itself or not
 	    }
 	  }, {
 	    key: 'updateWidth',
@@ -5256,21 +5369,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // If it's an odd number then we shift away from line by adding .5 to the step, which puts
 	      // us the closest we want to be to a line.
 	
-	      var y = 0;
+	      var y = 0,
+	          step;
 	      var minDistanceAway = ctxt.staffInterval * 0.4; // min distance from neume
 	
-	      if (this.positionHint == Exsurge.MarkingPositionHint.Below) {
+	      if (this.positionHint === Exsurge.MarkingPositionHint.Below) {
 	        y = this.note.bounds.bottom() + minDistanceAway; // the highest the line could be at
-	
-	        var step = Math.round(y / ctxt.staffInterval);
+	        step = Math.round(y / ctxt.staffInterval);
 	
 	        // if it's an odd step, that means we're near a line, and therefore
 	        // need to shift down
 	        if (Math.abs(step % 2) === 1) y = (step + 0.5) * ctxt.staffInterval;
 	      } else {
 	        y = this.note.bounds.y - minDistanceAway; // the lowest the line could be at
-	
-	        var step = Math.round(y / ctxt.staffInterval);
+	        step = Math.round(y / ctxt.staffInterval);
 	
 	        // if it's an odd step, that means we're near a line, and therefore
 	        // need to shift up
@@ -5321,7 +5433,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
 	
-	      if (this.positionHint == Exsurge.MarkingPositionHint.Above) {
+	      if (this.positionHint === Exsurge.MarkingPositionHint.Above) {
 	        glyphCode = _Exsurge2.GlyphCode.VerticalEpisemaAbove;
 	      } else {
 	        glyphCode = _Exsurge2.GlyphCode.VerticalEpisemaBelow;
@@ -5334,12 +5446,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      switch (glyphCode) {
 	        case _Exsurge2.GlyphCode.VerticalEpisemaAbove:
-	          if (staffPosition % 2 == 0) this.verticalOffset -= ctxt.staffInterval * 1.5;else this.verticalOffset -= ctxt.staffInterval * .9;
+	          if (staffPosition % 2 === 0) this.verticalOffset -= ctxt.staffInterval * 1.5;else this.verticalOffset -= ctxt.staffInterval * .9;
 	          break;
 	
 	        case _Exsurge2.GlyphCode.VerticalEpisemaBelow:
 	        default:
-	          if (staffPosition % 2 == 0) this.verticalOffset += ctxt.staffInterval * 1.5;else this.verticalOffset += ctxt.staffInterval * .8;
+	          if (staffPosition % 2 === 0) this.verticalOffset += ctxt.staffInterval * 1.5;else this.verticalOffset += ctxt.staffInterval * .8;
 	          break;
 	      }
 	
@@ -5368,10 +5480,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Mora = exports.Mora = function (_Marking4) {
 	  _inherits(Mora, _Marking4);
 	
-	  function Mora(note) {
+	  function Mora(note, horizontalOffset) {
 	    _classCallCheck(this, Mora);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Mora).call(this, note));
+	    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mora).call(this, note));
+	
+	    _this5.horizontalOffset = horizontalOffset;
+	    return _this5;
 	  }
 	
 	  _createClass(Mora, [{
@@ -5386,13 +5501,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.verticalOffset = 0;
 	      switch (this.positionHint) {
 	        case Exsurge.MarkingPositionHint.Below:
-	          if (staffPosition % 2 == 0) this.verticalOffset += ctxt.staffInterval / 3.0;else this.verticalOffset += ctxt.staffInterval * 2 / 3.0;
+	          if (staffPosition % 2 === 0) this.verticalOffset += ctxt.staffInterval / 3.0;else this.verticalOffset += ctxt.staffInterval * 2 / 3.0;
 	          break;
 	
 	        case Exsurge.MarkingPositionHint.Default:
 	        case Exsurge.MarkingPositionHint.Above:
 	        default:
-	          if (staffPosition % 2 == 0) this.verticalOffset -= ctxt.staffInterval / 3.0;else this.verticalOffset -= ctxt.staffInterval * 2 / 3.0;
+	          if (staffPosition % 2 === 0) this.verticalOffset -= ctxt.staffInterval / 3.0;else this.verticalOffset -= ctxt.staffInterval * 2 / 3.0;
 	          break;
 	      }
 	
@@ -5411,7 +5526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(Marking);
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5431,7 +5546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Exsurge2 = __webpack_require__(4);
 	
-	var _Exsurge3 = __webpack_require__(5);
+	var _Exsurge3 = __webpack_require__(6);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5489,107 +5604,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'finishLayout',
 	        value: function finishLayout(ctxt) {
 	
-	            var episemae = [];
+	            // allow subclasses an opportunity position their own markings...
+	            this.positionMarkings();
 	
 	            // layout the markings of the notes
 	            for (var i = 0; i < this.notes.length; i++) {
 	                var note = this.notes[i];
-	
-	                var hasEpisema = false;
 	
 	                for (var j = 0; j < note.markings.length; j++) {
 	                    var marking = note.markings[j];
 	
 	                    marking.performLayout(ctxt);
 	                    this.addVisualizer(marking.visualizer);
-	
-	                    // Keep track of episemae here, and blend them together if it
-	                    // makes sense.
-	                    //
-	                    // fixme: All this works fine, but in fact doesn't allow us to have
-	                    // episemae that span multiple neumes, as seen so often in the Liber
-	                    // Hymnarius responsories, for example.
-	                    //
-	                    // A nice enhancement would be to move this logic outside of finishLayout
-	                    // for the neume, and blend episemae after the chant line layout and
-	                    // justify process has taken place. Then again, it will require yet
-	                    // another pass over the neumes/notes. Oh well, doesn't seem like a
-	                    // better way to do it really!
-	
-	                    if (marking.constructor.name === "HorizontalEpisema") {
-	                        hasEpisema = true;
-	
-	                        // we try to blend the episema if we're able.
-	                        if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
-	                            // start a new set of episemae to potentially blend
-	                            episemae = [];
-	                            episemae.push(marking);
-	                        } else {
-	                            // blend all previous with this one
-	                            var newY;
-	
-	                            if (marking.positionHint == Exsurge.MarkingPositionHint.Below) newY = Math.max(marking.bounds.y, episemae[0].bounds.y);else newY = Math.min(marking.bounds.y, episemae[0].bounds.y);
-	
-	                            if (marking.bounds.y != newY) marking.updateY(newY);else {
-	                                for (var i = 0; i < episemae.length; i++) {
-	                                    episemae[i].updateY(newY);
-	                                }
-	                            }
-	
-	                            // extend the last episema to meet the new one
-	                            episemae[episemae.length - 1].updateWidth(marking.bounds.x - episemae[episemae.length - 1].bounds.x);
-	                            episemae.push(marking);
-	                        }
-	                    }
 	                }
-	
-	                if (hasEpisema === false) episemae = [];
 	            }
 	
 	            _get(Object.getPrototypeOf(Neume.prototype), 'finishLayout', this).call(this, ctxt);
 	        }
 	
-	        // this will handle quilismae, mora, and horizontal episemae.
-	        // subclasses can override for their own nuances to note rhythms
+	        // subclasses can override this in order to correctly place markings in a neume specific way
 	
 	    }, {
-	        key: 'generatePlaybackData',
-	        value: function generatePlaybackData() {
-	
-	            var playbackData = [];
-	
-	            var prevIsQuilisma = false;
-	            for (var i = 0; i < this.notes; i++) {
-	                var note = this.notes[i];
-	
-	                var duration = 1.0; // reset to standard length
-	                var multiplier = 1.0;
-	
-	                if (prevIsQuilisma) multiplier *= 0.5;
-	
-	                if (note.shape == _Exsurge3.NoteShape.Quilisma) {
-	                    multiplier *= 2;
-	                    prevIsQuilisma = true;
-	                } else prevIsQuilisma = false;
-	
-	                // check markings
-	                for (var j = 0; j < note.markings.length; j++) {
-	                    var marking = note.markings[j];
-	
-	                    if (marking.className == 'Mora') multiplier = Math.max(multiplier, 2);else if (marking.className == 'HorizontalEpisema' || _Exsurge2.ctxt.horizontalEpisemaActive) multiplier = Math.max(multiplier, 2);
-	                }
-	
-	                duration *= multiplier;
-	
-	                playbackData.push({
-	                    type: 'note',
-	                    duration: duration,
-	                    pitch: note.pitch
-	                });
-	            }
-	
-	            return playbackData;
-	        }
+	        key: 'positionMarkings',
+	        value: function positionMarkings() {}
 	    }]);
 	
 	    return Neume;
@@ -5820,6 +5857,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    _createClass(Clivis, [{
+	        key: 'positionMarkings',
+	        value: function positionMarkings() {
+	
+	            var hasLowerMora = false;
+	            var marking, i;
+	
+	            // 1. morae need to be lined up if both notes have morae
+	            // 2. like the podatus, mora on lower note needs to below
+	            //    under certain circumstances
+	            for (i = 0; i < this.notes[1].markings.length; i++) {
+	                marking = this.notes[1].markings[i];
+	
+	                if (marking.constructor.name === 'Mora') {
+	
+	                    hasLowerMora = true;
+	
+	                    if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 && Math.abs(this.notes[1].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
+	                }
+	            }
+	
+	            for (i = 0; i < this.notes[0].markings.length; i++) {
+	                marking = this.notes[0].markings[i];
+	
+	                if (marking.constructor.name === 'Mora' && hasLowerMora) {
+	                    marking.positionHint = Exsurge.MarkingPositionHint.Above;
+	                    marking.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+	                }
+	            }
+	        }
+	    }, {
 	        key: 'performLayout',
 	        value: function performLayout(ctxt) {
 	            _get(Object.getPrototypeOf(Clivis.prototype), 'performLayout', this).call(this, ctxt);
@@ -5864,7 +5931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            if (isLiquescent) {
-	                if (line != null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
+	                if (line !== null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
 	            }
 	
 	            lower.bounds.x = x;
@@ -5949,7 +6016,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // determine the glyph to use
 	            var note = this.notes[0];
 	
-	            if (note.shape == _Exsurge3.NoteShape.OriscusAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusDes);
+	            if (note.shape === _Exsurge3.NoteShape.OriscusAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusDes);
 	
 	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
@@ -6068,7 +6135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	            }
 	
-	            if (lower.shape == _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            lower.performLayout(ctxt);
 	            upper.performLayout(ctxt);
@@ -6146,6 +6213,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    _createClass(Podatus, [{
+	        key: 'positionMarkings',
+	        value: function positionMarkings() {
+	            var marking, i;
+	
+	            // 1. episema on lower note should always be below, upper note above
+	            // 2. morae:
+	            //   a. if podatus difference is 1 and lower note is on a line,
+	            //      the lower mora should be below
+	            for (i = 0; i < this.notes[0].markings.length; i++) {
+	                marking = this.notes[0].markings[i];
+	
+	                if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Below;else if (marking.constructor.name === 'Mora' && this.notes[1].staffPosition - this.notes[0].staffPosition === 1 && Math.abs(this.notes[0].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
+	            }
+	
+	            for (i = 0; i < this.notes[1].markings.length; i++) {
+	                marking = this.notes[1].markings[i];
+	
+	                if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Above;
+	            }
+	        }
+	    }, {
 	        key: 'performLayout',
 	        value: function performLayout(ctxt) {
 	            _get(Object.getPrototypeOf(Podatus.prototype), 'performLayout', this).call(this, ctxt);
@@ -6161,7 +6249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	            }
 	
-	            if (lower.shape == _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            upper.performLayout(ctxt);
 	            lower.performLayout(ctxt);
@@ -6263,7 +6351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (third.isLiquescent) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	
 	            third.performLayout(ctxt);
-	            third.bounds.x += x;
+	            third.bounds.x = second.bounds.right() - third.bounds.width;
 	
 	            this.addVisualizer(third);
 	
@@ -6406,7 +6494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note = this.notes[0];
 	
 	            if (note.isLiquescent) {
-	                if (note.shape == _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
+	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
 	                    // fixme: implement two types of punctum liquescents
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
 	                }
@@ -6484,7 +6572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape == _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            first.performLayout(ctxt);
 	            second.performLayout(ctxt);
@@ -6550,7 +6638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape == _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            first.performLayout(ctxt);
 	            second.performLayout(ctxt);
@@ -7022,7 +7110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }], [{
 	        key: 'getGlyphCode',
 	        value: function getGlyphCode(staffPosition) {
-	            if (Math.abs(staffPosition) % 2 == 1) return _Exsurge2.GlyphCode.VirgaLong;else return _Exsurge2.GlyphCode.VirgaShort;
+	            if (Math.abs(staffPosition) % 2 === 1) return _Exsurge2.GlyphCode.VirgaLong;else return _Exsurge2.GlyphCode.VirgaShort;
 	
 	            // fixme: add logic for virgas low on the staff that are probably short also...
 	        }
@@ -7030,12 +7118,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    return Virga;
 	}(Neume);
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	module.exports = "data:font/opentype;base64,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eHN1cmdlIENoYXJhY3RlcnM6VmVyc2lvbiAxLjAwVmVyc2lvbiAxLjAwIEZlYnJ1YXJ5IDE4LCAyMDE2LCBpbml0aWFsIHJlbGVhc2VFeHN1cmdlQ2hhcmFjdGVyc1RoaXMgRm9udCBTb2Z0d2FyZSBpcyBsaWNlbnNlZCB1bmRlciB0aGUgU0lMIE9wZW4gRm9udCBMaWNlbnNlLCBWZXJzaW9uIDEuMS4gVGhpcyBsaWNlbnNlIGlzIGNvcGllZCBiZWxvdywgYW5kIGlzIGFsc28gYXZhaWxhYmxlIHdpdGggYSBGQVEgYXQ6IGh0dHA6Ly9zY3JpcHRzLnNpbC5vcmcvT0ZMDQoNCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClNJTCBPUEVOIEZPTlQgTElDRU5TRSBWZXJzaW9uIDEuMSAtIDI2IEZlYnJ1YXJ5IDIwMDcNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNClBSRUFNQkxFDQpUaGUgZ29hbHMgb2YgdGhlIE9wZW4gRm9udCBMaWNlbnNlIChPRkwpIGFyZSB0byBzdGltdWxhdGUgd29ybGR3aWRlIGRldmVsb3BtZW50IG9mIGNvbGxhYm9yYXRpdmUgZm9udCBwcm9qZWN0cywgdG8gc3VwcG9ydCB0aGUgZm9udCBjcmVhdGlvbiBlZmZvcnRzIG9mIGFjYWRlbWljIGFuZCBsaW5ndWlzdGljIGNvbW11bml0aWVzLCBhbmQgdG8gcHJvdmlkZSBhIGZyZWUgYW5kIG9wZW4gZnJhbWV3b3JrIGluIHdoaWNoIGZvbnRzIG1heSBiZSBzaGFyZWQgYW5kIGltcHJvdmVkIGluIHBhcnRuZXJzaGlwIHdpdGggb3RoZXJzLg0KDQpUaGUgT0ZMIGFsbG93cyB0aGUgbGljZW5zZWQgZm9udHMgdG8gYmUgdXNlZCwgc3R1ZGllZCwgbW9kaWZpZWQgYW5kIHJlZGlzdHJpYnV0ZWQgZnJlZWx5IGFzIGxvbmcgYXMgdGhleSBhcmUgbm90IHNvbGQgYnkgdGhlbXNlbHZlcy4gVGhlIGZvbnRzLCBpbmNsdWRpbmcgYW55IGRlcml2YXRpdmUgd29ya3MsIGNhbiBiZSBidW5kbGVkLCBlbWJlZGRlZCwgcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSBwcm92aWRlZCB0aGF0IGFueSByZXNlcnZlZCBuYW1lcyBhcmUgbm90IHVzZWQgYnkgZGVyaXZhdGl2ZSB3b3Jrcy4gVGhlIGZvbnRzIGFuZCBkZXJpdmF0aXZlcywgaG93ZXZlciwgY2Fubm90IGJlIHJlbGVhc2VkIHVuZGVyIGFueSBvdGhlciB0eXBlIG9mIGxpY2Vuc2UuIFRoZSByZXF1aXJlbWVudCBmb3IgZm9udHMgdG8gcmVtYWluIHVuZGVyIHRoaXMgbGljZW5zZSBkb2VzIG5vdCBhcHBseSB0byBhbnkgZG9jdW1lbnQgY3JlYXRlZCB1c2luZyB0aGUgZm9udHMgb3IgdGhlaXIgZGVyaXZhdGl2ZXMuDQoNCkRFRklOSVRJT05TDQoiRm9udCBTb2Z0d2FyZSIgcmVmZXJzIHRvIHRoZSBzZXQgb2YgZmlsZXMgcmVsZWFzZWQgYnkgdGhlIENvcHlyaWdodCBIb2xkZXIocykgdW5kZXIgdGhpcyBsaWNlbnNlIGFuZCBjbGVhcmx5IG1hcmtlZCBhcyBzdWNoLiBUaGlzIG1heSBpbmNsdWRlIHNvdXJjZSBmaWxlcywgYnVpbGQgc2NyaXB0cyBhbmQgZG9jdW1lbnRhdGlvbi4NCg0KIlJlc2VydmVkIEZvbnQgTmFtZSIgcmVmZXJzIHRvIGFueSBuYW1lcyBzcGVjaWZpZWQgYXMgc3VjaCBhZnRlciB0aGUgY29weXJpZ2h0IHN0YXRlbWVudChzKS4NCg0KIk9yaWdpbmFsIFZlcnNpb24iIHJlZmVycyB0byB0aGUgY29sbGVjdGlvbiBvZiBGb250IFNvZnR3YXJlIGNvbXBvbmVudHMgYXMgZGlzdHJpYnV0ZWQgYnkgdGhlIENvcHlyaWdodCBIb2xkZXIocykuDQoNCiJNb2RpZmllZCBWZXJzaW9uIiByZWZlcnMgdG8gYW55IGRlcml2YXRpdmUgbWFkZSBieSBhZGRpbmcgdG8sIGRlbGV0aW5nLCBvciBzdWJzdGl0dXRpbmcgLS0gaW4gcGFydCBvciBpbiB3aG9sZSAtLSBhbnkgb2YgdGhlIGNvbXBvbmVudHMgb2YgdGhlIE9yaWdpbmFsIFZlcnNpb24sIGJ5IGNoYW5naW5nIGZvcm1hdHMgb3IgYnkgcG9ydGluZyB0aGUgRm9udCBTb2Z0d2FyZSB0byBhIG5ldyBlbnZpcm9ubWVudC4NCg0KIkF1dGhvciIgcmVmZXJzIHRvIGFueSBkZXNpZ25lciwgZW5naW5lZXIsIHByb2dyYW1tZXIsIHRlY2huaWNhbCB3cml0ZXIgb3Igb3RoZXIgcGVyc29uIHdobyBjb250cmlidXRlZCB0byB0aGUgRm9udCBTb2Z0d2FyZS4NCg0KUEVSTUlTU0lPTiAmIENPTkRJVElPTlMNClBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVyc29uIG9idGFpbmluZyBhIGNvcHkgb2YgdGhlIEZvbnQgU29mdHdhcmUsIHRvIHVzZSwgc3R1ZHksIGNvcHksIG1lcmdlLCBlbWJlZCwgbW9kaWZ5LCByZWRpc3RyaWJ1dGUsIGFuZCBzZWxsIG1vZGlmaWVkIGFuZCB1bm1vZGlmaWVkIGNvcGllcyBvZiB0aGUgRm9udCBTb2Z0d2FyZSwgc3ViamVjdCB0byB0aGUgZm9sbG93aW5nIGNvbmRpdGlvbnM6DQoNCjEpIE5laXRoZXIgdGhlIEZvbnQgU29mdHdhcmUgbm9yIGFueSBvZiBpdHMgaW5kaXZpZHVhbCBjb21wb25lbnRzLCBpbiBPcmlnaW5hbCBvciBNb2RpZmllZCBWZXJzaW9ucywgbWF5IGJlIHNvbGQgYnkgaXRzZWxmLg0KDQoyKSBPcmlnaW5hbCBvciBNb2RpZmllZCBWZXJzaW9ucyBvZiB0aGUgRm9udCBTb2Z0d2FyZSBtYXkgYmUgYnVuZGxlZCwgcmVkaXN0cmlidXRlZCBhbmQvb3Igc29sZCB3aXRoIGFueSBzb2Z0d2FyZSwgcHJvdmlkZWQgdGhhdCBlYWNoIGNvcHkgY29udGFpbnMgdGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgbGljZW5zZS4gVGhlc2UgY2FuIGJlIGluY2x1ZGVkIGVpdGhlciBhcyBzdGFuZC1hbG9uZSB0ZXh0IGZpbGVzLCBodW1hbi1yZWFkYWJsZSBoZWFkZXJzIG9yIGluIHRoZSBhcHByb3ByaWF0ZSBtYWNoaW5lLXJlYWRhYmxlIG1ldGFkYXRhIGZpZWxkcyB3aXRoaW4gdGV4dCBvciBiaW5hcnkgZmlsZXMgYXMgbG9uZyBhcyB0aG9zZSBmaWVsZHMgY2FuIGJlIGVhc2lseSB2aWV3ZWQgYnkgdGhlIHVzZXIuDQoNCjMpIE5vIE1vZGlmaWVkIFZlcnNpb24gb2YgdGhlIEZvbnQgU29mdHdhcmUgbWF5IHVzZSB0aGUgUmVzZXJ2ZWQgRm9udCBOYW1lKHMpIHVubGVzcyBleHBsaWNpdCB3cml0dGVuIHBlcm1pc3Npb24gaXMgZ3JhbnRlZCBieSB0aGUgY29ycmVzcG9uZGluZyBDb3B5cmlnaHQgSG9sZGVyLiBUaGlzIHJlc3RyaWN0aW9uIG9ubHkgYXBwbGllcyB0byB0aGUgcHJpbWFyeSBmb250IG5hbWUgYXMgcHJlc2VudGVkIHRvIHRoZSB1c2Vycy4NCg0KNCkgVGhlIG5hbWUocykgb2YgdGhlIENvcHlyaWdodCBIb2xkZXIocykgb3IgdGhlIEF1dGhvcihzKSBvZiB0aGUgRm9udCBTb2Z0d2FyZSBzaGFsbCBub3QgYmUgdXNlZCB0byBwcm9tb3RlLCBlbmRvcnNlIG9yIGFkdmVydGlzZSBhbnkgTW9kaWZpZWQgVmVyc2lvbiwgZXhjZXB0IHRvIGFja25vd2xlZGdlIHRoZSBjb250cmlidXRpb24ocykgb2YgdGhlIENvcHlyaWdodCBIb2xkZXIocykgYW5kIHRoZSBBdXRob3Iocykgb3Igd2l0aCB0aGVpciBleHBsaWNpdCB3cml0dGVuIHBlcm1pc3Npb24uDQoNCjUpIFRoZSBGb250IFNvZnR3YXJlLCBtb2RpZmllZCBvciB1bm1vZGlmaWVkLCBpbiBwYXJ0IG9yIGluIHdob2xlLCBtdXN0IGJlIGRpc3RyaWJ1dGVkIGVudGlyZWx5IHVuZGVyIHRoaXMgbGljZW5zZSwgYW5kIG11c3Qgbm90IGJlIGRpc3RyaWJ1dGVkIHVuZGVyIGFueSBvdGhlciBsaWNlbnNlLiBUaGUgcmVxdWlyZW1lbnQgZm9yIGZvbnRzIHRvIHJlbWFpbiB1bmRlciB0aGlzIGxpY2Vuc2UgZG9lcyBub3QgYXBwbHkgdG8gYW55IGRvY3VtZW50IGNyZWF0ZWQgdXNpbmcgdGhlIEZvbnQgU29mdHdhcmUuDQoNClRFUk1JTkFUSU9ODQpUaGlzIGxpY2Vuc2UgYmVjb21lcyBudWxsIGFuZCB2b2lkIGlmIGFueSBvZiB0aGUgYWJvdmUgY29uZGl0aW9ucyBhcmUgbm90IG1ldC4NCg0KRElTQ0xBSU1FUg0KVEhFIEZPTlQgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUiBJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIEFOWSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVCBPRiBDT1BZUklHSFQsIFBBVEVOVCwgVFJBREVNQVJLLCBPUiBPVEhFUiBSSUdIVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFIENPUFlSSUdIVCBIT0xERVIgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIgTElBQklMSVRZLCBJTkNMVURJTkcgQU5ZIEdFTkVSQUwsIFNQRUNJQUwsIElORElSRUNULCBJTkNJREVOVEFMLCBPUiBDT05TRVFVRU5USUFMIERBTUFHRVMsIFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORyBGUk9NLCBPVVQgT0YgVEhFIFVTRSBPUiBJTkFCSUxJVFkgVE8gVVNFIFRIRSBGT05UIFNPRlRXQVJFIE9SIEZST00gT1RIRVIgREVBTElOR1MgSU4gVEhFIEZPTlQgU09GVFdBUkUuAEMAbwBwAHkAcgBpAGcAaAB0ACAAKABjACkAIAAyADAAMQA2ACAARgByAC4AIABNAGEAdAB0AGgAZQB3ACAAUwBwAGUAbgBjAGUAcgAsACAATwAuAFMALgBKAC4AUgBlAGcAdQBsAGEAcgBFAHgAcwB1AHIAZwBlACAAQwBoAGEAcgBhAGMAdABlAHIAcwA6AFYAZQByAHMAaQBvAG4AIAAxAC4AMAAwAFYAZQByAHMAaQBvAG4AIAAxAC4AMAAwACAARgBlAGIAcgB1AGEAcgB5ACAAMQA4ACwAIAAyADAAMQA2ACwAIABpAG4AaQB0AGkAYQBsACAAcgBlAGwAZQBhAHMAZQBFAHgAcwB1AHIAZwBlAEMAaABhAHIAYQBjAHQAZQByAHMAVABoAGkAcwAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABpAHMAIABsAGkAYwBlAG4AcwBlAGQAIAB1AG4AZABlAHIAIAB0AGgAZQAgAFMASQBMACAATwBwAGUAbgAgAEYAbwBuAHQAIABMAGkAYwBlAG4AcwBlACwAIABWAGUAcgBzAGkAbwBuACAAMQAuADEALgAgAFQAaABpAHMAIABsAGkAYwBlAG4AcwBlACAAaQBzACAAYwBvAHAAaQBlAGQAIABiAGUAbABvAHcALAAgAGEAbgBkACAAaQBzACAAYQBsAHMAbwAgAGEAdgBhAGkAbABhAGIAbABlACAAdwBpAHQAaAAgAGEAIABGAEEAUQAgAGEAdAA6ACAAaAB0AHQAcAA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAA0ACgANAAoADQAKAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQANAAoAUwBJAEwAIABPAFAARQBOACAARgBPAE4AVAAgAEwASQBDAEUATgBTAEUAIABWAGUAcgBzAGkAbwBuACAAMQAuADEAIAAtACAAMgA2ACAARgBlAGIAcgB1AGEAcgB5ACAAMgAwADAANwANAAoALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAA0ACgANAAoAUABSAEUAQQBNAEIATABFAA0ACgBUAGgAZQAgAGcAbwBhAGwAcwAgAG8AZgAgAHQAaABlACAATwBwAGUAbgAgAEYAbwBuAHQAIABMAGkAYwBlAG4AcwBlACAAKABPAEYATAApACAAYQByAGUAIAB0AG8AIABzAHQAaQBtAHUAbABhAHQAZQAgAHcAbwByAGwAZAB3AGkAZABlACAAZABlAHYAZQBsAG8AcABtAGUAbgB0ACAAbwBmACAAYwBvAGwAbABhAGIAbwByAGEAdABpAHYAZQAgAGYAbwBuAHQAIABwAHIAbwBqAGUAYwB0AHMALAAgAHQAbwAgAHMAdQBwAHAAbwByAHQAIAB0AGgAZQAgAGYAbwBuAHQAIABjAHIAZQBhAHQAaQBvAG4AIABlAGYAZgBvAHIAdABzACAAbwBmACAAYQBjAGEAZABlAG0AaQBjACAAYQBuAGQAIABsAGkAbgBnAHUAaQBzAHQAaQBjACAAYwBvAG0AbQB1AG4AaQB0AGkAZQBzACwAIABhAG4AZAAgAHQAbwAgAHAAcgBvAHYAaQBkAGUAIABhACAAZgByAGUAZQAgAGEAbgBkACAAbwBwAGUAbgAgAGYAcgBhAG0AZQB3AG8AcgBrACAAaQBuACAAdwBoAGkAYwBoACAAZgBvAG4AdABzACAAbQBhAHkAIABiAGUAIABzAGgAYQByAGUAZAAgAGEAbgBkACAAaQBtAHAAcgBvAHYAZQBkACAAaQBuACAAcABhAHIAdABuAGUAcgBzAGgAaQBwACAAdwBpAHQAaAAgAG8AdABoAGUAcgBzAC4ADQAKAA0ACgBUAGgAZQAgAE8ARgBMACAAYQBsAGwAbwB3AHMAIAB0AGgAZQAgAGwAaQBjAGUAbgBzAGUAZAAgAGYAbwBuAHQAcwAgAHQAbwAgAGIAZQAgAHUAcwBlAGQALAAgAHMAdAB1AGQAaQBlAGQALAAgAG0AbwBkAGkAZgBpAGUAZAAgAGEAbgBkACAAcgBlAGQAaQBzAHQAcgBpAGIAdQB0AGUAZAAgAGYAcgBlAGUAbAB5ACAAYQBzACAAbABvAG4AZwAgAGEAcwAgAHQAaABlAHkAIABhAHIAZQAgAG4AbwB0ACAAcwBvAGwAZAAgAGIAeQAgAHQAaABlAG0AcwBlAGwAdgBlAHMALgAgAFQAaABlACAAZgBvAG4AdABzACwAIABpAG4AYwBsAHUAZABpAG4AZwAgAGEAbgB5ACAAZABlAHIAaQB2AGEAdABpAHYAZQAgAHcAbwByAGsAcwAsACAAYwBhAG4AIABiAGUAIABiAHUAbgBkAGwAZQBkACwAIABlAG0AYgBlAGQAZABlAGQALAAgAHIAZQBkAGkAcwB0AHIAaQBiAHUAdABlAGQAIABhAG4AZAAvAG8AcgAgAHMAbwBsAGQAIAB3AGkAdABoACAAYQBuAHkAIABzAG8AZgB0AHcAYQByAGUAIABwAHIAbwB2AGkAZABlAGQAIAB0AGgAYQB0ACAAYQBuAHkAIAByAGUAcwBlAHIAdgBlAGQAIABuAGEAbQBlAHMAIABhAHIAZQAgAG4AbwB0ACAAdQBzAGUAZAAgAGIAeQAgAGQAZQByAGkAdgBhAHQAaQB2AGUAIAB3AG8AcgBrAHMALgAgAFQAaABlACAAZgBvAG4AdABzACAAYQBuAGQAIABkAGUAcgBpAHYAYQB0AGkAdgBlAHMALAAgAGgAbwB3AGUAdgBlAHIALAAgAGMAYQBuAG4AbwB0ACAAYgBlACAAcgBlAGwAZQBhAHMAZQBkACAAdQBuAGQAZQByACAAYQBuAHkAIABvAHQAaABlAHIAIAB0AHkAcABlACAAbwBmACAAbABpAGMAZQBuAHMAZQAuACAAVABoAGUAIAByAGUAcQB1AGkAcgBlAG0AZQBuAHQAIABmAG8AcgAgAGYAbwBuAHQAcwAgAHQAbwAgAHIAZQBtAGEAaQBuACAAdQBuAGQAZQByACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUAIABkAG8AZQBzACAAbgBvAHQAIABhAHAAcABsAHkAIAB0AG8AIABhAG4AeQAgAGQAbwBjAHUAbQBlAG4AdAAgAGMAcgBlAGEAdABlAGQAIAB1AHMAaQBuAGcAIAB0AGgAZQAgAGYAbwBuAHQAcwAgAG8AcgAgAHQAaABlAGkAcgAgAGQAZQByAGkAdgBhAHQAaQB2AGUAcwAuAA0ACgANAAoARABFAEYASQBOAEkAVABJAE8ATgBTAA0ACgAiAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAdABoAGUAIABzAGUAdAAgAG8AZgAgAGYAaQBsAGUAcwAgAHIAZQBsAGUAYQBzAGUAZAAgAGIAeQAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAHUAbgBkAGUAcgAgAHQAaABpAHMAIABsAGkAYwBlAG4AcwBlACAAYQBuAGQAIABjAGwAZQBhAHIAbAB5ACAAbQBhAHIAawBlAGQAIABhAHMAIABzAHUAYwBoAC4AIABUAGgAaQBzACAAbQBhAHkAIABpAG4AYwBsAHUAZABlACAAcwBvAHUAcgBjAGUAIABmAGkAbABlAHMALAAgAGIAdQBpAGwAZAAgAHMAYwByAGkAcAB0AHMAIABhAG4AZAAgAGQAbwBjAHUAbQBlAG4AdABhAHQAaQBvAG4ALgANAAoADQAKACIAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAYQBuAHkAIABuAGEAbQBlAHMAIABzAHAAZQBjAGkAZgBpAGUAZAAgAGEAcwAgAHMAdQBjAGgAIABhAGYAdABlAHIAIAB0AGgAZQAgAGMAbwBwAHkAcgBpAGcAaAB0ACAAcwB0AGEAdABlAG0AZQBuAHQAKABzACkALgANAAoADQAKACIATwByAGkAZwBpAG4AYQBsACAAVgBlAHIAcwBpAG8AbgAiACAAcgBlAGYAZQByAHMAIAB0AG8AIAB0AGgAZQAgAGMAbwBsAGwAZQBjAHQAaQBvAG4AIABvAGYAIABGAG8AbgB0ACAAUwBvAGYAdAB3AGEAcgBlACAAYwBvAG0AcABvAG4AZQBuAHQAcwAgAGEAcwAgAGQAaQBzAHQAcgBpAGIAdQB0AGUAZAAgAGIAeQAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAuAA0ACgANAAoAIgBNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuACIAIAByAGUAZgBlAHIAcwAgAHQAbwAgAGEAbgB5ACAAZABlAHIAaQB2AGEAdABpAHYAZQAgAG0AYQBkAGUAIABiAHkAIABhAGQAZABpAG4AZwAgAHQAbwAsACAAZABlAGwAZQB0AGkAbgBnACwAIABvAHIAIABzAHUAYgBzAHQAaQB0AHUAdABpAG4AZwAgAC0ALQAgAGkAbgAgAHAAYQByAHQAIABvAHIAIABpAG4AIAB3AGgAbwBsAGUAIAAtAC0AIABhAG4AeQAgAG8AZgAgAHQAaABlACAAYwBvAG0AcABvAG4AZQBuAHQAcwAgAG8AZgAgAHQAaABlACAATwByAGkAZwBpAG4AYQBsACAAVgBlAHIAcwBpAG8AbgAsACAAYgB5ACAAYwBoAGEAbgBnAGkAbgBnACAAZgBvAHIAbQBhAHQAcwAgAG8AcgAgAGIAeQAgAHAAbwByAHQAaQBuAGcAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIAB0AG8AIABhACAAbgBlAHcAIABlAG4AdgBpAHIAbwBuAG0AZQBuAHQALgANAAoADQAKACIAQQB1AHQAaABvAHIAIgAgAHIAZQBmAGUAcgBzACAAdABvACAAYQBuAHkAIABkAGUAcwBpAGcAbgBlAHIALAAgAGUAbgBnAGkAbgBlAGUAcgAsACAAcAByAG8AZwByAGEAbQBtAGUAcgAsACAAdABlAGMAaABuAGkAYwBhAGwAIAB3AHIAaQB0AGUAcgAgAG8AcgAgAG8AdABoAGUAcgAgAHAAZQByAHMAbwBuACAAdwBoAG8AIABjAG8AbgB0AHIAaQBiAHUAdABlAGQAIAB0AG8AIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUALgANAAoADQAKAFAARQBSAE0ASQBTAFMASQBPAE4AIAAmACAAQwBPAE4ARABJAFQASQBPAE4AUwANAAoAUABlAHIAbQBpAHMAcwBpAG8AbgAgAGkAcwAgAGgAZQByAGUAYgB5ACAAZwByAGEAbgB0AGUAZAAsACAAZgByAGUAZQAgAG8AZgAgAGMAaABhAHIAZwBlACwAIAB0AG8AIABhAG4AeQAgAHAAZQByAHMAbwBuACAAbwBiAHQAYQBpAG4AaQBuAGcAIABhACAAYwBvAHAAeQAgAG8AZgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAsACAAdABvACAAdQBzAGUALAAgAHMAdAB1AGQAeQAsACAAYwBvAHAAeQAsACAAbQBlAHIAZwBlACwAIABlAG0AYgBlAGQALAAgAG0AbwBkAGkAZgB5ACwAIAByAGUAZABpAHMAdAByAGkAYgB1AHQAZQAsACAAYQBuAGQAIABzAGUAbABsACAAbQBvAGQAaQBmAGkAZQBkACAAYQBuAGQAIAB1AG4AbQBvAGQAaQBmAGkAZQBkACAAYwBvAHAAaQBlAHMAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUALAAgAHMAdQBiAGoAZQBjAHQAIAB0AG8AIAB0AGgAZQAgAGYAbwBsAGwAbwB3AGkAbgBnACAAYwBvAG4AZABpAHQAaQBvAG4AcwA6AA0ACgANAAoAMQApACAATgBlAGkAdABoAGUAcgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAgAG4AbwByACAAYQBuAHkAIABvAGYAIABpAHQAcwAgAGkAbgBkAGkAdgBpAGQAdQBhAGwAIABjAG8AbQBwAG8AbgBlAG4AdABzACwAIABpAG4AIABPAHIAaQBnAGkAbgBhAGwAIABvAHIAIABNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuAHMALAAgAG0AYQB5ACAAYgBlACAAcwBvAGwAZAAgAGIAeQAgAGkAdABzAGUAbABmAC4ADQAKAA0ACgAyACkAIABPAHIAaQBnAGkAbgBhAGwAIABvAHIAIABNAG8AZABpAGYAaQBlAGQAIABWAGUAcgBzAGkAbwBuAHMAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABtAGEAeQAgAGIAZQAgAGIAdQBuAGQAbABlAGQALAAgAHIAZQBkAGkAcwB0AHIAaQBiAHUAdABlAGQAIABhAG4AZAAvAG8AcgAgAHMAbwBsAGQAIAB3AGkAdABoACAAYQBuAHkAIABzAG8AZgB0AHcAYQByAGUALAAgAHAAcgBvAHYAaQBkAGUAZAAgAHQAaABhAHQAIABlAGEAYwBoACAAYwBvAHAAeQAgAGMAbwBuAHQAYQBpAG4AcwAgAHQAaABlACAAYQBiAG8AdgBlACAAYwBvAHAAeQByAGkAZwBoAHQAIABuAG8AdABpAGMAZQAgAGEAbgBkACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUALgAgAFQAaABlAHMAZQAgAGMAYQBuACAAYgBlACAAaQBuAGMAbAB1AGQAZQBkACAAZQBpAHQAaABlAHIAIABhAHMAIABzAHQAYQBuAGQALQBhAGwAbwBuAGUAIAB0AGUAeAB0ACAAZgBpAGwAZQBzACwAIABoAHUAbQBhAG4ALQByAGUAYQBkAGEAYgBsAGUAIABoAGUAYQBkAGUAcgBzACAAbwByACAAaQBuACAAdABoAGUAIABhAHAAcAByAG8AcAByAGkAYQB0AGUAIABtAGEAYwBoAGkAbgBlAC0AcgBlAGEAZABhAGIAbABlACAAbQBlAHQAYQBkAGEAdABhACAAZgBpAGUAbABkAHMAIAB3AGkAdABoAGkAbgAgAHQAZQB4AHQAIABvAHIAIABiAGkAbgBhAHIAeQAgAGYAaQBsAGUAcwAgAGEAcwAgAGwAbwBuAGcAIABhAHMAIAB0AGgAbwBzAGUAIABmAGkAZQBsAGQAcwAgAGMAYQBuACAAYgBlACAAZQBhAHMAaQBsAHkAIAB2AGkAZQB3AGUAZAAgAGIAeQAgAHQAaABlACAAdQBzAGUAcgAuAA0ACgANAAoAMwApACAATgBvACAATQBvAGQAaQBmAGkAZQBkACAAVgBlAHIAcwBpAG8AbgAgAG8AZgAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAgAG0AYQB5ACAAdQBzAGUAIAB0AGgAZQAgAFIAZQBzAGUAcgB2AGUAZAAgAEYAbwBuAHQAIABOAGEAbQBlACgAcwApACAAdQBuAGwAZQBzAHMAIABlAHgAcABsAGkAYwBpAHQAIAB3AHIAaQB0AHQAZQBuACAAcABlAHIAbQBpAHMAcwBpAG8AbgAgAGkAcwAgAGcAcgBhAG4AdABlAGQAIABiAHkAIAB0AGgAZQAgAGMAbwByAHIAZQBzAHAAbwBuAGQAaQBuAGcAIABDAG8AcAB5AHIAaQBnAGgAdAAgAEgAbwBsAGQAZQByAC4AIABUAGgAaQBzACAAcgBlAHMAdAByAGkAYwB0AGkAbwBuACAAbwBuAGwAeQAgAGEAcABwAGwAaQBlAHMAIAB0AG8AIAB0AGgAZQAgAHAAcgBpAG0AYQByAHkAIABmAG8AbgB0ACAAbgBhAG0AZQAgAGEAcwAgAHAAcgBlAHMAZQBuAHQAZQBkACAAdABvACAAdABoAGUAIAB1AHMAZQByAHMALgANAAoADQAKADQAKQAgAFQAaABlACAAbgBhAG0AZQAoAHMAKQAgAG8AZgAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAG8AcgAgAHQAaABlACAAQQB1AHQAaABvAHIAKABzACkAIABvAGYAIAB0AGgAZQAgAEYAbwBuAHQAIABTAG8AZgB0AHcAYQByAGUAIABzAGgAYQBsAGwAIABuAG8AdAAgAGIAZQAgAHUAcwBlAGQAIAB0AG8AIABwAHIAbwBtAG8AdABlACwAIABlAG4AZABvAHIAcwBlACAAbwByACAAYQBkAHYAZQByAHQAaQBzAGUAIABhAG4AeQAgAE0AbwBkAGkAZgBpAGUAZAAgAFYAZQByAHMAaQBvAG4ALAAgAGUAeABjAGUAcAB0ACAAdABvACAAYQBjAGsAbgBvAHcAbABlAGQAZwBlACAAdABoAGUAIABjAG8AbgB0AHIAaQBiAHUAdABpAG8AbgAoAHMAKQAgAG8AZgAgAHQAaABlACAAQwBvAHAAeQByAGkAZwBoAHQAIABIAG8AbABkAGUAcgAoAHMAKQAgAGEAbgBkACAAdABoAGUAIABBAHUAdABoAG8AcgAoAHMAKQAgAG8AcgAgAHcAaQB0AGgAIAB0AGgAZQBpAHIAIABlAHgAcABsAGkAYwBpAHQAIAB3AHIAaQB0AHQAZQBuACAAcABlAHIAbQBpAHMAcwBpAG8AbgAuAA0ACgANAAoANQApACAAVABoAGUAIABGAG8AbgB0ACAAUwBvAGYAdAB3AGEAcgBlACwAIABtAG8AZABpAGYAaQBlAGQAIABvAHIAIAB1AG4AbQBvAGQAaQBmAGkAZQBkACwAIABpAG4AIABwAGEAcgB0ACAAbwByACAAaQBuACAAdwBoAG8AbABlACwAIABtAHUAcwB0ACAAYgBlACAAZABpAHMAdAByAGkAYgB1AHQAZQBkACAAZQBuAHQAaQByAGUAbAB5ACAAdQBuAGQAZQByACAAdABoAGkAcwAgAGwAaQBjAGUAbgBzAGUALAAgAGEAbgBkACAAbQB1AHMAdAAgAG4AbwB0ACAAYgBlACAAZABpAHMAdAByAGkAYgB1AHQAZQBkACAAdQBuAGQAZQByACAAYQBuAHkAIABvAHQAaABlAHIAIABsAGkAYwBlAG4AcwBlAC4AIABUAGgAZQAgAHIAZQBxAHUAaQByAGUAbQBlAG4AdAAgAGYAbwByACAAZgBvAG4AdABzACAAdABvACAAcgBlAG0AYQBpAG4AIAB1AG4AZABlAHIAIAB0AGgAaQBzACAAbABpAGMAZQBuAHMAZQAgAGQAbwBlAHMAIABuAG8AdAAgAGEAcABwAGwAeQAgAHQAbwAgAGEAbgB5ACAAZABvAGMAdQBtAGUAbgB0ACAAYwByAGUAYQB0AGUAZAAgAHUAcwBpAG4AZwAgAHQAaABlACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAuAA0ACgANAAoAVABFAFIATQBJAE4AQQBUAEkATwBOAA0ACgBUAGgAaQBzACAAbABpAGMAZQBuAHMAZQAgAGIAZQBjAG8AbQBlAHMAIABuAHUAbABsACAAYQBuAGQAIAB2AG8AaQBkACAAaQBmACAAYQBuAHkAIABvAGYAIAB0AGgAZQAgAGEAYgBvAHYAZQAgAGMAbwBuAGQAaQB0AGkAbwBuAHMAIABhAHIAZQAgAG4AbwB0ACAAbQBlAHQALgANAAoADQAKAEQASQBTAEMATABBAEkATQBFAFIADQAKAFQASABFACAARgBPAE4AVAAgAFMATwBGAFQAVwBBAFIARQAgAEkAUwAgAFAAUgBPAFYASQBEAEUARAAgACIAQQBTACAASQBTACIALAAgAFcASQBUAEgATwBVAFQAIABXAEEAUgBSAEEATgBUAFkAIABPAEYAIABBAE4AWQAgAEsASQBOAEQALAAgAEUAWABQAFIARQBTAFMAIABPAFIAIABJAE0AUABMAEkARQBEACwAIABJAE4AQwBMAFUARABJAE4ARwAgAEIAVQBUACAATgBPAFQAIABMAEkATQBJAFQARQBEACAAVABPACAAQQBOAFkAIABXAEEAUgBSAEEATgBUAEkARQBTACAATwBGACAATQBFAFIAQwBIAEEATgBUAEEAQgBJAEwASQBUAFkALAAgAEYASQBUAE4ARQBTAFMAIABGAE8AUgAgAEEAIABQAEEAUgBUAEkAQwBVAEwAQQBSACAAUABVAFIAUABPAFMARQAgAEEATgBEACAATgBPAE4ASQBOAEYAUgBJAE4ARwBFAE0ARQBOAFQAIABPAEYAIABDAE8AUABZAFIASQBHAEgAVAAsACAAUABBAFQARQBOAFQALAAgAFQAUgBBAEQARQBNAEEAUgBLACwAIABPAFIAIABPAFQASABFAFIAIABSAEkARwBIAFQALgAgAEkATgAgAE4ATwAgAEUAVgBFAE4AVAAgAFMASABBAEwATAAgAFQASABFACAAQwBPAFAAWQBSAEkARwBIAFQAIABIAE8ATABEAEUAUgAgAEIARQAgAEwASQBBAEIATABFACAARgBPAFIAIABBAE4AWQAgAEMATABBAEkATQAsACAARABBAE0AQQBHAEUAUwAgAE8AUgAgAE8AVABIAEUAUgAgAEwASQBBAEIASQBMAEkAVABZACwAIABJAE4AQwBMAFUARABJAE4ARwAgAEEATgBZACAARwBFAE4ARQBSAEEATAAsACAAUwBQAEUAQwBJAEEATAAsACAASQBOAEQASQBSAEUAQwBUACwAIABJAE4AQwBJAEQARQBOAFQAQQBMACwAIABPAFIAIABDAE8ATgBTAEUAUQBVAEUATgBUAEkAQQBMACAARABBAE0AQQBHAEUAUwAsACAAVwBIAEUAVABIAEUAUgAgAEkATgAgAEEATgAgAEEAQwBUAEkATwBOACAATwBGACAAQwBPAE4AVABSAEEAQwBUACwAIABUAE8AUgBUACAATwBSACAATwBUAEgARQBSAFcASQBTAEUALAAgAEEAUgBJAFMASQBOAEcAIABGAFIATwBNACwAIABPAFUAVAAgAE8ARgAgAFQASABFACAAVQBTAEUAIABPAFIAIABJAE4AQQBCAEkATABJAFQAWQAgAFQATwAgAFUAUwBFACAAVABIAEUAIABGAE8ATgBUACAAUwBPAEYAVABXAEEAUgBFACAATwBSACAARgBSAE8ATQAgAE8AVABIAEUAUgAgAEQARQBBAEwASQBOAEcAUwAgAEkATgAgAFQASABFACAARgBPAE4AVAAgAFMATwBGAFQAVwBBAFIARQAuAAAAAgAAAAAAAP8GAGQAAAAAAAAAAAAAAAAAAAAAAAAAAABfAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQAAAAMACAACABAAAf//AAIAAAABAAAAAAABAAAADgAAAAAAAAAAAAIAAQAAAF4AAQABAAAACgBKAGQAAmN5cmwADmxhdG4AGAAEAAAAAP//AAAAEAACSVBBIAAaVklUIAAiAAD//wACAAEAAAAA//8AAQABAAD//wAAAAJrZXJuAA5tYXJrABQAAAABAAEAAAABAAAAAgAGAA4ABAAEAAEAEAACAAAAAQAsAAEADAAQAAAAIAAiAAIAAAABAAYAIQAyADYAQQBSAFYAAAAGAAEAjgAEAAAABgAWADAASgBkAHIAgAAGAA7/nAAhADYAQQA2ADIADQA2//IAUgAXAAYADv+cACEAWABBAFgAMgChADYAvQBSAE8ABgAO/nAAIf6TAEH+kwAy//kANgAOAFL/YQADAA7/nABSABcAVv/VAAMADv+cAFIANgBWAEwAAwAO/nAAUgAJAFYAGQABAAYAIQAyADYAQQBSAFYAAQAAAAoATgBoAAJjeXJsAA5sYXRuABoABAAAAAD//wABAAAAEAACSVBBIAAaVklUIAAiAAD//wACAAAAAQAA//8AAQAAAAD//wABAAAAAmFhbHQADnNtY3AAFAAAAAEAAAAAAAEAAAABAAQAAwAAAAEACAABABgAAwAMABAAFAABAEEAAQBSAAEAVgABAAMAIQAyADYAAA=="
 
 /***/ }
 /******/ ])

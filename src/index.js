@@ -64,7 +64,7 @@ ChantVisualElementPrototype.createdCallback = function() {
 }
 
 ChantVisualElementPrototype.attachedCallback = function() {
-  console.log("Attached a chant-visual");
+  
 }
 
 // register the custom element

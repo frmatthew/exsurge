@@ -25,7 +25,7 @@
 
 import * as Exsurge from 'Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, HorizontalEpisemaLineVisualizer } from 'Exsurge.Drawing'
+import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, HorizontalEpisemaLineVisualizer, LedgerLineVisualizer } from 'Exsurge.Drawing'
 import { Note, NoteShape } from 'Exsurge.Chant'
 
 /*
@@ -45,113 +45,27 @@ export class Neume extends ChantNotationElement {
 
   finishLayout(ctxt) {
 
-    var episemae = [];
+    // allow subclasses an opportunity position their own markings...
+    this.positionMarkings();
 
     // layout the markings of the notes
     for (var i = 0; i < this.notes.length; i++) {
       var note = this.notes[i];
-
-      var hasEpisema = false;
 
       for (var j = 0; j < note.markings.length; j++) {
         var marking = note.markings[j];
 
         marking.performLayout(ctxt);
         this.addVisualizer(marking.visualizer);
-
-        // Keep track of episemae here, and blend them together if it
-        // makes sense.
-        //
-        // fixme: All this works fine, but in fact doesn't allow us to have
-        // episemae that span multiple neumes, as seen so often in the Liber
-        // Hymnarius responsories, for example.
-        //
-        // A nice enhancement would be to move this logic outside of finishLayout
-        // for the neume, and blend episemae after the chant line layout and
-        // justify process has taken place. Then again, it will require yet
-        // another pass over the neumes/notes. Oh well, doesn't seem like a
-        // better way to do it really!
-
-        if (marking.constructor.name === "HorizontalEpisema") {
-          hasEpisema = true;
-
-          // we try to blend the episema if we're able.
-          if (episemae.length === 0 || episemae[0].positionHint != marking.positionHint) {
-            // start a new set of episemae to potentially blend
-            episemae = [];
-            episemae.push(marking);
-          } else {
-            // blend all previous with this one
-            var newY;
-
-            if (marking.positionHint == Exsurge.MarkingPositionHint.Below)
-              newY = Math.max(marking.bounds.y, episemae[0].bounds.y);
-            else
-              newY = Math.min(marking.bounds.y, episemae[0].bounds.y);
-
-            if (marking.bounds.y != newY)
-              marking.updateY(newY);
-            else {
-              for (var i = 0; i < episemae.length; i++)
-                episemae[i].updateY(newY);
-            }
-
-            // extend the last episema to meet the new one
-            episemae[episemae.length - 1].updateWidth(marking.bounds.x - episemae[episemae.length - 1].bounds.x);
-            episemae.push(marking);
-          }
-        }
       }
-
-      if (hasEpisema === false)
-        episemae = [];
     }
 
     super.finishLayout(ctxt);
   }
 
-  // this will handle quilismae, mora, and horizontal episemae.
-  // subclasses can override for their own nuances to note rhythms
-  generatePlaybackData() {
+  // subclasses can override this in order to correctly place markings in a neume specific way
+  positionMarkings() {
 
-    var playbackData = [];
-
-    var prevIsQuilisma = false;
-    for (var i = 0; i < this.notes; i++) {
-      var note = this.notes[i];
-
-      var duration = 1.0; // reset to standard length
-      var multiplier = 1.0;
-
-      if (prevIsQuilisma)
-        multiplier *= 0.5;
-
-      if (note.shape == NoteShape.Quilisma) {
-        multiplier *= 2;
-        prevIsQuilisma = true;
-      } else
-        prevIsQuilisma = false;
-       
-      // check markings
-      for (var j = 0; j < note.markings.length; j++) {
-        var marking = note.markings[j];
-
-        if (marking.className == 'Mora')
-          multiplier = Math.max(multiplier, 2);
-        else if (marking.className == 'HorizontalEpisema' || ctxt.horizontalEpisemaActive)
-          multiplier = Math.max(multiplier, 2);
-      }
-
-      duration *= multiplier;
-
-      playbackData.push({
-        type: 'note',
-        duration: duration,
-        pitch: note.pitch
-      })
-    }
-
-    return playbackData;
   }
 }
 
@@ -319,6 +233,37 @@ export class Climacus extends Neume {
  */
 export class Clivis extends Neume {
 
+  positionMarkings() {
+
+    var hasLowerMora = false;
+    var marking, i;
+
+    // 1. morae need to be lined up if both notes have morae
+    // 2. like the podatus, mora on lower note needs to below
+    //    under certain circumstances
+    for (i = 0; i < this.notes[1].markings.length; i++) {
+      marking = this.notes[1].markings[i];
+
+      if (marking.constructor.name === 'Mora') {
+
+        hasLowerMora = true;
+
+        if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
+            Math.abs(this.notes[1].staffPosition % 2) === 1)
+          marking.positionHint = Exsurge.MarkingPositionHint.Below;
+      }
+    }
+
+    for (i = 0; i < this.notes[0].markings.length; i++) {
+      marking = this.notes[0].markings[i];
+
+      if (marking.constructor.name === 'Mora' && hasLowerMora) {
+        marking.positionHint = Exsurge.MarkingPositionHint.Above;
+        marking.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+      }
+    }    
+  }
+
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
@@ -362,7 +307,7 @@ export class Clivis extends Neume {
     }
 
     if (isLiquescent) {
-      if (line != null)
+      if (line !== null)
         x -= lower.bounds.width - line.bounds.width;
       else
         x -= lower.bounds.width;
@@ -424,7 +369,7 @@ export class Oriscus extends Neume {
     // determine the glyph to use
     var note = this.notes[0];
 
-    if (note.shape == NoteShape.OriscusAscending)
+    if (note.shape === NoteShape.OriscusAscending)
       note.setGlyphShape(ctxt, GlyphCode.OriscusAsc);
     else
       note.setGlyphShape(ctxt, GlyphCode.OriscusDes);
@@ -521,7 +466,7 @@ export class PesSubpunctis extends Neume {
       upper.setGlyphShape(ctxt, GlyphCode.PodatusUpper);
     }
 
-    if (lower.shape == NoteShape.Quilisma)
+    if (lower.shape === NoteShape.Quilisma)
       lower.setGlyphShape(ctxt, GlyphCode.Quilisma);
 
     lower.performLayout(ctxt);
@@ -589,6 +534,32 @@ export class PesSubpunctis extends Neume {
  */
 export class Podatus extends Neume {
 
+  positionMarkings() {
+    var marking, i;
+
+    // 1. episema on lower note should always be below, upper note above
+    // 2. morae: 
+    //   a. if podatus difference is 1 and lower note is on a line,
+    //      the lower mora should be below
+    for (i = 0; i < this.notes[0].markings.length; i++) {
+      marking = this.notes[0].markings[i];
+
+      if (marking.constructor.name === 'HorizontalEpisema')
+        marking.positionHint = Exsurge.MarkingPositionHint.Below;
+      else if (marking.constructor.name === 'Mora' &&
+          (this.notes[1].staffPosition - this.notes[0].staffPosition) === 1 &&
+          Math.abs(this.notes[0].staffPosition % 2) === 1)
+        marking.positionHint = Exsurge.MarkingPositionHint.Below;
+    }
+
+    for (i = 0; i < this.notes[1].markings.length; i++) {
+      marking = this.notes[1].markings[i];
+
+      if (marking.constructor.name === 'HorizontalEpisema')
+        marking.positionHint = Exsurge.MarkingPositionHint.Above;
+    }    
+  }
+
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
@@ -603,7 +574,7 @@ export class Podatus extends Neume {
       upper.setGlyphShape(ctxt, GlyphCode.PodatusUpper);
     }
 
-    if (lower.shape == NoteShape.Quilisma)
+    if (lower.shape === NoteShape.Quilisma)
       lower.setGlyphShape(ctxt, GlyphCode.Quilisma);
 
     upper.performLayout(ctxt);
@@ -696,7 +667,7 @@ export class Porrectus extends Neume {
       third.setGlyphShape(ctxt, GlyphCode.PodatusUpper);
 
     third.performLayout(ctxt);
-    third.bounds.x += x;
+    third.bounds.x = second.bounds.right() - third.bounds.width;
 
     this.addVisualizer(third);
 
@@ -813,7 +784,7 @@ export class Punctum extends Neume {
     var note = this.notes[0];
 
     if (note.isLiquescent) {
-      if (note.shape == NoteShape.Inclinatum)
+      if (note.shape === NoteShape.Inclinatum)
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else {
         // fixme: implement two types of punctum liquescents
@@ -877,7 +848,7 @@ export class Scandicus extends Neume {
     }
 
     // fixme: can a scandicus have a quilisma like this?
-    if (second.shape == NoteShape.Quilisma)
+    if (second.shape === NoteShape.Quilisma)
       second.setGlyphShape(ctxt, GlyphCode.Quilisma);
 
     first.performLayout(ctxt);
@@ -929,7 +900,7 @@ export class ScandicusFlexus extends Neume {
     }
 
     // fixme: can a scandicus have a quilisma like this?
-    if (second.shape == NoteShape.Quilisma)
+    if (second.shape === NoteShape.Quilisma)
       second.setGlyphShape(ctxt, GlyphCode.Quilisma);
 
     first.performLayout(ctxt);
@@ -1320,7 +1291,7 @@ export class Virga extends Neume {
   // The virga's glyph depends on its staff position. This is a helper function
   // that can be used by other neumes that use the virga glyphs...
   static getGlyphCode(staffPosition) {
-    if (Math.abs(staffPosition) % 2 == 1)
+    if (Math.abs(staffPosition) % 2 === 1)
       return GlyphCode.VirgaLong;
     else
       return GlyphCode.VirgaShort;
