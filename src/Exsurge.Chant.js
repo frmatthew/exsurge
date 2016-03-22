@@ -27,7 +27,7 @@ import * as Exsurge from './Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from './Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from './Exsurge.Drawing'
 import { Glyphs } from './Exsurge.Glyphs'
-import { Custod } from './Exsurge.Chant.Signs'
+import { Custod, AccidentalType } from './Exsurge.Chant.Signs'
 import { Gabc } from './Exsurge.Gabc'
 
 
