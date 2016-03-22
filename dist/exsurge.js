@@ -231,6 +231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	ChantVisualElementPrototype.attachedCallback = function () {};
 	
+	document.registerElement = document.registerElement || function () {};
 	// register the custom element
 	var ChantVisualElement = exports.ChantVisualElement = document.registerElement('chant-visual', {
 	  prototype: ChantVisualElementPrototype
@@ -2598,7 +2599,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.bounds.x = 0;
 	      this.bounds.y = 0;
 	
-	      ctxt.svgTextMeasurer.innerHTML = this.createDrawable(ctxt);
+	      var xml = '<svg xmlns="http://www.w3.org/2000/svg">' + this.createDrawable(ctxt) + '</svg>';
+	      var doc = new DOMParser().parseFromString(xml, 'application/xml');
+	      while (ctxt.svgTextMeasurer.firstChild) {
+	        ctxt.svgTextMeasurer.firstChild.remove();
+	      }
+	      ctxt.svgTextMeasurer.appendChild(ctxt.svgTextMeasurer.ownerDocument.importNode(doc.documentElement, true).firstChild);
+	
 	      var bbox = ctxt.svgTextMeasurer.firstChild.getBBox();
 	
 	      this.bounds.x = 0;
