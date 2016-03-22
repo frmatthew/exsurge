@@ -704,7 +704,7 @@ export class TextElement extends ChantLayoutElement {
     }
 
     var styleProperties = "font-family:" + this.fontFamily +
-      ";font-size:" + this.fontSize +
+      ";font-size:" + this.fontSize + "px" +
       ";font-kerning:normal;" +
       this.getExtraStyleProperties(ctxt);
 
