@@ -401,7 +401,7 @@ export var Gabc = {
 
     var unknownState = {
       neume: function() {
-        return new Punctum();
+        return new Neumes.Punctum();
       },
       handle: function(currNote, prevNote) {
       
@@ -409,7 +409,7 @@ export var Gabc = {
           case NoteShape.Apostropha:
             return apostrophaState;
           case NoteShape.Cavum:
-            return createNeume(new Punctum(), true);
+            return createNeume(new Neumes.Punctum(), true);
           case NoteShape.OriscusAscending:
             break;
           case NoteShape.OriscusDescending:

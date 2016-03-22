@@ -4829,7 +4829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var unknownState = {
 	      neume: function neume() {
-	        return new Punctum();
+	        return new Neumes.Punctum();
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
@@ -4837,7 +4837,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          case _Exsurge3.NoteShape.Apostropha:
 	            return apostrophaState;
 	          case _Exsurge3.NoteShape.Cavum:
-	            return createNeume(new Punctum(), true);
+	            return createNeume(new Neumes.Punctum(), true);
 	          case _Exsurge3.NoteShape.OriscusAscending:
 	            break;
 	          case _Exsurge3.NoteShape.OriscusDescending:
