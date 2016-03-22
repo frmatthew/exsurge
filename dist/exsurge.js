@@ -88,165 +88,112 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Exsurge = __webpack_require__(1);
 	
-	var _loop = function _loop(_key10) {
-	  if (_key10 === "default") return 'continue';
-	  Object.defineProperty(exports, _key10, {
+	Object.keys(_Exsurge).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge[_key10];
+	      return _Exsurge[key];
 	    }
 	  });
-	};
-	
-	for (var _key10 in _Exsurge) {
-	  var _ret = _loop(_key10);
-	
-	  if (_ret === 'continue') continue;
-	}
+	});
 	
 	var _Exsurge2 = __webpack_require__(2);
 	
-	var _loop2 = function _loop2(_key11) {
-	  if (_key11 === "default") return 'continue';
-	  Object.defineProperty(exports, _key11, {
+	Object.keys(_Exsurge2).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge2[_key11];
+	      return _Exsurge2[key];
 	    }
 	  });
-	};
-	
-	for (var _key11 in _Exsurge2) {
-	  var _ret2 = _loop2(_key11);
-	
-	  if (_ret2 === 'continue') continue;
-	}
+	});
 	
 	var _Exsurge3 = __webpack_require__(3);
 	
-	var _loop3 = function _loop3(_key12) {
-	  if (_key12 === "default") return 'continue';
-	  Object.defineProperty(exports, _key12, {
+	Object.keys(_Exsurge3).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge3[_key12];
+	      return _Exsurge3[key];
 	    }
 	  });
-	};
-	
-	for (var _key12 in _Exsurge3) {
-	  var _ret3 = _loop3(_key12);
-	
-	  if (_ret3 === 'continue') continue;
-	}
+	});
 	
 	var _Exsurge4 = __webpack_require__(4);
 	
-	var _loop4 = function _loop4(_key13) {
-	  if (_key13 === "default") return 'continue';
-	  Object.defineProperty(exports, _key13, {
+	Object.keys(_Exsurge4).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge4[_key13];
+	      return _Exsurge4[key];
 	    }
 	  });
-	};
-	
-	for (var _key13 in _Exsurge4) {
-	  var _ret4 = _loop4(_key13);
-	
-	  if (_ret4 === 'continue') continue;
-	}
+	});
 	
 	var _Exsurge5 = __webpack_require__(6);
 	
-	var _loop5 = function _loop5(_key14) {
-	  if (_key14 === "default") return 'continue';
-	  Object.defineProperty(exports, _key14, {
+	Object.keys(_Exsurge5).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge5[_key14];
+	      return _Exsurge5[key];
 	    }
 	  });
-	};
-	
-	for (var _key14 in _Exsurge5) {
-	  var _ret5 = _loop5(_key14);
-	
-	  if (_ret5 === 'continue') continue;
-	}
+	});
 	
 	var _ExsurgeChant = __webpack_require__(9);
 	
-	var _loop6 = function _loop6(_key15) {
-	  if (_key15 === "default") return 'continue';
-	  Object.defineProperty(exports, _key15, {
+	Object.keys(_ExsurgeChant).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _ExsurgeChant[_key15];
+	      return _ExsurgeChant[key];
 	    }
 	  });
-	};
-	
-	for (var _key15 in _ExsurgeChant) {
-	  var _ret6 = _loop6(_key15);
-	
-	  if (_ret6 === 'continue') continue;
-	}
+	});
 	
 	var _ExsurgeChant2 = __webpack_require__(7);
 	
-	var _loop7 = function _loop7(_key16) {
-	  if (_key16 === "default") return 'continue';
-	  Object.defineProperty(exports, _key16, {
+	Object.keys(_ExsurgeChant2).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _ExsurgeChant2[_key16];
+	      return _ExsurgeChant2[key];
 	    }
 	  });
-	};
-	
-	for (var _key16 in _ExsurgeChant2) {
-	  var _ret7 = _loop7(_key16);
-	
-	  if (_ret7 === 'continue') continue;
-	}
+	});
 	
 	var _ExsurgeChant3 = __webpack_require__(10);
 	
-	var _loop8 = function _loop8(_key17) {
-	  if (_key17 === "default") return 'continue';
-	  Object.defineProperty(exports, _key17, {
+	Object.keys(_ExsurgeChant3).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _ExsurgeChant3[_key17];
+	      return _ExsurgeChant3[key];
 	    }
 	  });
-	};
-	
-	for (var _key17 in _ExsurgeChant3) {
-	  var _ret8 = _loop8(_key17);
-	
-	  if (_ret8 === 'continue') continue;
-	}
+	});
 	
 	var _Exsurge6 = __webpack_require__(8);
 	
-	var _loop9 = function _loop9(_key18) {
-	  if (_key18 === "default") return 'continue';
-	  Object.defineProperty(exports, _key18, {
+	Object.keys(_Exsurge6).forEach(function (key) {
+	  if (key === "default") return;
+	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _Exsurge6[_key18];
+	      return _Exsurge6[key];
 	    }
 	  });
-	};
+	});
 	
-	for (var _key18 in _Exsurge6) {
-	  var _ret9 = _loop9(_key18);
-	
-	  if (_ret9 === 'continue') continue;
-	}
 	
 	// client side support
 	var ChantVisualElementPrototype = Object.create(HTMLElement.prototype);
@@ -3230,7 +3177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      /*
 	      if (this.defaultAccidental != null) {
 	        var x = glyph.bounds.right() + ctxt.intraNeumeSpacing;
-	          glyph = new GlyphVisualizer(ctxt, GlyphCode.Flat, this.staffPosition - 1);
+	         glyph = new GlyphVisualizer(ctxt, GlyphCode.Flat, this.staffPosition - 1);
 	        glyph.bounds.x += x;
 	        this.addVisualizer(glyph);
 	      }
@@ -3275,7 +3222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var step = _Exsurge.Pitch.staffOffsetToStep(offset);
 	
-	      if (step === _Exsurge.Step.Ti && this.defaultAccidental === AccidentalType.Flat) step = _Exsurge.Step.Te;
+	      if (step === _Exsurge.Step.Ti && this.defaultAccidental === _ExsurgeChant.AccidentalType.Flat) step = _Exsurge.Step.Te;
 	
 	      return new _Exsurge.Pitch(step, this.octave + octaveOffset);
 	    }
@@ -4751,13 +4698,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        case "cb3":
 	          passByRef.activeClef = new _Exsurge3.DoClef(1, 2);
-	          passByRef.activeClef.defaultAccidental = new Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+	          passByRef.activeClef.defaultAccidental = new Signs.Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
 	          addNotation(passByRef.activeClef);
 	          break;
 	
 	        case "cb4":
 	          passByRef.activeClef = new _Exsurge3.DoClef(3, 2);
-	          passByRef.activeClef.defaultAccidental = new Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+	          passByRef.activeClef.defaultAccidental = new Signs.Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
 	          addNotation(passByRef.activeClef);
 	          break;
 	
@@ -5532,7 +5479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.Virga = exports.Tristropha = exports.TorculusResupinusFlexus = exports.TorculusResupinus = exports.Torculus = exports.TextOnly = exports.ScandicusFlexus = exports.Scandicus = exports.Punctum = exports.PorrectusFlexus = exports.Porrectus = exports.Podatus = exports.PesSubpunctis = exports.PesQuassus = exports.Oriscus = exports.Distropha = exports.Clivis = exports.Climacus = exports.Trivirga = exports.Bivirga = exports.Apostropha = exports.Neume = undefined;
 	
@@ -5584,52 +5531,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	var Neume = exports.Neume = function (_ChantNotationElement) {
-	    _inherits(Neume, _ChantNotationElement);
+	  _inherits(Neume, _ChantNotationElement);
 	
-	    function Neume() {
-	        _classCallCheck(this, Neume);
+	  function Neume() {
+	    _classCallCheck(this, Neume);
 	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Neume).call(this));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Neume).call(this));
 	
-	        _this.notes = [];
-	        return _this;
+	    _this.notes = [];
+	    return _this;
+	  }
+	
+	  _createClass(Neume, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Neume.prototype), 'performLayout', this).call(this, ctxt);
+	    }
+	  }, {
+	    key: 'finishLayout',
+	    value: function finishLayout(ctxt) {
+	
+	      // allow subclasses an opportunity position their own markings...
+	      this.positionMarkings();
+	
+	      // layout the markings of the notes
+	      for (var i = 0; i < this.notes.length; i++) {
+	        var note = this.notes[i];
+	
+	        for (var j = 0; j < note.markings.length; j++) {
+	          var marking = note.markings[j];
+	
+	          marking.performLayout(ctxt);
+	          this.addVisualizer(marking.visualizer);
+	        }
+	      }
+	
+	      _get(Object.getPrototypeOf(Neume.prototype), 'finishLayout', this).call(this, ctxt);
 	    }
 	
-	    _createClass(Neume, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Neume.prototype), 'performLayout', this).call(this, ctxt);
-	        }
-	    }, {
-	        key: 'finishLayout',
-	        value: function finishLayout(ctxt) {
+	    // subclasses can override this in order to correctly place markings in a neume specific way
 	
-	            // allow subclasses an opportunity position their own markings...
-	            this.positionMarkings();
+	  }, {
+	    key: 'positionMarkings',
+	    value: function positionMarkings() {}
+	  }]);
 	
-	            // layout the markings of the notes
-	            for (var i = 0; i < this.notes.length; i++) {
-	                var note = this.notes[i];
-	
-	                for (var j = 0; j < note.markings.length; j++) {
-	                    var marking = note.markings[j];
-	
-	                    marking.performLayout(ctxt);
-	                    this.addVisualizer(marking.visualizer);
-	                }
-	            }
-	
-	            _get(Object.getPrototypeOf(Neume.prototype), 'finishLayout', this).call(this, ctxt);
-	        }
-	
-	        // subclasses can override this in order to correctly place markings in a neume specific way
-	
-	    }, {
-	        key: 'positionMarkings',
-	        value: function positionMarkings() {}
-	    }]);
-	
-	    return Neume;
+	  return Neume;
 	}(_Exsurge2.ChantNotationElement);
 	
 	/*
@@ -5638,35 +5585,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Apostropha = exports.Apostropha = function (_Neume) {
-	    _inherits(Apostropha, _Neume);
+	  _inherits(Apostropha, _Neume);
 	
-	    function Apostropha() {
-	        _classCallCheck(this, Apostropha);
+	  function Apostropha() {
+	    _classCallCheck(this, Apostropha);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Apostropha).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Apostropha).apply(this, arguments));
+	  }
+	
+	  _createClass(Apostropha, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Apostropha.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      // determine the glyph to use
+	      var note = this.notes[0];
+	
+	      if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.ApostrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);
+	
+	      note.performLayout(ctxt);
+	      this.addVisualizer(note);
+	
+	      this.origin.x = note.origin.x;
+	      this.origin.y = note.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Apostropha, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Apostropha.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            // determine the glyph to use
-	            var note = this.notes[0];
-	
-	            if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.ApostrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);
-	
-	            note.performLayout(ctxt);
-	            this.addVisualizer(note);
-	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Apostropha;
+	  return Apostropha;
 	}(Neume);
 	
 	/*
@@ -5678,40 +5625,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Bivirga = exports.Bivirga = function (_Neume2) {
-	    _inherits(Bivirga, _Neume2);
+	  _inherits(Bivirga, _Neume2);
 	
-	    function Bivirga() {
-	        _classCallCheck(this, Bivirga);
+	  function Bivirga() {
+	    _classCallCheck(this, Bivirga);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Bivirga).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Bivirga).apply(this, arguments));
+	  }
+	
+	  _createClass(Bivirga, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Bivirga.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note1 = this.notes[0];
+	      var note2 = this.notes[1];
+	
+	      note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	      note1.performLayout(ctxt);
+	
+	      note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	      note2.performLayout(ctxt);
+	      note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
+	
+	      this.addVisualizer(note1);
+	      this.addVisualizer(note2);
+	
+	      this.origin.x = note1.origin.x;
+	      this.origin.y = note1.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Bivirga, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Bivirga.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var note1 = this.notes[0];
-	            var note2 = this.notes[1];
-	
-	            note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note2.performLayout(ctxt);
-	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
-	
-	            this.addVisualizer(note1);
-	            this.addVisualizer(note2);
-	
-	            this.origin.x = note1.origin.x;
-	            this.origin.y = note1.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Bivirga;
+	  return Bivirga;
 	}(Neume);
 	
 	/*
@@ -5723,46 +5670,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Trivirga = exports.Trivirga = function (_Neume3) {
-	    _inherits(Trivirga, _Neume3);
+	  _inherits(Trivirga, _Neume3);
 	
-	    function Trivirga() {
-	        _classCallCheck(this, Trivirga);
+	  function Trivirga() {
+	    _classCallCheck(this, Trivirga);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Trivirga).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Trivirga).apply(this, arguments));
+	  }
+	
+	  _createClass(Trivirga, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Trivirga.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note1 = this.notes[0];
+	      var note2 = this.notes[1];
+	      var note3 = this.notes[2];
+	
+	      note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	      note1.performLayout(ctxt);
+	
+	      note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	      note2.performLayout(ctxt);
+	      note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
+	
+	      note3.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
+	      note3.performLayout(ctxt);
+	      note3.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing + note2.bounds.width + ctxt.intraNeumeSpacing;
+	
+	      this.addVisualizer(note1);
+	      this.addVisualizer(note2);
+	      this.addVisualizer(note3);
+	
+	      this.origin.x = note1.origin.x;
+	      this.origin.y = note1.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Trivirga, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Trivirga.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var note1 = this.notes[0];
-	            var note2 = this.notes[1];
-	            var note3 = this.notes[2];
-	
-	            note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note2.performLayout(ctxt);
-	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
-	
-	            note3.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
-	            note3.performLayout(ctxt);
-	            note3.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing + note2.bounds.width + ctxt.intraNeumeSpacing;
-	
-	            this.addVisualizer(note1);
-	            this.addVisualizer(note2);
-	            this.addVisualizer(note3);
-	
-	            this.origin.x = note1.origin.x;
-	            this.origin.y = note1.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Trivirga;
+	  return Trivirga;
 	}(Neume);
 	
 	/*
@@ -5771,75 +5718,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Climacus = exports.Climacus = function (_Neume4) {
-	    _inherits(Climacus, _Neume4);
+	  _inherits(Climacus, _Neume4);
 	
-	    function Climacus() {
-	        _classCallCheck(this, Climacus);
+	  function Climacus() {
+	    _classCallCheck(this, Climacus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Climacus).apply(this, arguments));
-	    }
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Climacus).apply(this, arguments));
+	  }
 	
-	    _createClass(Climacus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Climacus.prototype), 'performLayout', this).call(this, ctxt);
+	  _createClass(Climacus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Climacus.prototype), 'performLayout', this).call(this, ctxt);
 	
-	            // the first note is always a virga...
-	            var staffPosition, prevStaffPosition;
-	            var x = 0;
+	      // the first note is always a virga...
+	      var staffPosition, prevStaffPosition;
+	      var x = 0;
 	
-	            var note = this.notes[0];
-	            staffPosition = note.staffPosition;
-	            note.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
-	            note.performLayout(ctxt);
+	      var note = this.notes[0];
+	      staffPosition = note.staffPosition;
+	      note.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
+	      note.performLayout(ctxt);
 	
-	            x += note.bounds.width * 1.2; // fixme: correct spacing after virga
+	      x += note.bounds.width * 1.2; // fixme: correct spacing after virga
 	
-	            this.addVisualizer(note);
+	      this.addVisualizer(note);
 	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
+	      this.origin.x = note.origin.x;
+	      this.origin.y = note.origin.y;
 	
-	            // now add all the punctum inclinati
-	            prevStaffPosition = this.notes[1].staffPosition;
-	            for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
-	                note = this.notes[i];
+	      // now add all the punctum inclinati
+	      prevStaffPosition = this.notes[1].staffPosition;
+	      for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
+	        note = this.notes[i];
 	
-	                if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.punctumInclinatumLiquescent);else {
-	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
-	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                }
-	
-	                staffPosition = note.staffPosition;
-	
-	                note.performLayout(ctxt);
-	
-	                // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
-	                var multiple;
-	                switch (Math.abs(prevStaffPosition - staffPosition)) {
-	                    case 0:
-	                        multiple = 0;
-	                        break;
-	                    case 1:
-	                        multiple = 0.8;
-	                        break;
-	                    default:
-	                        multiple = 1.2;
-	                        break;
-	                }
-	
-	                x += note.bounds.width * multiple;
-	                note.bounds.x += x;
-	
-	                this.addVisualizer(note);
-	            }
-	
-	            this.finishLayout(ctxt);
+	        if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.punctumInclinatumLiquescent);else {
+	          // fixme: some climaci in the new chant books end with a punctum cuadratum
+	          // (see, for example, the antiphon "Sancta Maria" for October 7).
+	          note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
 	        }
-	    }]);
 	
-	    return Climacus;
+	        staffPosition = note.staffPosition;
+	
+	        note.performLayout(ctxt);
+	
+	        // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
+	        var multiple;
+	        switch (Math.abs(prevStaffPosition - staffPosition)) {
+	          case 0:
+	            multiple = 0;
+	            break;
+	          case 1:
+	            multiple = 0.8;
+	            break;
+	          default:
+	            multiple = 1.2;
+	            break;
+	        }
+	
+	        x += note.bounds.width * multiple;
+	        note.bounds.x += x;
+	
+	        this.addVisualizer(note);
+	      }
+	
+	      this.finishLayout(ctxt);
+	    }
+	  }]);
+	
+	  return Climacus;
 	}(Neume);
 	
 	/*
@@ -5848,105 +5795,105 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Clivis = exports.Clivis = function (_Neume5) {
-	    _inherits(Clivis, _Neume5);
+	  _inherits(Clivis, _Neume5);
 	
-	    function Clivis() {
-	        _classCallCheck(this, Clivis);
+	  function Clivis() {
+	    _classCallCheck(this, Clivis);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Clivis).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Clivis).apply(this, arguments));
+	  }
+	
+	  _createClass(Clivis, [{
+	    key: 'positionMarkings',
+	    value: function positionMarkings() {
+	
+	      var hasLowerMora = false;
+	      var marking, i;
+	
+	      // 1. morae need to be lined up if both notes have morae
+	      // 2. like the podatus, mora on lower note needs to below
+	      //    under certain circumstances
+	      for (i = 0; i < this.notes[1].markings.length; i++) {
+	        marking = this.notes[1].markings[i];
+	
+	        if (marking.constructor.name === 'Mora') {
+	
+	          hasLowerMora = true;
+	
+	          if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 && Math.abs(this.notes[1].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
+	        }
+	      }
+	
+	      for (i = 0; i < this.notes[0].markings.length; i++) {
+	        marking = this.notes[0].markings[i];
+	
+	        if (marking.constructor.name === 'Mora' && hasLowerMora) {
+	          marking.positionHint = Exsurge.MarkingPositionHint.Above;
+	          marking.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+	        }
+	      }
 	    }
+	  }, {
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Clivis.prototype), 'performLayout', this).call(this, ctxt);
 	
-	    _createClass(Clivis, [{
-	        key: 'positionMarkings',
-	        value: function positionMarkings() {
+	      var line;
+	      var isLiquescent;
 	
-	            var hasLowerMora = false;
-	            var marking, i;
+	      var upper = this.notes[0];
+	      var lower = this.notes[1];
 	
-	            // 1. morae need to be lined up if both notes have morae
-	            // 2. like the podatus, mora on lower note needs to below
-	            //    under certain circumstances
-	            for (i = 0; i < this.notes[1].markings.length; i++) {
-	                marking = this.notes[1].markings[i];
+	      if (lower.isLiquescent || upper.isLiquescent) {
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	        isLiquescent = true;
+	      } else {
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	        isLiquescent = false;
+	      }
 	
-	                if (marking.constructor.name === 'Mora') {
+	      var upperStaffPos = upper.staffPosition;
+	      var lowerStaffPos = lower.staffPosition;
 	
-	                    hasLowerMora = true;
+	      upper.performLayout(ctxt);
+	      lower.performLayout(ctxt);
 	
-	                    if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 && Math.abs(this.notes[1].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
-	                }
-	            }
+	      // add the ascending line
+	      line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, true);
+	      line.bounds.x = upper.bounds.x;
 	
-	            for (i = 0; i < this.notes[0].markings.length; i++) {
-	                marking = this.notes[0].markings[i];
+	      this.addVisualizer(line);
+	      line = null;
 	
-	                if (marking.constructor.name === 'Mora' && hasLowerMora) {
-	                    marking.positionHint = Exsurge.MarkingPositionHint.Above;
-	                    marking.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
-	                }
-	            }
-	        }
-	    }, {
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Clivis.prototype), 'performLayout', this).call(this, ctxt);
+	      var x = upper.bounds.right();
 	
-	            var line;
-	            var isLiquescent;
+	      // do we need to draw a descending line?
+	      if (upperStaffPos - lowerStaffPos > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, upper, lower, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
 	
-	            var upper = this.notes[0];
-	            var lower = this.notes[1];
+	      if (isLiquescent) {
+	        if (line !== null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
+	      }
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
-	                isLiquescent = true;
-	            } else {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                isLiquescent = false;
-	            }
+	      lower.bounds.x = x;
 	
-	            var upperStaffPos = upper.staffPosition;
-	            var lowerStaffPos = lower.staffPosition;
+	      this.addVisualizer(upper);
+	      this.addVisualizer(lower);
 	
-	            upper.performLayout(ctxt);
-	            lower.performLayout(ctxt);
+	      this.origin.x = upper.origin.x;
+	      this.origin.y = upper.origin.y;
 	
-	            // add the ascending line
-	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, true);
-	            line.bounds.x = upper.bounds.x;
+	      this.finishLayout(ctxt);
+	    }
+	  }]);
 	
-	            this.addVisualizer(line);
-	            line = null;
-	
-	            var x = upper.bounds.right();
-	
-	            // do we need to draw a descending line?
-	            if (upperStaffPos - lowerStaffPos > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, upper, lower, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            if (isLiquescent) {
-	                if (line !== null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
-	            }
-	
-	            lower.bounds.x = x;
-	
-	            this.addVisualizer(upper);
-	            this.addVisualizer(lower);
-	
-	            this.origin.x = upper.origin.x;
-	            this.origin.y = upper.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Clivis;
+	  return Clivis;
 	}(Neume);
 	
 	/*
@@ -5958,40 +5905,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Distropha = exports.Distropha = function (_Neume6) {
-	    _inherits(Distropha, _Neume6);
+	  _inherits(Distropha, _Neume6);
 	
-	    function Distropha() {
-	        _classCallCheck(this, Distropha);
+	  function Distropha() {
+	    _classCallCheck(this, Distropha);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Distropha).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Distropha).apply(this, arguments));
+	  }
+	
+	  _createClass(Distropha, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Distropha.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note1 = this.notes[0];
+	      var note2 = this.notes[1];
+	
+	      note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note1.performLayout(ctxt);
+	
+	      note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note2.performLayout(ctxt);
+	      note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
+	
+	      this.addVisualizer(note1);
+	      this.addVisualizer(note2);
+	
+	      this.origin.x = note1.origin.x;
+	      this.origin.y = note1.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Distropha, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Distropha.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var note1 = this.notes[0];
-	            var note2 = this.notes[1];
-	
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note2.performLayout(ctxt);
-	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
-	
-	            this.addVisualizer(note1);
-	            this.addVisualizer(note2);
-	
-	            this.origin.x = note1.origin.x;
-	            this.origin.y = note1.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Distropha;
+	  return Distropha;
 	}(Neume);
 	
 	/*
@@ -6000,35 +5947,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Oriscus = exports.Oriscus = function (_Neume7) {
-	    _inherits(Oriscus, _Neume7);
+	  _inherits(Oriscus, _Neume7);
 	
-	    function Oriscus() {
-	        _classCallCheck(this, Oriscus);
+	  function Oriscus() {
+	    _classCallCheck(this, Oriscus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Oriscus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Oriscus).apply(this, arguments));
+	  }
+	
+	  _createClass(Oriscus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Oriscus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      // determine the glyph to use
+	      var note = this.notes[0];
+	
+	      if (note.shape === _Exsurge3.NoteShape.OriscusAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusDes);
+	
+	      note.performLayout(ctxt);
+	      this.addVisualizer(note);
+	
+	      this.origin.x = note.origin.x;
+	      this.origin.y = note.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Oriscus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Oriscus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            // determine the glyph to use
-	            var note = this.notes[0];
-	
-	            if (note.shape === _Exsurge3.NoteShape.OriscusAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusDes);
-	
-	            note.performLayout(ctxt);
-	            this.addVisualizer(note);
-	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Oriscus;
+	  return Oriscus;
 	}(Neume);
 	
 	/*
@@ -6037,70 +5984,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var PesQuassus = exports.PesQuassus = function (_Neume8) {
-	    _inherits(PesQuassus, _Neume8);
+	  _inherits(PesQuassus, _Neume8);
 	
-	    function PesQuassus() {
-	        _classCallCheck(this, PesQuassus);
+	  function PesQuassus() {
+	    _classCallCheck(this, PesQuassus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PesQuassus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PesQuassus).apply(this, arguments));
+	  }
+	
+	  _createClass(PesQuassus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(PesQuassus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var x = 0;
+	
+	      var lower = this.notes[0];
+	      var upper = this.notes[1];
+	      var line;
+	
+	      var lowerStaffPos = lower.staffPosition;
+	      var upperStaffPos = upper.staffPosition;
+	
+	      lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	      if (upper.isLiquescent) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	      lower.performLayout(ctxt);
+	      lower.bounds.x = x;
+	      this.addVisualizer(lower);
+	
+	      x += lower.bounds.right();
+	
+	      var needsLines = upperStaffPos - lowerStaffPos > 1;
+	      if (needsLines) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      upper.bounds.x = x;
+	
+	      upper.performLayout(ctxt);
+	      upper.bounds.x = x;
+	      this.addVisualizer(upper);
+	
+	      x += upper.bounds.width;
+	
+	      // add a hanging line if we need it
+	      if (needsLines) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, upper, lower, true);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      this.origin.x = lower.origin.x;
+	      this.origin.y = lower.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(PesQuassus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(PesQuassus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var x = 0;
-	
-	            var lower = this.notes[0];
-	            var upper = this.notes[1];
-	            var line;
-	
-	            var lowerStaffPos = lower.staffPosition;
-	            var upperStaffPos = upper.staffPosition;
-	
-	            lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            if (upper.isLiquescent) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            lower.performLayout(ctxt);
-	            lower.bounds.x = x;
-	            this.addVisualizer(lower);
-	
-	            x += lower.bounds.right();
-	
-	            var needsLines = upperStaffPos - lowerStaffPos > 1;
-	            if (needsLines) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            upper.bounds.x = x;
-	
-	            upper.performLayout(ctxt);
-	            upper.bounds.x = x;
-	            this.addVisualizer(upper);
-	
-	            x += upper.bounds.width;
-	
-	            // add a hanging line if we need it
-	            if (needsLines) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, upper, lower, true);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            this.origin.x = lower.origin.x;
-	            this.origin.y = lower.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return PesQuassus;
+	  return PesQuassus;
 	}(Neume);
 	
 	/*
@@ -6109,93 +6056,93 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var PesSubpunctis = exports.PesSubpunctis = function (_Neume9) {
-	    _inherits(PesSubpunctis, _Neume9);
+	  _inherits(PesSubpunctis, _Neume9);
 	
-	    function PesSubpunctis() {
-	        _classCallCheck(this, PesSubpunctis);
+	  function PesSubpunctis() {
+	    _classCallCheck(this, PesSubpunctis);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PesSubpunctis).apply(this, arguments));
-	    }
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PesSubpunctis).apply(this, arguments));
+	  }
 	
-	    _createClass(PesSubpunctis, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(PesSubpunctis.prototype), 'performLayout', this).call(this, ctxt);
+	  _createClass(PesSubpunctis, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(PesSubpunctis.prototype), 'performLayout', this).call(this, ctxt);
 	
-	            var lower = this.notes[0];
-	            var upper = this.notes[1];
-	            var staffPosition, prevStaffPosition;
-	            var x = 0;
+	      var lower = this.notes[0];
+	      var upper = this.notes[1];
+	      var staffPosition, prevStaffPosition;
+	      var x = 0;
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
+	      if (lower.isLiquescent || upper.isLiquescent) {
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	      } else {
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	      }
 	
-	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	      if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
-	            lower.performLayout(ctxt);
-	            upper.performLayout(ctxt);
+	      lower.performLayout(ctxt);
+	      upper.performLayout(ctxt);
 	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
+	      var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
 	
-	            line.bounds.x = lower.bounds.right() - line.bounds.width;
-	            upper.bounds.x = lower.bounds.right() - upper.bounds.width;
+	      line.bounds.x = lower.bounds.right() - line.bounds.width;
+	      upper.bounds.x = lower.bounds.right() - upper.bounds.width;
 	
-	            // add the elements
-	            this.addVisualizer(lower);
-	            this.addVisualizer(line);
-	            this.addVisualizer(upper);
+	      // add the elements
+	      this.addVisualizer(lower);
+	      this.addVisualizer(line);
+	      this.addVisualizer(upper);
 	
-	            x += Math.max(lower.bounds.width, upper.bounds.width) * 1.2; // fixme: correct spacing after podatus
+	      x += Math.max(lower.bounds.width, upper.bounds.width) * 1.2; // fixme: correct spacing after podatus
 	
-	            // now add all the punctum inclinati
-	            staffPosition = upper.staffPosition;
-	            prevStaffPosition = lower.staffPosition;
-	            for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
-	                var note = this.notes[i];
+	      // now add all the punctum inclinati
+	      staffPosition = upper.staffPosition;
+	      prevStaffPosition = lower.staffPosition;
+	      for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
+	        var note = this.notes[i];
 	
-	                if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
-	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
-	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                }
-	
-	                staffPosition = note.staffPosition;
-	
-	                note.performLayout(ctxt);
-	
-	                // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
-	                var multiple;
-	                switch (Math.abs(prevStaffPosition - staffPosition)) {
-	                    case 0:
-	                        multiple = 0;
-	                        break;
-	                    case 1:
-	                        multiple = 0.8;
-	                        break;
-	                    default:
-	                        multiple = 1.2;
-	                        break;
-	                }
-	
-	                x += note.bounds.width * multiple;
-	                note.bounds.x += x;
-	
-	                this.addVisualizer(note);
-	            }
-	
-	            this.origin.x = lower.origin.x;
-	            this.origin.y = lower.origin.y;
-	
-	            this.finishLayout(ctxt);
+	        if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
+	          // fixme: some climaci in the new chant books end with a punctum cuadratum
+	          // (see, for example, the antiphon "Sancta Maria" for October 7).
+	          note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
 	        }
-	    }]);
 	
-	    return PesSubpunctis;
+	        staffPosition = note.staffPosition;
+	
+	        note.performLayout(ctxt);
+	
+	        // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
+	        var multiple;
+	        switch (Math.abs(prevStaffPosition - staffPosition)) {
+	          case 0:
+	            multiple = 0;
+	            break;
+	          case 1:
+	            multiple = 0.8;
+	            break;
+	          default:
+	            multiple = 1.2;
+	            break;
+	        }
+	
+	        x += note.bounds.width * multiple;
+	        note.bounds.x += x;
+	
+	        this.addVisualizer(note);
+	      }
+	
+	      this.origin.x = lower.origin.x;
+	      this.origin.y = lower.origin.y;
+	
+	      this.finishLayout(ctxt);
+	    }
+	  }]);
+	
+	  return PesSubpunctis;
 	}(Neume);
 	
 	/*
@@ -6204,74 +6151,74 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Podatus = exports.Podatus = function (_Neume10) {
-	    _inherits(Podatus, _Neume10);
+	  _inherits(Podatus, _Neume10);
 	
-	    function Podatus() {
-	        _classCallCheck(this, Podatus);
+	  function Podatus() {
+	    _classCallCheck(this, Podatus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Podatus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Podatus).apply(this, arguments));
+	  }
+	
+	  _createClass(Podatus, [{
+	    key: 'positionMarkings',
+	    value: function positionMarkings() {
+	      var marking, i;
+	
+	      // 1. episema on lower note should always be below, upper note above
+	      // 2. morae:
+	      //   a. if podatus difference is 1 and lower note is on a line,
+	      //      the lower mora should be below
+	      for (i = 0; i < this.notes[0].markings.length; i++) {
+	        marking = this.notes[0].markings[i];
+	
+	        if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Below;else if (marking.constructor.name === 'Mora' && this.notes[1].staffPosition - this.notes[0].staffPosition === 1 && Math.abs(this.notes[0].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
+	      }
+	
+	      for (i = 0; i < this.notes[1].markings.length; i++) {
+	        marking = this.notes[1].markings[i];
+	
+	        if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Above;
+	      }
 	    }
+	  }, {
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Podatus.prototype), 'performLayout', this).call(this, ctxt);
 	
-	    _createClass(Podatus, [{
-	        key: 'positionMarkings',
-	        value: function positionMarkings() {
-	            var marking, i;
+	      var lower = this.notes[0];
+	      var upper = this.notes[1];
 	
-	            // 1. episema on lower note should always be below, upper note above
-	            // 2. morae:
-	            //   a. if podatus difference is 1 and lower note is on a line,
-	            //      the lower mora should be below
-	            for (i = 0; i < this.notes[0].markings.length; i++) {
-	                marking = this.notes[0].markings[i];
+	      if (lower.isLiquescent || upper.isLiquescent) {
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	      } else {
+	        lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	        upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	      }
 	
-	                if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Below;else if (marking.constructor.name === 'Mora' && this.notes[1].staffPosition - this.notes[0].staffPosition === 1 && Math.abs(this.notes[0].staffPosition % 2) === 1) marking.positionHint = Exsurge.MarkingPositionHint.Below;
-	            }
+	      if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
-	            for (i = 0; i < this.notes[1].markings.length; i++) {
-	                marking = this.notes[1].markings[i];
+	      upper.performLayout(ctxt);
+	      lower.performLayout(ctxt);
 	
-	                if (marking.constructor.name === 'HorizontalEpisema') marking.positionHint = Exsurge.MarkingPositionHint.Above;
-	            }
-	        }
-	    }, {
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Podatus.prototype), 'performLayout', this).call(this, ctxt);
+	      var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
 	
-	            var lower = this.notes[0];
-	            var upper = this.notes[1];
+	      line.bounds.x = lower.bounds.right() - line.bounds.width;
+	      upper.bounds.x = lower.bounds.right() - upper.bounds.width;
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
+	      // add the elements
+	      this.addVisualizer(lower);
+	      this.addVisualizer(line);
+	      this.addVisualizer(upper);
 	
-	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	      this.origin.x = lower.origin.x;
+	      this.origin.y = lower.origin.y;
 	
-	            upper.performLayout(ctxt);
-	            lower.performLayout(ctxt);
+	      this.finishLayout(ctxt);
+	    }
+	  }]);
 	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	
-	            line.bounds.x = lower.bounds.right() - line.bounds.width;
-	            upper.bounds.x = lower.bounds.right() - upper.bounds.width;
-	
-	            // add the elements
-	            this.addVisualizer(lower);
-	            this.addVisualizer(line);
-	            this.addVisualizer(upper);
-	
-	            this.origin.x = lower.origin.x;
-	            this.origin.y = lower.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Podatus;
+	  return Podatus;
 	}(Neume);
 	
 	/*
@@ -6280,89 +6227,89 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Porrectus = exports.Porrectus = function (_Neume11) {
-	    _inherits(Porrectus, _Neume11);
+	  _inherits(Porrectus, _Neume11);
 	
-	    function Porrectus() {
-	        _classCallCheck(this, Porrectus);
+	  function Porrectus() {
+	    _classCallCheck(this, Porrectus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Porrectus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Porrectus).apply(this, arguments));
+	  }
+	
+	  _createClass(Porrectus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Porrectus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var line;
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	      var x = 0.0;
+	
+	      var firstStaffPosition = first.staffPosition;
+	      var secondStaffPosition = second.staffPosition;
+	      var thirdStaffPosition = third.staffPosition;
+	
+	      switch (firstStaffPosition - secondStaffPosition) {
+	        case 1:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	          break;
+	        case 2:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	          break;
+	        case 3:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	          break;
+	        case 4:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	          break;
+	        default:
+	          // fixme: should we generate an error here?
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	          break;
+	      }
+	
+	      first.performLayout(ctxt);
+	
+	      // the second glyph does not draw anything, but it still has logical importance for the editing
+	      // environment...it can respond to changes which will then change the swash glyph of the first.
+	      second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	      second.performLayout(ctxt);
+	
+	      // add the first line and the swash
+	      line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
+	
+	      x = line.bounds.x = first.bounds.x;
+	      x = first.bounds.right();
+	      second.bounds.x = x - second.bounds.width;
+	      x = second.bounds.right();
+	
+	      this.addVisualizer(line);
+	      this.addVisualizer(first);
+	      this.addVisualizer(second);
+	
+	      // add the connecting line
+	      if (thirdStaffPosition - secondStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	        line.bounds.x = x - line.bounds.width;
+	        this.addVisualizer(line);
+	      }
+	
+	      if (third.isLiquescent) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	
+	      third.performLayout(ctxt);
+	      third.bounds.x = second.bounds.right() - third.bounds.width;
+	
+	      this.addVisualizer(third);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Porrectus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Porrectus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var line;
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	            var x = 0.0;
-	
-	            var firstStaffPosition = first.staffPosition;
-	            var secondStaffPosition = second.staffPosition;
-	            var thirdStaffPosition = third.staffPosition;
-	
-	            switch (firstStaffPosition - secondStaffPosition) {
-	                case 1:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
-	                    break;
-	                case 2:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
-	                    break;
-	                case 3:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
-	                    break;
-	                case 4:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
-	                    break;
-	                default:
-	                    // fixme: should we generate an error here?
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	                    break;
-	            }
-	
-	            first.performLayout(ctxt);
-	
-	            // the second glyph does not draw anything, but it still has logical importance for the editing
-	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            second.performLayout(ctxt);
-	
-	            // add the first line and the swash
-	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
-	
-	            x = line.bounds.x = first.bounds.x;
-	            x = first.bounds.right();
-	            second.bounds.x = x - second.bounds.width;
-	            x = second.bounds.right();
-	
-	            this.addVisualizer(line);
-	            this.addVisualizer(first);
-	            this.addVisualizer(second);
-	
-	            // add the connecting line
-	            if (thirdStaffPosition - secondStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	                line.bounds.x = x - line.bounds.width;
-	                this.addVisualizer(line);
-	            }
-	
-	            if (third.isLiquescent) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	
-	            third.performLayout(ctxt);
-	            third.bounds.x = second.bounds.right() - third.bounds.width;
-	
-	            this.addVisualizer(third);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Porrectus;
+	  return Porrectus;
 	}(Neume);
 	
 	/*
@@ -6371,103 +6318,103 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var PorrectusFlexus = exports.PorrectusFlexus = function (_Neume12) {
-	    _inherits(PorrectusFlexus, _Neume12);
+	  _inherits(PorrectusFlexus, _Neume12);
 	
-	    function PorrectusFlexus() {
-	        _classCallCheck(this, PorrectusFlexus);
+	  function PorrectusFlexus() {
+	    _classCallCheck(this, PorrectusFlexus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(PorrectusFlexus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PorrectusFlexus).apply(this, arguments));
+	  }
+	
+	  _createClass(PorrectusFlexus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(PorrectusFlexus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var line;
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	      var fourth = this.notes[3];
+	      var x = 0;
+	
+	      var firstStaffPosition = first.staffPosition;
+	      var secondStaffPosition = second.staffPosition;
+	      var thirdStaffPosition = third.staffPosition;
+	      var fourthStaffPosition = fourth.staffPosition;
+	
+	      switch (firstStaffPosition - secondStaffPosition) {
+	        case 1:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	          break;
+	        case 2:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	          break;
+	        case 3:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	          break;
+	        case 4:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	          break;
+	        default:
+	          // fixme: should we generate an error here?
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	          break;
+	      }
+	
+	      first.performLayout(ctxt);
+	
+	      // add the first line and the swash
+	      line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
+	
+	      x = line.bounds.x = first.bounds.x;
+	      x = first.bounds.right();
+	      this.addVisualizer(line);
+	      this.addVisualizer(first);
+	
+	      // the second glyph does not draw anything, but it still has logical importance for the editing
+	      // environment...it can respond to changes which will then change the swash glyph of the first.
+	      second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	      second.performLayout(ctxt);
+	      second.bounds.x = x;
+	      x = second.bounds.right();
+	      this.addVisualizer(second);
+	
+	      // add a connecting line
+	      if (thirdStaffPosition - secondStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	        x -= line.bounds.width;
+	        line.bounds.x += x;
+	        this.addVisualizer(line);
+	      }
+	
+	      third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      third.performLayout(ctxt);
+	      third.bounds.x = x;
+	      x = third.bounds.right();
+	      this.addVisualizer(third);
+	
+	      // add a connecting line
+	      if (thirdStaffPosition - fourthStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
+	        x -= line.bounds.width;
+	        line.bounds.x += x;
+	        this.addVisualizer(line);
+	      }
+	
+	      fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      fourth.performLayout(ctxt);
+	      fourth.bounds.x = x;
+	      this.addVisualizer(fourth);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(PorrectusFlexus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(PorrectusFlexus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var line;
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	            var fourth = this.notes[3];
-	            var x = 0;
-	
-	            var firstStaffPosition = first.staffPosition;
-	            var secondStaffPosition = second.staffPosition;
-	            var thirdStaffPosition = third.staffPosition;
-	            var fourthStaffPosition = fourth.staffPosition;
-	
-	            switch (firstStaffPosition - secondStaffPosition) {
-	                case 1:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
-	                    break;
-	                case 2:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
-	                    break;
-	                case 3:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
-	                    break;
-	                case 4:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
-	                    break;
-	                default:
-	                    // fixme: should we generate an error here?
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	                    break;
-	            }
-	
-	            first.performLayout(ctxt);
-	
-	            // add the first line and the swash
-	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
-	
-	            x = line.bounds.x = first.bounds.x;
-	            x = first.bounds.right();
-	            this.addVisualizer(line);
-	            this.addVisualizer(first);
-	
-	            // the second glyph does not draw anything, but it still has logical importance for the editing
-	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            second.performLayout(ctxt);
-	            second.bounds.x = x;
-	            x = second.bounds.right();
-	            this.addVisualizer(second);
-	
-	            // add a connecting line
-	            if (thirdStaffPosition - secondStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	                x -= line.bounds.width;
-	                line.bounds.x += x;
-	                this.addVisualizer(line);
-	            }
-	
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            third.performLayout(ctxt);
-	            third.bounds.x = x;
-	            x = third.bounds.right();
-	            this.addVisualizer(third);
-	
-	            // add a connecting line
-	            if (thirdStaffPosition - fourthStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
-	                x -= line.bounds.width;
-	                line.bounds.x += x;
-	                this.addVisualizer(line);
-	            }
-	
-	            fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fourth.performLayout(ctxt);
-	            fourth.bounds.x = x;
-	            this.addVisualizer(fourth);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return PorrectusFlexus;
+	  return PorrectusFlexus;
 	}(Neume);
 	
 	/*
@@ -6476,59 +6423,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Punctum = exports.Punctum = function (_Neume13) {
-	    _inherits(Punctum, _Neume13);
+	  _inherits(Punctum, _Neume13);
 	
-	    function Punctum() {
-	        _classCallCheck(this, Punctum);
+	  function Punctum() {
+	    _classCallCheck(this, Punctum);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Punctum).apply(this, arguments));
-	    }
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Punctum).apply(this, arguments));
+	  }
 	
-	    _createClass(Punctum, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Punctum.prototype), 'performLayout', this).call(this, ctxt);
+	  _createClass(Punctum, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Punctum.prototype), 'performLayout', this).call(this, ctxt);
 	
-	            // determine the glyph to use
+	      // determine the glyph to use
 	
-	            var note = this.notes[0];
+	      var note = this.notes[0];
 	
-	            if (note.isLiquescent) {
-	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
-	                    // fixme: implement two types of punctum liquescents
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                }
-	            } else {
-	                switch (note.shape) {
-	                    case _Exsurge3.NoteShape.Cavum:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCavum);
-	                        break;
-	
-	                    case _Exsurge3.NoteShape.Inclinatum:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                        break;
-	
-	                    case _Exsurge3.NoteShape.Quilisma:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	                        break;
-	
-	                    default:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                        break;
-	                }
-	            }
-	
-	            note.performLayout(ctxt);
-	            this.addVisualizer(note);
-	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
-	
-	            this.finishLayout(ctxt);
+	      if (note.isLiquescent) {
+	        if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
+	          // fixme: implement two types of punctum liquescents
+	          note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
 	        }
-	    }]);
+	      } else {
+	        switch (note.shape) {
+	          case _Exsurge3.NoteShape.Cavum:
+	            note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCavum);
+	            break;
 	
-	    return Punctum;
+	          case _Exsurge3.NoteShape.Inclinatum:
+	            note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
+	            break;
+	
+	          case _Exsurge3.NoteShape.Quilisma:
+	            note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	            break;
+	
+	          default:
+	            note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            break;
+	        }
+	      }
+	
+	      note.performLayout(ctxt);
+	      this.addVisualizer(note);
+	
+	      this.origin.x = note.origin.x;
+	      this.origin.y = note.origin.y;
+	
+	      this.finishLayout(ctxt);
+	    }
+	  }]);
+	
+	  return Punctum;
 	}(Neume);
 	
 	/*
@@ -6537,67 +6484,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Scandicus = exports.Scandicus = function (_Neume14) {
-	    _inherits(Scandicus, _Neume14);
+	  _inherits(Scandicus, _Neume14);
 	
-	    function Scandicus() {
-	        _classCallCheck(this, Scandicus);
+	  function Scandicus() {
+	    _classCallCheck(this, Scandicus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Scandicus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Scandicus).apply(this, arguments));
+	  }
+	
+	  _createClass(Scandicus, [{
+	    key: 'performLayout',
+	
+	
+	    // fixme: for now, we render the scandicus as a punctum followed by a podatus. however,
+	    // it could also be a podatus followed by a virga...see LU, "Preface," xj.
+	    //
+	    // perhaps the best way to indicate the virga form is to check if the note shape of
+	    // the third note is a virga!
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Scandicus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	
+	      first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	      if (second.isLiquescent || third.isLiquescent) {
+	        second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	        third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	      } else {
+	        second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	        third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	      }
+	
+	      // fixme: can a scandicus have a quilisma like this?
+	      if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	
+	      first.performLayout(ctxt);
+	      second.performLayout(ctxt);
+	      third.performLayout(ctxt);
+	
+	      var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	
+	      second.bounds.x = first.bounds.right();
+	      line.bounds.x = second.bounds.right() - line.bounds.width;
+	      third.bounds.x = second.bounds.right() - third.bounds.width;
+	
+	      // add the elements
+	      this.addVisualizer(first);
+	      this.addVisualizer(second);
+	      this.addVisualizer(line);
+	      this.addVisualizer(third);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Scandicus, [{
-	        key: 'performLayout',
-	
-	
-	        // fixme: for now, we render the scandicus as a punctum followed by a podatus. however,
-	        // it could also be a podatus followed by a virga...see LU, "Preface," xj.
-	        //
-	        // perhaps the best way to indicate the virga form is to check if the note shape of
-	        // the third note is a virga!
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Scandicus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	
-	            first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            if (second.isLiquescent || third.isLiquescent) {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
-	
-	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            first.performLayout(ctxt);
-	            second.performLayout(ctxt);
-	            third.performLayout(ctxt);
-	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	
-	            second.bounds.x = first.bounds.right();
-	            line.bounds.x = second.bounds.right() - line.bounds.width;
-	            third.bounds.x = second.bounds.right() - third.bounds.width;
-	
-	            // add the elements
-	            this.addVisualizer(first);
-	            this.addVisualizer(second);
-	            this.addVisualizer(line);
-	            this.addVisualizer(third);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Scandicus;
+	  return Scandicus;
 	}(Neume);
 	
 	/*
@@ -6606,77 +6553,77 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var ScandicusFlexus = exports.ScandicusFlexus = function (_Neume15) {
-	    _inherits(ScandicusFlexus, _Neume15);
+	  _inherits(ScandicusFlexus, _Neume15);
 	
-	    function ScandicusFlexus() {
-	        _classCallCheck(this, ScandicusFlexus);
+	  function ScandicusFlexus() {
+	    _classCallCheck(this, ScandicusFlexus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ScandicusFlexus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ScandicusFlexus).apply(this, arguments));
+	  }
+	
+	  _createClass(ScandicusFlexus, [{
+	    key: 'performLayout',
+	
+	
+	    // see notes in Scandicus about determining the first three notes.
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(ScandicusFlexus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	      var fourth = this.notes[3];
+	
+	      first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	      if (second.iisLiquescent || third.isLiquescent) {
+	        second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	        third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	      } else {
+	        second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	        third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	      }
+	
+	      // fixme: can a scandicus have a quilisma like this?
+	      if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	
+	      first.performLayout(ctxt);
+	      second.performLayout(ctxt);
+	      third.performLayout(ctxt);
+	      fourth.performLayout(ctxt);
+	
+	      var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	
+	      second.bounds.x = first.bounds.right();
+	      line.bounds.x = second.bounds.right() - line.bounds.width;
+	      third.bounds.x = second.bounds.right() - third.bounds.width;
+	      fourth.bounds.x = third.bounds.right();
+	
+	      // do we need to draw a descending line?
+	      var staffPos3 = third.staffPosition;
+	      var staffPos4 = fourth.staffPosition;
+	      if (staffPos3 - staffPos4 > 1) {
+	        var extraLine = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
+	        fourth.bounds.x -= extraLine.bounds.width;
+	        extraLine.bounds.x -= extraLine.bounds.width;
+	        this.addVisualizer(extraLine);
+	      }
+	
+	      // add the elements
+	      this.addVisualizer(first);
+	      this.addVisualizer(second);
+	      this.addVisualizer(line);
+	      this.addVisualizer(third);
+	      this.addVisualizer(fourth);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(ScandicusFlexus, [{
-	        key: 'performLayout',
-	
-	
-	        // see notes in Scandicus about determining the first three notes.
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(ScandicusFlexus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	            var fourth = this.notes[3];
-	
-	            first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            if (second.iisLiquescent || third.isLiquescent) {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
-	
-	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            first.performLayout(ctxt);
-	            second.performLayout(ctxt);
-	            third.performLayout(ctxt);
-	            fourth.performLayout(ctxt);
-	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	
-	            second.bounds.x = first.bounds.right();
-	            line.bounds.x = second.bounds.right() - line.bounds.width;
-	            third.bounds.x = second.bounds.right() - third.bounds.width;
-	            fourth.bounds.x = third.bounds.right();
-	
-	            // do we need to draw a descending line?
-	            var staffPos3 = third.staffPosition;
-	            var staffPos4 = fourth.staffPosition;
-	            if (staffPos3 - staffPos4 > 1) {
-	                var extraLine = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
-	                fourth.bounds.x -= extraLine.bounds.width;
-	                extraLine.bounds.x -= extraLine.bounds.width;
-	                this.addVisualizer(extraLine);
-	            }
-	
-	            // add the elements
-	            this.addVisualizer(first);
-	            this.addVisualizer(second);
-	            this.addVisualizer(line);
-	            this.addVisualizer(third);
-	            this.addVisualizer(fourth);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return ScandicusFlexus;
+	  return ScandicusFlexus;
 	}(Neume);
 	
 	/*
@@ -6685,30 +6632,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var TextOnly = exports.TextOnly = function (_Neume16) {
-	    _inherits(TextOnly, _Neume16);
+	  _inherits(TextOnly, _Neume16);
 	
-	    function TextOnly() {
-	        _classCallCheck(this, TextOnly);
+	  function TextOnly() {
+	    _classCallCheck(this, TextOnly);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TextOnly).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextOnly).apply(this, arguments));
+	  }
+	
+	  _createClass(TextOnly, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(TextOnly.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      // add an empty glyph as a placeholder
+	      this.addVisualizer(new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.None));
+	
+	      this.origin.x = 0;
+	      this.origin.y = 0;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(TextOnly, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(TextOnly.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            // add an empty glyph as a placeholder
-	            this.addVisualizer(new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.None));
-	
-	            this.origin.x = 0;
-	            this.origin.y = 0;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return TextOnly;
+	  return TextOnly;
 	}(Neume);
 	
 	/*
@@ -6717,72 +6664,72 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Torculus = exports.Torculus = function (_Neume17) {
-	    _inherits(Torculus, _Neume17);
+	  _inherits(Torculus, _Neume17);
 	
-	    function Torculus() {
-	        _classCallCheck(this, Torculus);
+	  function Torculus() {
+	    _classCallCheck(this, Torculus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Torculus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Torculus).apply(this, arguments));
+	  }
+	
+	  _createClass(Torculus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Torculus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note1 = this.notes[0];
+	      var note2 = this.notes[1];
+	      var note3 = this.notes[2];
+	      var line;
+	
+	      // fixme: implement liquescents
+	      note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	      var staffPos1 = note1.staffPosition;
+	      var staffPos2 = note2.staffPosition;
+	      var staffPos3 = note3.staffPosition;
+	
+	      note1.performLayout(ctxt);
+	      note2.performLayout(ctxt);
+	      note3.performLayout(ctxt);
+	
+	      var x = note1.bounds.right();
+	
+	      // do we need to draw the first (ascending) line?
+	      if (staffPos2 - staffPos1 > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, note1, note2, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      note2.bounds.x = x;
+	      x += note2.bounds.width;
+	
+	      // do we need to draw a descending line?
+	      if (staffPos2 - staffPos3 > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, note2, note3, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      note3.bounds.x = x;
+	
+	      this.addVisualizer(note1);
+	      this.addVisualizer(note2);
+	      this.addVisualizer(note3);
+	
+	      this.origin.x = note1.origin.x;
+	      this.origin.y = note1.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Torculus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Torculus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var note1 = this.notes[0];
-	            var note2 = this.notes[1];
-	            var note3 = this.notes[2];
-	            var line;
-	
-	            // fixme: implement liquescents
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            var staffPos1 = note1.staffPosition;
-	            var staffPos2 = note2.staffPosition;
-	            var staffPos3 = note3.staffPosition;
-	
-	            note1.performLayout(ctxt);
-	            note2.performLayout(ctxt);
-	            note3.performLayout(ctxt);
-	
-	            var x = note1.bounds.right();
-	
-	            // do we need to draw the first (ascending) line?
-	            if (staffPos2 - staffPos1 > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note1, note2, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            note2.bounds.x = x;
-	            x += note2.bounds.width;
-	
-	            // do we need to draw a descending line?
-	            if (staffPos2 - staffPos3 > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note2, note3, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            note3.bounds.x = x;
-	
-	            this.addVisualizer(note1);
-	            this.addVisualizer(note2);
-	            this.addVisualizer(note3);
-	
-	            this.origin.x = note1.origin.x;
-	            this.origin.y = note1.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Torculus;
+	  return Torculus;
 	}(Neume);
 	
 	/*
@@ -6791,104 +6738,104 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var TorculusResupinus = exports.TorculusResupinus = function (_Neume18) {
-	    _inherits(TorculusResupinus, _Neume18);
+	  _inherits(TorculusResupinus, _Neume18);
 	
-	    function TorculusResupinus() {
-	        _classCallCheck(this, TorculusResupinus);
+	  function TorculusResupinus() {
+	    _classCallCheck(this, TorculusResupinus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TorculusResupinus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TorculusResupinus).apply(this, arguments));
+	  }
+	
+	  _createClass(TorculusResupinus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(TorculusResupinus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var line;
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	      var fourth = this.notes[3];
+	      var x = 0;
+	
+	      // first, figure out the porrectus swash
+	      var firstStaffPosition = first.staffPosition;
+	      var secondStaffPosition = second.staffPosition;
+	      var thirdStaffPosition = third.staffPosition;
+	      var fourthStaffPosition = fourth.staffPosition;
+	
+	      switch (first.shape) {
+	        case _Exsurge3.NoteShape.Quilisma:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	          break;
+	
+	        default:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	          break;
+	      }
+	
+	      first.performLayout(ctxt);
+	      x = first.bounds.right();
+	      this.addVisualizer(first);
+	
+	      // if we need a line between the first punctum and the porrectus swash, add it now
+	      if (secondStaffPosition - firstStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      switch (Math.abs(secondStaffPosition - thirdStaffPosition)) {
+	        case 1:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	          break;
+	        case 2:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	          break;
+	        case 3:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	          break;
+	        case 4:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	          break;
+	        default:
+	          // fixme: this should be an error!
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	          break;
+	      }
+	
+	      second.performLayout(ctxt);
+	      second.bounds.x = x;
+	      x = second.bounds.right();
+	      this.addVisualizer(second);
+	
+	      // the third glyph does not draw anything, but it still has logical importance for the editing
+	      // environment...it can respond to changes which will then change the swash glyph of the first.
+	      third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	      third.performLayout(ctxt);
+	
+	      // do we need an ascending line after the porrectus swash?
+	      if (fourthStaffPosition - thirdStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
+	        line.bounds.x = x - line.bounds.width;
+	        this.addVisualizer(line);
+	      }
+	
+	      if (fourth.isLiquescent) fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	
+	      fourth.performLayout(ctxt);
+	      fourth.bounds.x += x;
+	      this.addVisualizer(fourth);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(TorculusResupinus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(TorculusResupinus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var line;
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	            var fourth = this.notes[3];
-	            var x = 0;
-	
-	            // first, figure out the porrectus swash
-	            var firstStaffPosition = first.staffPosition;
-	            var secondStaffPosition = second.staffPosition;
-	            var thirdStaffPosition = third.staffPosition;
-	            var fourthStaffPosition = fourth.staffPosition;
-	
-	            switch (first.shape) {
-	                case _Exsurge3.NoteShape.Quilisma:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	                    break;
-	
-	                default:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    break;
-	            }
-	
-	            first.performLayout(ctxt);
-	            x = first.bounds.right();
-	            this.addVisualizer(first);
-	
-	            // if we need a line between the first punctum and the porrectus swash, add it now
-	            if (secondStaffPosition - firstStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            switch (Math.abs(secondStaffPosition - thirdStaffPosition)) {
-	                case 1:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
-	                    break;
-	                case 2:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
-	                    break;
-	                case 3:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
-	                    break;
-	                case 4:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
-	                    break;
-	                default:
-	                    // fixme: this should be an error!
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
-	                    break;
-	            }
-	
-	            second.performLayout(ctxt);
-	            second.bounds.x = x;
-	            x = second.bounds.right();
-	            this.addVisualizer(second);
-	
-	            // the third glyph does not draw anything, but it still has logical importance for the editing
-	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            third.performLayout(ctxt);
-	
-	            // do we need an ascending line after the porrectus swash?
-	            if (fourthStaffPosition - thirdStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
-	                line.bounds.x = x - line.bounds.width;
-	                this.addVisualizer(line);
-	            }
-	
-	            if (fourth.isLiquescent) fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	
-	            fourth.performLayout(ctxt);
-	            fourth.bounds.x += x;
-	            this.addVisualizer(fourth);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return TorculusResupinus;
+	  return TorculusResupinus;
 	}(Neume);
 	
 	/*
@@ -6897,122 +6844,122 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var TorculusResupinusFlexus = exports.TorculusResupinusFlexus = function (_Neume19) {
-	    _inherits(TorculusResupinusFlexus, _Neume19);
+	  _inherits(TorculusResupinusFlexus, _Neume19);
 	
-	    function TorculusResupinusFlexus() {
-	        _classCallCheck(this, TorculusResupinusFlexus);
+	  function TorculusResupinusFlexus() {
+	    _classCallCheck(this, TorculusResupinusFlexus);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(TorculusResupinusFlexus).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TorculusResupinusFlexus).apply(this, arguments));
+	  }
+	
+	  _createClass(TorculusResupinusFlexus, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(TorculusResupinusFlexus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var line;
+	      var first = this.notes[0];
+	      var second = this.notes[1];
+	      var third = this.notes[2];
+	      var fourth = this.notes[3];
+	      var fifth = this.notes[4];
+	      var x = 0;
+	
+	      var firstStaffPosition = first.staffPosition;
+	      var secondStaffPosition = second.staffPosition;
+	      var thirdStaffPosition = third.staffPosition;
+	      var fourthStaffPosition = fourth.staffPosition;
+	      var fifthStaffPosition = fifth.staffPosition;
+	
+	      switch (first.shape) {
+	        case _Exsurge3.NoteShape.Quilisma:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	          break;
+	
+	        default:
+	          first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	          break;
+	      }
+	
+	      first.performLayout(ctxt);
+	      x = first.bounds.right();
+	      this.addVisualizer(first);
+	
+	      // if we need a line between the first punctum and the porrectus swash, add it now
+	      if (secondStaffPosition - firstStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
+	        x -= line.bounds.width;
+	        line.bounds.x = x;
+	        this.addVisualizer(line);
+	      }
+	
+	      switch (secondStaffPosition - thirdStaffPosition) {
+	        case 1:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	          break;
+	        case 2:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	          break;
+	        case 3:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	          break;
+	        case 4:
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	          break;
+	        default:
+	          // fixme: should we generate an error here?
+	          second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	          break;
+	      }
+	
+	      second.performLayout(ctxt);
+	      second.bounds.x = x;
+	      x = second.bounds.right();
+	      this.addVisualizer(second);
+	
+	      // the second glyph does not draw anything, but it still has logical importance for the editing
+	      // environment...it can respond to changes which will then change the swash glyph of the first.
+	      third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	      third.performLayout(ctxt);
+	      third.bounds.x = x;
+	      x = third.bounds.right();
+	      this.addVisualizer(third);
+	
+	      // add a connecting line
+	      if (fourthStaffPosition - thirdStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
+	        x -= line.bounds.width;
+	        line.bounds.x += x;
+	        this.addVisualizer(line);
+	      }
+	
+	      fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      fourth.performLayout(ctxt);
+	      fourth.bounds.x = x;
+	      x = fourth.bounds.right();
+	      this.addVisualizer(fourth);
+	
+	      // add a connecting line
+	      if (fourthStaffPosition - fifthStaffPosition > 1) {
+	        line = new _Exsurge2.NeumeLineVisualizer(ctxt, fourth, fifth, false);
+	        x -= line.bounds.width * 1.5;
+	        line.bounds.x += x;
+	        this.addVisualizer(line);
+	      }
+	
+	      fifth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      fifth.performLayout(ctxt);
+	      fifth.bounds.x = x;
+	      this.addVisualizer(fifth);
+	
+	      this.origin.x = first.origin.x;
+	      this.origin.y = first.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(TorculusResupinusFlexus, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(TorculusResupinusFlexus.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var line;
-	            var first = this.notes[0];
-	            var second = this.notes[1];
-	            var third = this.notes[2];
-	            var fourth = this.notes[3];
-	            var fifth = this.notes[4];
-	            var x = 0;
-	
-	            var firstStaffPosition = first.staffPosition;
-	            var secondStaffPosition = second.staffPosition;
-	            var thirdStaffPosition = third.staffPosition;
-	            var fourthStaffPosition = fourth.staffPosition;
-	            var fifthStaffPosition = fifth.staffPosition;
-	
-	            switch (first.shape) {
-	                case _Exsurge3.NoteShape.Quilisma:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	                    break;
-	
-	                default:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    break;
-	            }
-	
-	            first.performLayout(ctxt);
-	            x = first.bounds.right();
-	            this.addVisualizer(first);
-	
-	            // if we need a line between the first punctum and the porrectus swash, add it now
-	            if (secondStaffPosition - firstStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
-	                this.addVisualizer(line);
-	            }
-	
-	            switch (secondStaffPosition - thirdStaffPosition) {
-	                case 1:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
-	                    break;
-	                case 2:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
-	                    break;
-	                case 3:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
-	                    break;
-	                case 4:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
-	                    break;
-	                default:
-	                    // fixme: should we generate an error here?
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	                    break;
-	            }
-	
-	            second.performLayout(ctxt);
-	            second.bounds.x = x;
-	            x = second.bounds.right();
-	            this.addVisualizer(second);
-	
-	            // the second glyph does not draw anything, but it still has logical importance for the editing
-	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            third.performLayout(ctxt);
-	            third.bounds.x = x;
-	            x = third.bounds.right();
-	            this.addVisualizer(third);
-	
-	            // add a connecting line
-	            if (fourthStaffPosition - thirdStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
-	                x -= line.bounds.width;
-	                line.bounds.x += x;
-	                this.addVisualizer(line);
-	            }
-	
-	            fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fourth.performLayout(ctxt);
-	            fourth.bounds.x = x;
-	            x = fourth.bounds.right();
-	            this.addVisualizer(fourth);
-	
-	            // add a connecting line
-	            if (fourthStaffPosition - fifthStaffPosition > 1) {
-	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, fourth, fifth, false);
-	                x -= line.bounds.width * 1.5;
-	                line.bounds.x += x;
-	                this.addVisualizer(line);
-	            }
-	
-	            fifth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fifth.performLayout(ctxt);
-	            fifth.bounds.x = x;
-	            this.addVisualizer(fifth);
-	
-	            this.origin.x = first.origin.x;
-	            this.origin.y = first.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return TorculusResupinusFlexus;
+	  return TorculusResupinusFlexus;
 	}(Neume);
 	
 	/*
@@ -7025,48 +6972,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Tristropha = exports.Tristropha = function (_Neume20) {
-	    _inherits(Tristropha, _Neume20);
+	  _inherits(Tristropha, _Neume20);
 	
-	    function Tristropha() {
-	        _classCallCheck(this, Tristropha);
+	  function Tristropha() {
+	    _classCallCheck(this, Tristropha);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Tristropha).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Tristropha).apply(this, arguments));
+	  }
+	
+	  _createClass(Tristropha, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Tristropha.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note1 = this.notes[0];
+	      var note2 = this.notes[1];
+	      var note3 = this.notes[2];
+	
+	      var staffPosition = note1.staffPosition;
+	
+	      note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note1.performLayout(ctxt);
+	
+	      note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note2.performLayout(ctxt);
+	      note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
+	
+	      note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	      note3.performLayout(ctxt);
+	      note3.bounds.x += note1.bounds.width + note2.bounds.width + ctxt.intraNeumeSpacing * 2;
+	
+	      this.addVisualizer(note1);
+	      this.addVisualizer(note2);
+	      this.addVisualizer(note3);
+	
+	      this.origin.x = note1.origin.x;
+	      this.origin.y = note1.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
+	  }]);
 	
-	    _createClass(Tristropha, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Tristropha.prototype), 'performLayout', this).call(this, ctxt);
-	
-	            var note1 = this.notes[0];
-	            var note2 = this.notes[1];
-	            var note3 = this.notes[2];
-	
-	            var staffPosition = note1.staffPosition;
-	
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note2.performLayout(ctxt);
-	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
-	
-	            note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note3.performLayout(ctxt);
-	            note3.bounds.x += note1.bounds.width + note2.bounds.width + ctxt.intraNeumeSpacing * 2;
-	
-	            this.addVisualizer(note1);
-	            this.addVisualizer(note2);
-	            this.addVisualizer(note3);
-	
-	            this.origin.x = note1.origin.x;
-	            this.origin.y = note1.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	    }]);
-	
-	    return Tristropha;
+	  return Tristropha;
 	}(Neume);
 	
 	/*
@@ -7075,48 +7022,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var Virga = exports.Virga = function (_Neume21) {
-	    _inherits(Virga, _Neume21);
+	  _inherits(Virga, _Neume21);
 	
-	    function Virga() {
-	        _classCallCheck(this, Virga);
+	  function Virga() {
+	    _classCallCheck(this, Virga);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Virga).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Virga).apply(this, arguments));
+	  }
+	
+	  _createClass(Virga, [{
+	    key: 'performLayout',
+	    value: function performLayout(ctxt) {
+	      _get(Object.getPrototypeOf(Virga.prototype), 'performLayout', this).call(this, ctxt);
+	
+	      var note = this.notes[0];
+	
+	      var staffPosition = note.staffPosition;
+	
+	      var glyphCode = Virga.getGlyphCode(staffPosition);
+	      note.setGlyphShape(ctxt, glyphCode);
+	      note.performLayout(ctxt);
+	
+	      this.addVisualizer(note);
+	
+	      this.origin.x = note.origin.x;
+	      this.origin.y = note.origin.y;
+	
+	      this.finishLayout(ctxt);
 	    }
 	
-	    _createClass(Virga, [{
-	        key: 'performLayout',
-	        value: function performLayout(ctxt) {
-	            _get(Object.getPrototypeOf(Virga.prototype), 'performLayout', this).call(this, ctxt);
+	    // The virga's glyph depends on its staff position. This is a helper function
+	    // that can be used by other neumes that use the virga glyphs...
 	
-	            var note = this.notes[0];
+	  }], [{
+	    key: 'getGlyphCode',
+	    value: function getGlyphCode(staffPosition) {
+	      if (Math.abs(staffPosition) % 2 === 1) return _Exsurge2.GlyphCode.VirgaLong;else return _Exsurge2.GlyphCode.VirgaShort;
 	
-	            var staffPosition = note.staffPosition;
+	      // fixme: add logic for virgas low on the staff that are probably short also...
+	    }
+	  }]);
 	
-	            var glyphCode = Virga.getGlyphCode(staffPosition);
-	            note.setGlyphShape(ctxt, glyphCode);
-	            note.performLayout(ctxt);
-	
-	            this.addVisualizer(note);
-	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
-	
-	            this.finishLayout(ctxt);
-	        }
-	
-	        // The virga's glyph depends on its staff position. This is a helper function
-	        // that can be used by other neumes that use the virga glyphs...
-	
-	    }], [{
-	        key: 'getGlyphCode',
-	        value: function getGlyphCode(staffPosition) {
-	            if (Math.abs(staffPosition) % 2 === 1) return _Exsurge2.GlyphCode.VirgaLong;else return _Exsurge2.GlyphCode.VirgaShort;
-	
-	            // fixme: add logic for virgas low on the staff that are probably short also...
-	        }
-	    }]);
-	
-	    return Virga;
+	  return Virga;
 	}(Neume);
 
 /***/ }

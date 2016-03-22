@@ -274,13 +274,13 @@ export var Gabc = {
 
         case "cb3":
           passByRef.activeClef = new DoClef(1, 2);
-          passByRef.activeClef.defaultAccidental = new Accidental(Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+          passByRef.activeClef.defaultAccidental = new Signs.Accidental(Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
           addNotation(passByRef.activeClef);
           break;
 
         case "cb4":
           passByRef.activeClef = new DoClef(3, 2);
-          passByRef.activeClef.defaultAccidental = new Accidental(Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+          passByRef.activeClef.defaultAccidental = new Signs.Accidental(Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
           addNotation(passByRef.activeClef);
           break;
 
