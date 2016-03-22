@@ -117,7 +117,7 @@ export var Gabc = {
           }
 
           // if it's not a neume then make the lyric a directive
-          if (notationWithLyrics.notes === null)
+          if (typeof notationWithLyrics.notes === 'undefined')
             lyricType = LyricType.Directive;
 
           var lyric = this.makeLyric(ctxt, lyricText, lyricType);
@@ -127,7 +127,6 @@ export var Gabc = {
             lyric.lyricType === LyricType.SingleSyllable)
             passByRef.activeClef.resetAccidentals();
 
-          // fixme: lyrics are broken! for now, just ignore them
           notationWithLyrics.lyric = lyric;
         }
 
@@ -161,10 +160,6 @@ export var Gabc = {
 
     var s = new Lyric(ctxt, text, lyricType);
     s.elidesToNext = elides;
-
-    // a hack to make the response/versicle characters work...
-    //if (text.search('℟') >= 0 || text.search('℣') >= 0)
-    //  s.NativeText.font = new Font("Arial Unicode MS");
 
     return s;
   },
@@ -401,7 +396,7 @@ export var Gabc = {
 
     var unknownState = {
       neume: function() {
-        return new Punctum();
+        return new Neumes.Punctum();
       },
       handle: function(currNote, prevNote) {
       
@@ -409,7 +404,7 @@ export var Gabc = {
           case NoteShape.Apostropha:
             return apostrophaState;
           case NoteShape.Cavum:
-            return createNeume(new Punctum(), true);
+            return createNeume(new Neumes.Punctum(), true);
           case NoteShape.OriscusAscending:
             break;
           case NoteShape.OriscusDescending:
@@ -491,7 +486,7 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         if (currNote.shape !== NoteShape.Inclinatum)
-          return createNeume(this.neume(), false);
+          return createNeume(new Neumes.Climacus(), false);
         else
           return state;
       }
@@ -812,5 +807,3 @@ export var Gabc = {
     return pitch;
   }
 };
-
-//export default Gabc;
