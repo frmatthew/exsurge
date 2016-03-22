@@ -67,6 +67,7 @@ ChantVisualElementPrototype.attachedCallback = function() {
   
 }
 
+document.registerElement = document.registerElement || function() {};
 // register the custom element
 export var ChantVisualElement = document.registerElement('chant-visual', {
   prototype: ChantVisualElementPrototype
