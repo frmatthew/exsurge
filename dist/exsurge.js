@@ -3107,6 +3107,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof pitch !== 'undefined') _this.pitch = pitch;else _this.pitch = null;
 	
 	    _this.glyphVisualizer = null;
+	
+	    // The staffPosition on a note is an integer that indicates the vertical position on the staff.
+	    // 0 is the center space on the staff (equivalent to gabc 'g'). Positive numbers go up
+	    // the staff, and negative numbers go down, i.e., 1 is gabc 'h', 2 is gabc 'i', -1 is gabc 'f', etc.
 	    _this.staffPosition = 0;
 	    _this.isLiquescent = false;
 	    _this.shape = NoteShape.Default;
@@ -3232,16 +3236,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var glyph = new _Exsurge2.GlyphVisualizer(ctxt, _Exsurge2.GlyphCode.DoClef);
 	      glyph.setStaffPosition(ctxt, this.staffPosition);
 	      this.addVisualizer(glyph);
-	
-	      // fixme: implement this
-	      /*
-	      if (this.defaultAccidental != null) {
-	        var x = glyph.bounds.right() + ctxt.intraNeumeSpacing;
-	          glyph = new GlyphVisualizer(ctxt, GlyphCode.Flat, this.staffPosition - 1);
-	        glyph.bounds.x += x;
-	        this.addVisualizer(glyph);
-	      }
-	      */
 	
 	      this.finishLayout(ctxt);
 	    }
@@ -3723,11 +3717,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	          }
 	
+	          var noteHasEpisema = false;
+	
 	          // blend epismata as we're able
 	          for (var k = 0; k < note.markings.length; k++) {
 	
 	            if (note.markings[k].constructor.name !== "HorizontalEpisema") continue;
 	
+	            noteHasEpisema = true;
 	            var episema = note.markings[k];
 	
 	            // we try to blend the episema if we're able.
@@ -3761,6 +3758,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              });
 	            }
 	          }
+	
+	          // if the note doesn't have any episema, then make sure and stop blending epismata
+	          if (noteHasEpisema === false) epismata = [];
 	        }
 	      }
 	    }

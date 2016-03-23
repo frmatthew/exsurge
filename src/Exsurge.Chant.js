@@ -64,6 +64,10 @@ export class Note extends ChantLayoutElement {
       this.pitch = null;
 
     this.glyphVisualizer = null;
+
+    // The staffPosition on a note is an integer that indicates the vertical position on the staff.
+    // 0 is the center space on the staff (equivalent to gabc 'g'). Positive numbers go up
+    // the staff, and negative numbers go down, i.e., 1 is gabc 'h', 2 is gabc 'i', -1 is gabc 'f', etc.
     this.staffPosition = 0;
     this.isLiquescent = false;
     this.shape = NoteShape.Default;
@@ -169,17 +173,6 @@ export class DoClef extends Clef {
     var glyph = new GlyphVisualizer(ctxt, GlyphCode.DoClef);
     glyph.setStaffPosition(ctxt, this.staffPosition);
     this.addVisualizer(glyph);
-
-    // fixme: implement this
-    /*
-    if (this.defaultAccidental != null) {
-      var x = glyph.bounds.right() + ctxt.intraNeumeSpacing;
-
-      glyph = new GlyphVisualizer(ctxt, GlyphCode.Flat, this.staffPosition - 1);
-      glyph.bounds.x += x;
-      this.addVisualizer(glyph);
-    }
-    */
 
     this.finishLayout(ctxt);
   }
@@ -650,12 +643,15 @@ export class ChantLine extends ChantLayoutElement {
           });
         }
 
+        var noteHasEpisema = false;
+
         // blend epismata as we're able
         for (var k = 0; k < note.markings.length; k++) {
 
           if (note.markings[k].constructor.name !== "HorizontalEpisema")
             continue;
 
+          noteHasEpisema = true;
           var episema = note.markings[k];
 
           // we try to blend the episema if we're able.
@@ -695,6 +691,10 @@ export class ChantLine extends ChantLayoutElement {
             });
           }
         }
+
+        // if the note doesn't have any episema, then make sure and stop blending epismata
+        if (noteHasEpisema === false)
+          epismata = [];
       }
     }
   }
