@@ -182,6 +182,15 @@ export class Accidental extends ChantNotationElement {
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
+    this.addVisualizer(this.createGlyphVisualizer(ctxt));
+
+    this.finishLayout(ctxt);
+  }
+
+  // creation of the glyph visualizer is refactored out or performLayout
+  // so that clefs can use the same logic for their accidental glyph
+  createGlyphVisualizer(ctxt) {
+
     var glyphCode = GlyphCode.Flat;
 
     switch (this.accidentalType) {
@@ -199,9 +208,7 @@ export class Accidental extends ChantNotationElement {
     var glyph = new GlyphVisualizer(ctxt, glyphCode);
     glyph.setStaffPosition(ctxt, this.staffPosition);
 
-    this.addVisualizer(glyph);
-
-    this.finishLayout(ctxt);
+    return glyph;
   }
 
   adjustStep(step) {

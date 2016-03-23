@@ -3168,6 +3168,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(Clef, _ChantNotationElement);
 	
 	  function Clef(staffPosition, octave) {
+	    var defaultAccidental = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
 	    _classCallCheck(this, Clef);
 	
 	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Clef).call(this));
@@ -3175,8 +3177,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this2.isClef = true;
 	    _this2.staffPosition = staffPosition;
 	    _this2.octave = octave;
-	    _this2.defaultAccidental = null;
-	    _this2.activeAccidental = null;
+	    _this2.defaultAccidental = defaultAccidental;
+	    _this2.activeAccidental = defaultAccidental;
 	    return _this2;
 	  }
 	
@@ -3192,7 +3194,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'performLayout',
 	    value: function performLayout(ctxt) {
 	      ctxt.activeClef = this;
+	
+	      if (this.defaultAccidental) this.defaultAccidental.performLayout(ctxt);
+	
 	      _get(Object.getPrototypeOf(Clef.prototype), 'performLayout', this).call(this, ctxt);
+	    }
+	  }, {
+	    key: 'finishLayout',
+	    value: function finishLayout(ctxt) {
+	
+	      // if we have a default accidental, then add a glyph for it now
+	      if (this.defaultAccidental) {
+	        var accidentalGlyph = this.defaultAccidental.createGlyphVisualizer(ctxt);
+	        accidentalGlyph.bounds.x += this.visualizers[0].bounds.right() + ctxt.intraNeumeSpacing;
+	        this.addVisualizer(accidentalGlyph);
+	      }
+	
+	      _get(Object.getPrototypeOf(Clef.prototype), 'finishLayout', this).call(this, ctxt);
 	    }
 	  }]);
 	
@@ -3203,9 +3221,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(DoClef, _Clef);
 	
 	  function DoClef(staffPosition, octave) {
+	    var defaultAccidental = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
 	    _classCallCheck(this, DoClef);
 	
-	    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(DoClef).call(this, staffPosition, octave));
+	    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(DoClef).call(this, staffPosition, octave, defaultAccidental));
 	
 	    _this3.leadingSpace = 0.0;
 	    return _this3;
@@ -3242,7 +3262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'clone',
 	    value: function clone() {
-	      return new DoClef(this.staffPosition, this.octave);
+	      return new DoClef(this.staffPosition, this.octave, this.defaultAccidental);
 	    }
 	  }]);
 	
@@ -3253,9 +3273,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(FaClef, _Clef2);
 	
 	  function FaClef(staffPosition, octave) {
+	    var defaultAccidental = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
 	    _classCallCheck(this, FaClef);
 	
-	    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(FaClef).call(this, staffPosition, octave));
+	    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(FaClef).call(this, staffPosition, octave, defaultAccidental));
 	
 	    _this4.octave = octave;
 	
@@ -3294,7 +3316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'clone',
 	    value: function clone() {
-	      return new FaClef(this.staffPosition, this.octave);
+	      return new FaClef(this.staffPosition, this.octave, this.defaultAccidental);
 	    }
 	  }]);
 	
@@ -4382,6 +4404,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function performLayout(ctxt) {
 	      _get(Object.getPrototypeOf(Accidental.prototype), 'performLayout', this).call(this, ctxt);
 	
+	      this.addVisualizer(this.createGlyphVisualizer(ctxt));
+	
+	      this.finishLayout(ctxt);
+	    }
+	
+	    // creation of the glyph visualizer is refactored out or performLayout
+	    // so that clefs can use the same logic for their accidental glyph
+	
+	  }, {
+	    key: 'createGlyphVisualizer',
+	    value: function createGlyphVisualizer(ctxt) {
+	
 	      var glyphCode = _Exsurge2.GlyphCode.Flat;
 	
 	      switch (this.accidentalType) {
@@ -4399,9 +4433,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var glyph = new _Exsurge2.GlyphVisualizer(ctxt, glyphCode);
 	      glyph.setStaffPosition(ctxt, this.staffPosition);
 	
-	      this.addVisualizer(glyph);
-	
-	      this.finishLayout(ctxt);
+	      return glyph;
 	    }
 	  }, {
 	    key: 'adjustStep',
@@ -4752,14 +4784,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	
 	        case "cb3":
-	          passByRef.activeClef = new _Exsurge3.DoClef(1, 2);
-	          passByRef.activeClef.defaultAccidental = new Signs.Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+	          passByRef.activeClef = new _Exsurge3.DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat));
 	          addNotation(passByRef.activeClef);
 	          break;
 	
 	        case "cb4":
-	          passByRef.activeClef = new _Exsurge3.DoClef(3, 2);
-	          passByRef.activeClef.defaultAccidental = new Signs.Accidental(_Exsurge.Step.Te, passByRef.activeClef.octave, Signs.AccidentalType.Flat);
+	          passByRef.activeClef = new _Exsurge3.DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat));
 	          addNotation(passByRef.activeClef);
 	          break;
 	

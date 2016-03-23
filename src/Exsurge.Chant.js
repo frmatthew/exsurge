@@ -117,14 +117,14 @@ export class Note extends ChantLayoutElement {
 
 export class Clef extends ChantNotationElement {
 
-  constructor(staffPosition, octave) {
+  constructor(staffPosition, octave, defaultAccidental = null) {
     super();
 
     this.isClef = true;
     this.staffPosition = staffPosition;
     this.octave = octave;
-    this.defaultAccidental = null;
-    this.activeAccidental = null;
+    this.defaultAccidental = defaultAccidental;
+    this.activeAccidental = defaultAccidental;
   }
 
   resetAccidentals() {
@@ -137,14 +137,30 @@ export class Clef extends ChantNotationElement {
 
   performLayout(ctxt) {
     ctxt.activeClef = this;
+
+    if (this.defaultAccidental)
+      this.defaultAccidental.performLayout(ctxt);
+
     super.performLayout(ctxt);
+  }
+
+  finishLayout(ctxt) {
+
+    // if we have a default accidental, then add a glyph for it now
+    if (this.defaultAccidental) {
+      var accidentalGlyph = this.defaultAccidental.createGlyphVisualizer(ctxt);
+      accidentalGlyph.bounds.x += this.visualizers[0].bounds.right() + ctxt.intraNeumeSpacing;
+      this.addVisualizer(accidentalGlyph);
+    }
+
+    super.finishLayout(ctxt);
   }
 }
 
 export class DoClef extends Clef {
 
-  constructor(staffPosition, octave) {
-    super(staffPosition, octave);
+  constructor(staffPosition, octave, defaultAccidental = null) {
+    super(staffPosition, octave, defaultAccidental);
 
     this.leadingSpace = 0.0;
   }
@@ -178,15 +194,15 @@ export class DoClef extends Clef {
   }
 
   clone() {
-    return new DoClef(this.staffPosition, this.octave);
+    return new DoClef(this.staffPosition, this.octave, this.defaultAccidental);
   }
 }
 
 
 export class FaClef extends Clef {
 
-  constructor(staffPosition, octave) {
-    super(staffPosition, octave);
+  constructor(staffPosition, octave, defaultAccidental = null) {
+    super(staffPosition, octave, defaultAccidental);
 
     this.octave = octave;
 
@@ -222,7 +238,7 @@ export class FaClef extends Clef {
   }
 
   clone() {
-    return new FaClef(this.staffPosition, this.octave);
+    return new FaClef(this.staffPosition, this.octave, this.defaultAccidental);
   }
 }
 
