@@ -54,13 +54,24 @@ ChantVisualElementPrototype.createdCallback = function() {
 
   var _element = this;
 
-  // perform layout on the chant
-  score.performLayout(ctxt, function() {
-    score.layoutChantLines(ctxt, 0, function() {
-      // render the score to svg code
-      _element.innerHTML = score.createDrawable(ctxt);
+  var width = 0;
+  var doLayout = function() {
+    var newWidth = _element.parentElement.clientWidth;
+    if(width === newWidth) return;
+    width = newWidth;
+    // perform layout on the chant
+    score.performLayout(ctxt, function() {
+      score.layoutChantLines(ctxt, width, function() {
+        // render the score to svg code
+        _element.innerHTML = score.createDrawable(ctxt);
+      });
     });
-  });
+  }
+  doLayout();
+  if (window.addEventListener)
+    window.addEventListener('resize',doLayout,false);
+  else if (window.attachEvent)
+    window.attachEvent('onresize',doLayout);
 }
 
 ChantVisualElementPrototype.attachedCallback = function() {

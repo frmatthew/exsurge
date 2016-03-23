@@ -828,10 +828,17 @@ export class ChantScore {
     if (this.annotation)
       this.annotation.recalculateMetrics(ctxt);
 
-    // boot the compilation process
-    setTimeout(() => {
-      this.compileElement(ctxt, 0, finishedCallback);
-    }, 0);
+    if (this.compiled) {
+      setTimeout(() => {
+        if (finishedCallback)
+          finishedCallback();
+      }, 0);
+    } else {
+      // boot the compilation process
+      setTimeout(() => {
+        this.compileElement(ctxt, 0, finishedCallback);
+      }, 0);
+    }
   }
 
   compileElement(ctxt, index, finishedCallback) {
