@@ -173,12 +173,21 @@ export class DoClef extends Clef {
     var glyph = new GlyphVisualizer(ctxt, GlyphCode.DoClef);
     glyph.setStaffPosition(ctxt, this.staffPosition);
     this.addVisualizer(glyph);
+    if(this.defaultAccidental) {
+      this.defaultAccidental.staffPosition = this.staffPosition - 1;
+      this.defaultAccidental.performLayout(ctxt);
+      var glyphAccidental = this.defaultAccidental.visualizers[0];
+      glyphAccidental.bounds.x += glyph.bounds.width * 1.5;
+      this.addVisualizer(glyphAccidental);
+    }
 
     this.finishLayout(ctxt);
   }
 
   clone() {
-    return new DoClef(this.staffPosition, this.octave);
+    var clone = new DoClef(this.staffPosition, this.octave);
+    clone.defaultAccidental = this.defaultAccidental;
+    return clone;
   }
 }
 
