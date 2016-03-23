@@ -377,13 +377,12 @@ export var Gabc = {
 
       // add the notes to the neume
       var lastNoteIndex = includeCurrNote ? currNoteIndex : currNoteIndex - 1;
-      for (var i = firstNoteIndex; i <= lastNoteIndex; i++)
-        neume.notes.push(notes[i]);
+      while (firstNoteIndex <= lastNoteIndex)
+        neume.notes.push(notes[firstNoteIndex++]);
 
       neumes.push(neume);
 
       if (includeCurrNote === false) {
-        firstNoteIndex = currNoteIndex;
         currNoteIndex--;
         neume.keepWithNext = true;
         neume.trailingSpace = intraNeumeSpacing;
