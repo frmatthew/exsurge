@@ -5962,7 +5962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (lower.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
+	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending || lower.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
 	                smallLiquescent = true;
@@ -6309,7 +6309,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var lower = this.notes[0];
 	            var upper = this.notes[1];
 	            var overhangUpperNote = true;
-	            var needsConnectingLine = upper.staffPosition - lower.staffPosition > 1;
 	
 	            if (lower.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
 	
@@ -6318,39 +6317,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
 	                overhangUpperNote = false;
-	                needsConnectingLine = true; // always true for initio debilis
 	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                    overhangUpperNote = false;
-	                } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	                    overhangUpperNote = false;
-	                } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	                } else {
-	                    // standard shape
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	                }
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	            } else {
+	                // standard shape
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            }
 	
 	            // allow a quilisma pes
 	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
-	            upper.performLayout(ctxt);
 	            lower.performLayout(ctxt);
+	            upper.performLayout(ctxt);
 	
 	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	
 	            line.bounds.x = lower.bounds.right() - line.bounds.width;
+	            this.addVisualizer(line);
 	
-	            if (overhangUpperNote === true) upper.bounds.x += lower.bounds.right() - upper.bounds.width;else upper.bounds.x += lower.bounds.right() - line.bounds.width;
+	            // if it's overhanging, then right align the glyph
+	            if (overhangUpperNote === true) upper.bounds.x += line.bounds.right() - upper.bounds.width;else upper.bounds.x += line.bounds.x;
 	
 	            // add the elements
 	            this.addVisualizer(lower);
-	            this.addVisualizer(line);
 	            this.addVisualizer(upper);
 	
 	            this.origin.x = lower.origin.x;
@@ -6433,14 +6431,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // add the connecting line
 	            if (thirdStaffPosition - secondStaffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	                line.bounds.x = x - line.bounds.width;
+	                x -= line.bounds.width;
+	                line.bounds.x = x;
 	                this.addVisualizer(line);
 	            }
 	
-	            if (third.isLiquescent) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            var overhangThirdNote = true;
+	
+	            if (third.liquescent === _Exsurge3.LiquescentType.SmallAscending) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else if (third.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                overhangThirdNote = false;
+	            } else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	
 	            third.performLayout(ctxt);
-	            third.bounds.x = second.bounds.right() - third.bounds.width;
+	
+	            if (overhangThirdNote) third.bounds.x = second.bounds.right() - third.bounds.width;else third.bounds.x = x;
 	
 	            this.addVisualizer(third);
 	
@@ -6822,16 +6827,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note1 = this.notes[0];
 	            var note2 = this.notes[1];
 	            var note3 = this.notes[2];
+	            var drawFirstLine = note2.staffPosition - note1.staffPosition > 1;
+	            var note3SmallLiquescent = false;
 	            var line;
 	
-	            // fixme: implement liquescents
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (note1.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
+	                note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                drawFirstLine = true; // always draw first line with an initio debilis
+	            } else note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            var staffPos1 = note1.staffPosition;
-	            var staffPos2 = note2.staffPosition;
-	            var staffPos3 = note3.staffPosition;
+	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	            if (note3.liquescent === _Exsurge3.LiquescentType.LargeAscending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.LargeDescending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.SmallAscending || note3.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
+	                note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                note3SmallLiquescent = true;
+	            } else note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            note1.performLayout(ctxt);
 	            note2.performLayout(ctxt);
@@ -6840,7 +6850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var x = note1.bounds.right();
 	
 	            // do we need to draw the first (ascending) line?
-	            if (staffPos2 - staffPos1 > 1) {
+	            if (drawFirstLine) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note1, note2, false);
 	                x -= line.bounds.width;
 	                line.bounds.x = x;
@@ -6851,14 +6861,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            x += note2.bounds.width;
 	
 	            // do we need to draw a descending line?
-	            if (staffPos2 - staffPos3 > 1) {
+	            if (note2.staffPosition - note3.staffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note2, note3, false);
 	                x -= line.bounds.width;
 	                line.bounds.x = x;
 	                this.addVisualizer(line);
 	            }
 	
-	            note3.bounds.x = x;
+	            if (note3SmallLiquescent) note3.bounds.x = x - note3.bounds.width;else note3.bounds.x = x;
 	
 	            this.addVisualizer(note1);
 	            this.addVisualizer(note2);
