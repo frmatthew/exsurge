@@ -404,10 +404,8 @@ export var Gabc = {
             return createNeume(new Neumes.Punctum(), true);
           case NoteShape.OriscusAscending:
             return oriscusState;
-            break;
           case NoteShape.OriscusDescending:
             return oriscusState;
-            break;
           case NoteShape.Virga:
             return virgaState;
           default:

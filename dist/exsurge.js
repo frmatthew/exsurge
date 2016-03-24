@@ -4939,9 +4939,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          case _Exsurge3.NoteShape.Cavum:
 	            return createNeume(new Neumes.Punctum(), true);
 	          case _Exsurge3.NoteShape.OriscusAscending:
-	            break;
+	            return oriscusState;
 	          case _Exsurge3.NoteShape.OriscusDescending:
-	            break;
+	            return oriscusState;
 	          case _Exsurge3.NoteShape.Virga:
 	            return virgaState;
 	          default:
@@ -4968,7 +4968,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) return podatusState;else
+	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) {
+	          // force previous oriscus to be ascending
+	          prevNote.shape = _Exsurge3.NoteShape.OriscusAscending;
+	          return createNeume(new Neumes.PesQuassus(), true);
+	        } else
 	          // stand alone oriscus
 	          return createNeume(new Neumes.Oriscus(), true);
 	      }
@@ -6119,7 +6123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var lowerStaffPos = lower.staffPosition;
 	            var upperStaffPos = upper.staffPosition;
 	
-	            lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (lower.shape === _Exsurge3.NoteShape.OriscusAscending) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
