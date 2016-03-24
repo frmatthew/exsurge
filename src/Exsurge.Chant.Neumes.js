@@ -410,7 +410,10 @@ export class PesQuassus extends Neume {
     var lowerStaffPos = lower.staffPosition;
     var upperStaffPos = upper.staffPosition;
 
-    lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    if (lower.shape === NoteShape.OriscusAscending)
+      lower.setGlyphShape(ctxt, GlyphCode.OriscusAsc);
+    else
+      lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
 
     if (upper.liquescent === LiquescentType.LargeDescending)
       upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);

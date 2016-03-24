@@ -403,8 +403,10 @@ export var Gabc = {
           case NoteShape.Cavum:
             return createNeume(new Neumes.Punctum(), true);
           case NoteShape.OriscusAscending:
+            return oriscusState;
             break;
           case NoteShape.OriscusDescending:
+            return oriscusState;
             break;
           case NoteShape.Virga:
             return virgaState;
@@ -438,9 +440,11 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         
-        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition)
-          return podatusState;
-        else
+        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) {
+          // force previous oriscus to be ascending
+          prevNote.shape = NoteShape.OriscusAscending;
+          return createNeume(new Neumes.PesQuassus(), true);
+        } else
           // stand alone oriscus
           return createNeume(new Neumes.Oriscus(), true);
       }
