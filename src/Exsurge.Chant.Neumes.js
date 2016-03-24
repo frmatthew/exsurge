@@ -100,7 +100,7 @@ export class Apostropha extends Neume {
       case NoteShape.Stropha:
         return GlyphCode.Stropha;
       case NoteShape.Cavum:
-        return GlyphCode.Cavum;
+        return GlyphCode.PunctumCavum;
       default:
         return GlyphCode.PunctumCuadratum;
     }

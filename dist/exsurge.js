@@ -5730,7 +5730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                case _Exsurge3.NoteShape.Stropha:
 	                    return _Exsurge2.GlyphCode.Stropha;
 	                case _Exsurge3.NoteShape.Cavum:
-	                    return _Exsurge2.GlyphCode.Cavum;
+	                    return _Exsurge2.GlyphCode.PunctumCavum;
 	                default:
 	                    return _Exsurge2.GlyphCode.PunctumCuadratum;
 	            }
