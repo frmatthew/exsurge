@@ -25,7 +25,7 @@
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
 import { LyricType, Lyric, DropCap } from 'Exsurge.Drawing'
-import { Note, NoteShape, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
+import { Note, LiquescentType, NoteShape, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
@@ -35,7 +35,7 @@ import { ctxt } from 'Exsurge.Drawing'
 
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
-var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
+var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
 
 export var Gabc = {
 
@@ -646,8 +646,8 @@ export var Gabc = {
     if (data.length < 1)
       throw 'Invalid note data: ' + data;
 
-    if (data[0] === '-') { // liquescent
-      note.isLiquescent = true;
+    if (data[0] === '-') { // liquescent initio debilis
+      note.liquescent = LiquescentType.InitioDebilis;
       data = data.substring(1);
     }
 
@@ -726,6 +726,10 @@ export var Gabc = {
             note.shape = NoteShape.Cavum;
           break;
 
+        case 's':
+          note.shape = NoteShape.Apostropha;
+          break;
+
         case 'v':
           note.shape = NoteShape.Virga;
           break;
@@ -747,15 +751,19 @@ export var Gabc = {
 
         // liquescents
         case '~':
-          note.isLiquescent = true;
+          if (note.shape === NoteShape.Inclinatum)
+            note.liquescent = LiquescentType.SmallDescending;
+          else if (note.shape === NoteShape.OriscusAscending ||
+            note.shape === NoteShape.OriscusDescending)
+            note.liquescent = LiquescentType.LargeAscending;
+          else
+            note.liquescent = LiquescentType.SmallAscending;
           break;
         case '<':
-          note.isLiquescent = true;
-          note.shape = NoteShape.AscLiquescent;
+          note.liquescent = LiquescentType.LargeAscending;
           break;
         case '>':
-          note.isLiquescent = true;
-          note.shape = NoteShape.DesLiquescent;
+          note.liquescent = LiquescentType.LargeDescending;
           break;
 
         // accidentals

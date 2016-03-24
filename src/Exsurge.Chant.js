@@ -31,6 +31,15 @@ import { Custod, AccidentalType } from './Exsurge.Chant.Signs'
 import { Gabc } from './Exsurge.Gabc'
 
 
+export var LiquescentType = {
+  None: 0,
+  LargeAscending: 1,
+  LargeDescending: 2,
+  SmallAscending: 3,
+  SmallDescending: 4,
+  InitioDebilis: 5
+};
+
 export var NoteShape = {
   Default: 0,
 
@@ -69,7 +78,7 @@ export class Note extends ChantLayoutElement {
     // 0 is the center space on the staff (equivalent to gabc 'g'). Positive numbers go up
     // the staff, and negative numbers go down, i.e., 1 is gabc 'h', 2 is gabc 'i', -1 is gabc 'f', etc.
     this.staffPosition = 0;
-    this.isLiquescent = false;
+    this.liquescent = LiquescentType.None;
     this.shape = NoteShape.Default;
     this.markings = [];
   }

@@ -273,13 +273,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  var _element = this;
 	
-	  // perform layout on the chant
-	  score.performLayout(ctxt, function () {
-	    score.layoutChantLines(ctxt, 0, function () {
-	      // render the score to svg code
-	      _element.innerHTML = score.createDrawable(ctxt);
+	  var width = 0;
+	  var doLayout = function doLayout() {
+	    var newWidth = _element.parentElement.clientWidth;
+	    if (width === newWidth) return;
+	    width = newWidth;
+	    // perform layout on the chant
+	    score.performLayout(ctxt, function () {
+	      score.layoutChantLines(ctxt, width, function () {
+	        // render the score to svg code
+	        _element.innerHTML = score.createDrawable(ctxt);
+	      });
 	    });
-	  });
+	  };
+	  doLayout();
+	  if (window.addEventListener) window.addEventListener('resize', doLayout, false);else if (window.attachEvent) window.attachEvent('onresize', doLayout);
 	};
 	
 	ChantVisualElementPrototype.attachedCallback = function () {};
@@ -2012,7 +2020,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  PunctumCuadratumAscLiquescent: "PunctumCuadratumAscLiquescent",
 	  PunctumCuadratumDesLiquescent: "PunctumCuadratumDesLiquescent",
 	  PunctumInclinatum: "PunctumInclinatum",
-	  //  PunctumInclinatumLiquescent: "PunctumInclinatumLiquescent",
+	  PunctumInclinatumLiquescent: "PunctumInclinatumLiquescent",
 	  Quilisma: "Quilisma",
 	
 	  TerminatingAscLiquescent: "TerminatingAscLiquescent",
@@ -3023,7 +3031,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.ChantDocument = exports.ChantScore = exports.ChantLine = exports.ChantLineBreak = exports.FaClef = exports.DoClef = exports.Clef = exports.Note = exports.NoteShape = undefined;
+	exports.ChantDocument = exports.ChantScore = exports.ChantLine = exports.ChantLineBreak = exports.FaClef = exports.DoClef = exports.Clef = exports.Note = exports.NoteShape = exports.LiquescentType = undefined;
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
@@ -3072,6 +3080,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	// THE SOFTWARE.
 	//
 	
+	var LiquescentType = exports.LiquescentType = {
+	  None: 0,
+	  LargeAscending: 1,
+	  LargeDescending: 2,
+	  SmallAscending: 3,
+	  SmallDescending: 4,
+	  InitioDebilis: 5
+	};
+	
 	var NoteShape = exports.NoteShape = {
 	  Default: 0,
 	
@@ -3112,7 +3129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // 0 is the center space on the staff (equivalent to gabc 'g'). Positive numbers go up
 	    // the staff, and negative numbers go down, i.e., 1 is gabc 'h', 2 is gabc 'i', -1 is gabc 'f', etc.
 	    _this.staffPosition = 0;
-	    _this.isLiquescent = false;
+	    _this.liquescent = LiquescentType.None;
 	    _this.shape = NoteShape.Default;
 	    _this.markings = [];
 	    return _this;
@@ -3912,10 +3929,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (this.annotation) this.annotation.recalculateMetrics(ctxt);
 	
-	      // boot the compilation process
-	      setTimeout(function () {
-	        _this7.compileElement(ctxt, 0, finishedCallback);
-	      }, 0);
+	      if (this.compiled) {
+	        setTimeout(function () {
+	          if (finishedCallback) finishedCallback();
+	        }, 0);
+	      } else {
+	        // boot the compilation process
+	        setTimeout(function () {
+	          _this7.compileElement(ctxt, 0, finishedCallback);
+	        }, 0);
+	      }
 	    }
 	  }, {
 	    key: 'compileElement',
@@ -4572,7 +4595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// THE SOFTWARE.
 	//
 	
-	var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
+	var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
 	
 	var Gabc = exports.Gabc = {
 	
@@ -5111,8 +5134,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (data.length < 1) throw 'Invalid note data: ' + data;
 	
 	    if (data[0] === '-') {
-	      // liquescent
-	      note.isLiquescent = true;
+	      // liquescent initio debilis
+	      note.liquescent = _Exsurge3.LiquescentType.InitioDebilis;
 	      data = data.substring(1);
 	    }
 	
@@ -5176,6 +5199,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else note.shape = _Exsurge3.NoteShape.Cavum;
 	          break;
 	
+	        case 's':
+	          note.shape = _Exsurge3.NoteShape.Apostropha;
+	          break;
+	
 	        case 'v':
 	          note.shape = _Exsurge3.NoteShape.Virga;
 	          break;
@@ -5196,15 +5223,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // liquescents
 	        case '~':
-	          note.isLiquescent = true;
+	          if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.liquescent = _Exsurge3.LiquescentType.SmallDescending;else if (note.shape === _Exsurge3.NoteShape.OriscusAscending || note.shape === _Exsurge3.NoteShape.OriscusDescending) note.liquescent = _Exsurge3.LiquescentType.LargeAscending;else note.liquescent = _Exsurge3.LiquescentType.SmallAscending;
 	          break;
 	        case '<':
-	          note.isLiquescent = true;
-	          note.shape = _Exsurge3.NoteShape.AscLiquescent;
+	          note.liquescent = _Exsurge3.LiquescentType.LargeAscending;
 	          break;
 	        case '>':
-	          note.isLiquescent = true;
-	          note.shape = _Exsurge3.NoteShape.DesLiquescent;
+	          note.liquescent = _Exsurge3.LiquescentType.LargeDescending;
 	          break;
 	
 	        // accidentals
@@ -5683,7 +5708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // determine the glyph to use
 	            var note = this.notes[0];
 	
-	            if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.ApostrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.ApostrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);
 	
 	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
@@ -5834,11 +5859,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
 	                note = this.notes[i];
 	
-	                if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.punctumInclinatumLiquescent);else {
+	                if (note.isLiquescent === _Exsurge3.LiquescentType.LargeAscending || note.isLiquescent === _Exsurge3.LiquescentType.LargeDescending)
+	                    // fixme: is the large inclinatum liquescent the same as the apostropha?
+	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.isLiquescent === _Exsurge3.LiquescentType.SmallAscending || note.isLiquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
 	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
 	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                }
 	
 	                staffPosition = note.staffPosition;
 	
@@ -5921,19 +5947,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _get(Object.getPrototypeOf(Clivis.prototype), 'performLayout', this).call(this, ctxt);
 	
 	            var line;
-	            var isLiquescent;
+	            var smallLiquescent = false;
 	
 	            var upper = this.notes[0];
 	            var lower = this.notes[1];
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
+	            if (lower.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
+	            } else if (lower.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
-	                isLiquescent = true;
+	                smallLiquescent = true;
 	            } else {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                isLiquescent = false;
 	            }
 	
 	            var upperStaffPos = upper.staffPosition;
@@ -5959,7 +5990,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            if (isLiquescent) {
+	            if (smallLiquescent) {
 	                if (line !== null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
 	            }
 	
@@ -6090,7 +6121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            if (upper.isLiquescent) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            lower.performLayout(ctxt);
 	            lower.bounds.x = x;
@@ -6229,6 +6260,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*
 	 * Podatus
+	 *
+	 * This podatus class handles a few neume types actually, depending on the note
+	 * data: Podatus (including various liquescent types on the upper note),
+	 * Podatus initio debilis, and Quilisma-Pes
 	 */
 	
 	
@@ -6269,15 +6304,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var lower = this.notes[0];
 	            var upper = this.notes[1];
+	            var overhangUpperNote = true;
+	            var needsConnectingLine = upper.staffPosition - lower.staffPosition > 1;
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
+	            if (lower.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
 	
+	                // liquescent upper note or not?
+	                if (upper.liquescent === _Exsurge3.LiquescentType.None) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                overhangUpperNote = false;
+	                needsConnectingLine = true; // always true for initio debilis
+	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
+	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
+	                    overhangUpperNote = false;
+	                } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                    overhangUpperNote = false;
+	                } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
+	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	                } else {
+	                    // standard shape
+	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	                }
+	
+	            // allow a quilisma pes
 	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            upper.performLayout(ctxt);
@@ -6286,7 +6341,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
 	
 	            line.bounds.x = lower.bounds.right() - line.bounds.width;
-	            upper.bounds.x = lower.bounds.right() - upper.bounds.width;
+	
+	            if (overhangUpperNote === true) upper.bounds.x += lower.bounds.right() - upper.bounds.width;else upper.bounds.x += lower.bounds.right() - line.bounds.width;
 	
 	            // add the elements
 	            this.addVisualizer(lower);
@@ -6361,7 +6417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // add the first line and the swash
 	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
 	
-	            x = line.bounds.x = first.bounds.x;
+	            line.bounds.x = first.bounds.x;
 	            x = first.bounds.right();
 	            second.bounds.x = x - second.bounds.width;
 	            x = second.bounds.right();

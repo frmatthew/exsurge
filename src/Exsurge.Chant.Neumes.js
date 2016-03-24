@@ -25,8 +25,8 @@
 
 import * as Exsurge from 'Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, HorizontalEpisemaLineVisualizer, LedgerLineVisualizer } from 'Exsurge.Drawing'
-import { Note, NoteShape } from 'Exsurge.Chant'
+import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, HorizontalEpisemaLineVisualizer } from 'Exsurge.Drawing'
+import { Note, LiquescentType, NoteShape } from 'Exsurge.Chant'
 
 /*
  * Neumes base class
@@ -80,7 +80,7 @@ export class Apostropha extends Neume {
     // determine the glyph to use
     var note = this.notes[0];
 
-    if (note.isLiquescent)
+    if (note.liquescent !== LiquescentType.None)
       note.setGlyphShape(ctxt, GlyphCode.ApostrophaLiquescent);
     else
       note.setGlyphShape(ctxt, GlyphCode.Apostropha);
@@ -192,13 +192,17 @@ export class Climacus extends Neume {
     for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
       note = this.notes[i];
 
-      if (note.isLiquescent)
-        note.setGlyphShape(ctxt, GlyphCode.punctumInclinatumLiquescent);
-      else {
+      if (note.isLiquescent === LiquescentType.LargeAscending ||
+        note.isLiquescent === LiquescentType.LargeDescending)
+        // fixme: is the large inclinatum liquescent the same as the apostropha?
+        note.setGlyphShape(ctxt, GlyphCode.Apostropha);
+      else if (note.isLiquescent === LiquescentType.SmallAscending ||
+        note.isLiquescent === LiquescentType.SmallDescending)
+        note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
+      else
         // fixme: some climaci in the new chant books end with a punctum cuadratum
         // (see, for example, the antiphon "Sancta Maria" for October 7).
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatum);
-      }
 
       staffPosition = note.staffPosition;
 
@@ -268,19 +272,24 @@ export class Clivis extends Neume {
     super.performLayout(ctxt);
 
     var line;
-    var isLiquescent;
+    var smallLiquescent = false;
 
     var upper = this.notes[0];
     var lower = this.notes[1];
 
-    if (lower.isLiquescent || upper.isLiquescent) {
+    if (lower.liquescent === LiquescentType.LargeAscending) {
+      upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+      lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
+    } else if (lower.liquescent === LiquescentType.LargeDescending) {
+      upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+      lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+    } else if (lower.liquescent === LiquescentType.SmallDescending) {
       upper.setGlyphShape(ctxt, GlyphCode.BeginningDesLiquescent);
       lower.setGlyphShape(ctxt, GlyphCode.TerminatingDesLiquescent);
-      isLiquescent = true;
+      smallLiquescent = true;
     } else {
       upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
       lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
-      isLiquescent = false;
     }
 
     var upperStaffPos = upper.staffPosition;
@@ -306,7 +315,7 @@ export class Clivis extends Neume {
       this.addVisualizer(line);
     }
 
-    if (isLiquescent) {
+    if (smallLiquescent) {
       if (line !== null)
         x -= lower.bounds.width - line.bounds.width;
       else
@@ -403,7 +412,7 @@ export class PesQuassus extends Neume {
 
     lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
 
-    if (upper.isLiquescent)
+    if (upper.liquescent === LiquescentType.LargeDescending)
       upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
     else
       upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
@@ -531,6 +540,10 @@ export class PesSubpunctis extends Neume {
 
 /*
  * Podatus
+ *
+ * This podatus class handles a few neume types actually, depending on the note
+ * data: Podatus (including various liquescent types on the upper note),
+ * Podatus initio debilis, and Quilisma-Pes
  */
 export class Podatus extends Neume {
 
@@ -565,15 +578,38 @@ export class Podatus extends Neume {
 
     var lower = this.notes[0];
     var upper = this.notes[1];
+    var overhangUpperNote = true;
+    var needsConnectingLine = upper.staffPosition - lower.staffPosition > 1;
 
-    if (lower.isLiquescent || upper.isLiquescent) {
+    if (lower.liquescent === LiquescentType.InitioDebilis) {
+
+      // liquescent upper note or not?
+      if (upper.liquescent === LiquescentType.None)
+        upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+      else
+        upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+
+      lower.setGlyphShape(ctxt, GlyphCode.TerminatingDesLiquescent);
+      overhangUpperNote = false;
+      needsConnectingLine = true; // always true for initio debilis
+    } else if (upper.liquescent === LiquescentType.LargeAscending) {
+      lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+      upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
+      overhangUpperNote = false;
+    } else if (upper.liquescent === LiquescentType.LargeDescending) {
+      lower.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+      upper.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+      overhangUpperNote = false;
+    } else if (upper.liquescent === LiquescentType.SmallAscending) {
       lower.setGlyphShape(ctxt, GlyphCode.BeginningAscLiquescent);
       upper.setGlyphShape(ctxt, GlyphCode.TerminatingAscLiquescent);
     } else {
+      // standard shape
       lower.setGlyphShape(ctxt, GlyphCode.PodatusLower);
       upper.setGlyphShape(ctxt, GlyphCode.PodatusUpper);
     }
 
+    // allow a quilisma pes
     if (lower.shape === NoteShape.Quilisma)
       lower.setGlyphShape(ctxt, GlyphCode.Quilisma);
 
@@ -583,7 +619,11 @@ export class Podatus extends Neume {
     var line = new NeumeLineVisualizer(ctxt, lower, upper, false);
 
     line.bounds.x = lower.bounds.right() - line.bounds.width;
-    upper.bounds.x = lower.bounds.right() - upper.bounds.width;
+
+    if (overhangUpperNote === true)
+      upper.bounds.x += lower.bounds.right() - upper.bounds.width;
+    else
+      upper.bounds.x += lower.bounds.right() - line.bounds.width;
 
     // add the elements
     this.addVisualizer(lower);
@@ -644,7 +684,7 @@ export class Porrectus extends Neume {
     // add the first line and the swash
     line = new NeumeLineVisualizer(ctxt, first, second, true);
 
-    x = line.bounds.x = first.bounds.x;
+    line.bounds.x = first.bounds.x;
     x = first.bounds.right();
     second.bounds.x = x - second.bounds.width;
     x = second.bounds.right();

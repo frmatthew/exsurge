@@ -69,7 +69,7 @@ export let GlyphCode = {
   PunctumCuadratumAscLiquescent: "PunctumCuadratumAscLiquescent",
   PunctumCuadratumDesLiquescent: "PunctumCuadratumDesLiquescent",
   PunctumInclinatum: "PunctumInclinatum",
-  //  PunctumInclinatumLiquescent: "PunctumInclinatumLiquescent",
+  PunctumInclinatumLiquescent: "PunctumInclinatumLiquescent",
   Quilisma: "Quilisma",
 
   TerminatingAscLiquescent: "TerminatingAscLiquescent",
