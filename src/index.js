@@ -33,6 +33,7 @@ var ChantVisualElementPrototype = Object.create(HTMLElement.prototype);
 
 ChantVisualElementPrototype.createdCallback = function() {
   var ctxt = new ChantContext();
+  var _element = this;
   
   ctxt.lyricTextFont = "'Crimson Text', serif";
   ctxt.lyricTextSize *= 1.2;
@@ -44,15 +45,45 @@ ChantVisualElementPrototype.createdCallback = function() {
   if (useDropCapAttr === 'false')
     useDropCap = false;
 
-  var score = Gabc.loadChantScore(ctxt, this.innerText, useDropCap);
+  var score;
+  var srcAttr = this.getAttribute("src");
+  if(srcAttr) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() { 
+      if (request.readyState === 4 && request.status === 200) {
+        var gabc = request.responseText;
+        var gabcHeader = '';
+        var headerEndIndex = gabc.indexOf('\n%%\n');
+        if(headerEndIndex >= 0) {
+          gabcHeader = gabc.slice(0,headerEndIndex).split(/\r?\n/);
+          gabc = gabc.slice(headerEndIndex + 4);
+        }
+        score = Gabc.loadChantScore(ctxt, gabc, useDropCap);
+        if(gabcHeader) {
+          gabcHeader = gabcHeader.reduce(function(result,line){
+            var match = line.match(/^([\w-_]+):\s*([^;\r\n]*)(?:;|$)/i);
+            if(match) result[match[1]] = match[2];
+            return result;
+          }, {});
+          if(gabcHeader.annotation) {
+            score.annotation = new Annotation(ctxt, gabcHeader.annotation);
+          }
+        }
+        init();
+      }
+    }
+    request.open("GET", srcAttr, true); // true for asynchronous 
+    request.send(null);
+  } else {
+    score = Gabc.loadChantScore(ctxt, this.innerText, useDropCap);
 
-  var annotationAttr = this.getAttribute("annotation");
-  if (annotationAttr) {
-    // add an annotation
-    score.annotation = new Annotation(ctxt, annotationAttr);
+    var annotationAttr = this.getAttribute("annotation");
+    if (annotationAttr) {
+      // add an annotation
+      score.annotation = new Annotation(ctxt, annotationAttr);
+    }
+    init();
   }
-
-  var _element = this;
 
   var width = 0;
   var doLayout = function() {
@@ -67,11 +98,13 @@ ChantVisualElementPrototype.createdCallback = function() {
       });
     });
   }
-  doLayout();
-  if (window.addEventListener)
-    window.addEventListener('resize',doLayout,false);
-  else if (window.attachEvent)
-    window.attachEvent('onresize',doLayout);
+  var init = function() {
+    doLayout();
+    if (window.addEventListener)
+      window.addEventListener('resize',doLayout,false);
+    else if (window.attachEvent)
+      window.attachEvent('onresize',doLayout);
+  }
 }
 
 ChantVisualElementPrototype.attachedCallback = function() {
