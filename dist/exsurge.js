@@ -5863,9 +5863,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
 	                note = this.notes[i];
 	
-	                if (note.isLiquescent === _Exsurge3.LiquescentType.LargeAscending || note.isLiquescent === _Exsurge3.LiquescentType.LargeDescending)
+	                if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending || note.liquescent === _Exsurge3.LiquescentType.LargeDescending)
 	                    // fixme: is the large inclinatum liquescent the same as the apostropha?
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.isLiquescent === _Exsurge3.LiquescentType.SmallAscending || note.isLiquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
+	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.liquescent === _Exsurge3.LiquescentType.SmallAscending || note.liquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
 	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
 	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
@@ -6222,7 +6222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
 	                var note = this.notes[i];
 	
-	                if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
+	                if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
 	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
 	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
@@ -6587,11 +6587,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var note = this.notes[0];
 	
-	            if (note.isLiquescent) {
-	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
-	                    // fixme: implement two types of punctum liquescents
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                }
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) {
+	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else if (note.shape === _Exsurge3.NoteShape.AscLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
 	            } else {
 	                switch (note.shape) {
 	                    case _Exsurge3.NoteShape.Cavum:

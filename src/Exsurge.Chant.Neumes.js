@@ -192,12 +192,12 @@ export class Climacus extends Neume {
     for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
       note = this.notes[i];
 
-      if (note.isLiquescent === LiquescentType.LargeAscending ||
-        note.isLiquescent === LiquescentType.LargeDescending)
+      if (note.liquescent === LiquescentType.LargeAscending ||
+        note.liquescent === LiquescentType.LargeDescending)
         // fixme: is the large inclinatum liquescent the same as the apostropha?
         note.setGlyphShape(ctxt, GlyphCode.Apostropha);
-      else if (note.isLiquescent === LiquescentType.SmallAscending ||
-        note.isLiquescent === LiquescentType.SmallDescending)
+      else if (note.liquescent === LiquescentType.SmallAscending ||
+        note.liquescent === LiquescentType.SmallDescending)
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else
         // fixme: some climaci in the new chant books end with a punctum cuadratum
@@ -503,7 +503,7 @@ export class PesSubpunctis extends Neume {
     for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
       var note = this.notes[i];
 
-      if (note.isLiquescent)
+      if (note.liquescent !== LiquescentType.None)
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else {
         // fixme: some climaci in the new chant books end with a punctum cuadratum
@@ -834,13 +834,14 @@ export class Punctum extends Neume {
 
     var note = this.notes[0];
 
-    if (note.isLiquescent) {
+    if (note.liquescent !== LiquescentType.None) {
       if (note.shape === NoteShape.Inclinatum)
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
-      else {
-        // fixme: implement two types of punctum liquescents
+      else if (note.shape === NoteShape.AscLiquescent)
         note.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
-      }
+      else
+        note.setGlyphShape(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+
     } else {
       switch (note.shape) {
         case NoteShape.Cavum:
