@@ -41,7 +41,11 @@
     var gabcSource = document.getElementById('gabcSource');
     var chantContainer = document.getElementById('chant-container');
     var updateChant = function() {
-      score = exsurge.Gabc.loadChantScore(ctxt, gabcSource.value, true);
+      if(score) {
+        exsurge.Gabc.updateChantScore(ctxt, gabcSource.value, score, true);
+      } else {
+        score = exsurge.Gabc.loadChantScore(ctxt, gabcSource.value, true);
+      }
     
       // add an annotation
       //score.annotation = new exsurge.Annotation(ctxt, "Ant. X");

@@ -51,14 +51,16 @@ export var Gabc = {
 
   parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
 
-    score.notations = [];
-
-    var passByRef = {
-      activeClef: null
-    };
-
     // split the notations on whitespace boundaries
-    var words = gabcNotations.match(/\S+/g);
+    var words = score.gabcSource = gabcNotations.match(/\S+/g);
+    score.notations = this.parseChantWords(ctxt, words, score, createDropCap);
+  },
+
+  parseChantWords: function (ctxt, words, score, createDropCap, activeClef = null) {
+    var notations = [];
+    var passByRef = {
+      activeClef: activeClef
+    };
 
     for (var i = 0; i < words.length; i++) {
       var word = words[i];
@@ -130,11 +132,43 @@ export var Gabc = {
           notationWithLyrics.lyric = lyric;
         }
 
-        score.notations = score.notations.concat(items);
+        notations = notations.concat(items);
 
         currSyllable++;
       }
     }
+    return notations;
+  },
+
+  updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
+    var oldWords = score.gabcSource;
+    var newWords = score.gabcSource = gabcNotations.match(/\S+/g);
+  
+    // find the part of the words array that has changed:
+    var lenOld = oldWords.length,
+        lenNew = newWords.length,
+        minLen = Math.min(lenOld,lenNew),
+        i = 0;
+    // Count how many words are the same at the beginnings of the arrays:
+    while(i < minLen && oldWords[i] == newWords[i]) {
+      ++i;
+    }
+    var sameAtBeginning = i,
+        sameAtEnd = 0;
+    if(i < minLen) {
+      // Count how many words are the same at the ends of the arrays (but only if the shorter array wasn't completely a subset of the longer)
+      i = 1;
+      while(i <= minLen && oldWords[lenOld-i] == newWords[lenNew-i]) {
+        ++i;
+      }
+      sameAtEnd = i - 1;
+    }
+    var numWordsRemoved = lenOld - sameAtEnd - sameAtBeginning;
+    var wordsAdded = newWords.slice(sameAtBeginning, lenNew - sameAtEnd);
+    var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, score.startingClef);
+
+    [].splice.apply(score.notations, [sameAtBeginning, numWordsRemoved].concat(newNotations));
+    score.compiled = false;
   },
 
   makeLyric: function (ctxt, text, lyricType) {
