@@ -398,7 +398,7 @@ export var Gabc = {
       handle: function(currNote, prevNote) {
       
         switch (currNote.shape) {
-          case NoteShape.Apostropha:
+          case NoteShape.Stropha:
             return apostrophaState;
           case NoteShape.Cavum:
             return createNeume(new Neumes.Punctum(), true);
@@ -729,7 +729,7 @@ export var Gabc = {
           break;
 
         case 's':
-          note.shape = NoteShape.Apostropha;
+          note.shape = NoteShape.Stropha;
           break;
 
         case 'v':

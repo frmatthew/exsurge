@@ -36,8 +36,8 @@ export let GlyphCode = {
   None: "None",
 
   AcuteAccent: "AcuteAccent",
-  Apostropha: "Apostropha",
-  //  ApostrophaLiquescent: "ApostrophaLiquescent",
+  Stropha: "Stropha",
+  //  StrophaLiquescent: "StrophaLiquescent",
 
   BeginningAscLiquescent: "BeginningAscLiquescent",
   BeginningDesLiquescent: "BeginningDesLiquescent",

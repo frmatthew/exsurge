@@ -50,7 +50,7 @@ export var NoteShape = {
   OriscusAscending: 5,
   OriscusDescending: 6,
 
-  Apostropha: 7,
+  Stropha: 7,
 
   AscLiquescent: 8,
   DesLiquescent: 9

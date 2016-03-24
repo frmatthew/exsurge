@@ -81,9 +81,9 @@ export class Apostropha extends Neume {
     var note = this.notes[0];
 
     if (note.liquescent !== LiquescentType.None)
-      note.setGlyphShape(ctxt, GlyphCode.ApostrophaLiquescent);
+      note.setGlyphShape(ctxt, GlyphCode.StrophaLiquescent);
     else
-      note.setGlyphShape(ctxt, GlyphCode.Apostropha);
+      note.setGlyphShape(ctxt, GlyphCode.Stropha);
 
     note.performLayout(ctxt);
     this.addVisualizer(note);
@@ -92,6 +92,18 @@ export class Apostropha extends Neume {
     this.origin.y = note.origin.y;
 
     this.finishLayout(ctxt);
+  }
+
+  static determineNoteGlyphCode(note) {
+
+    switch (note.shape) {
+      case NoteShape.Stropha:
+        return GlyphCode.Stropha;
+      case NoteShape.Cavum:
+        return GlyphCode.Cavum;
+      default:
+        return GlyphCode.PunctumCuadratum;
+    }
   }
 }
 
@@ -194,8 +206,8 @@ export class Climacus extends Neume {
 
       if (note.isLiquescent === LiquescentType.LargeAscending ||
         note.isLiquescent === LiquescentType.LargeDescending)
-        // fixme: is the large inclinatum liquescent the same as the apostropha?
-        note.setGlyphShape(ctxt, GlyphCode.Apostropha);
+        // fixme: is the large inclinatum liquescent the same as the stropha?
+        note.setGlyphShape(ctxt, GlyphCode.Stropha);
       else if (note.isLiquescent === LiquescentType.SmallAscending ||
         note.isLiquescent === LiquescentType.SmallDescending)
         note.setGlyphShape(ctxt, GlyphCode.PunctumInclinatumLiquescent);
@@ -350,11 +362,12 @@ export class Distropha extends Neume {
     var note1 = this.notes[0];
     var note2 = this.notes[1];
 
-    note1.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
     note1.performLayout(ctxt);
 
-    note2.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
     note2.performLayout(ctxt);
+
     note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 
     this.addVisualizer(note1);
@@ -1285,14 +1298,14 @@ export class Tristropha extends Neume {
 
     var staffPosition = note1.staffPosition;
 
-    note1.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
     note1.performLayout(ctxt);
 
-    note2.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
     note2.performLayout(ctxt);
     note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 
-    note3.setGlyphShape(ctxt, GlyphCode.PunctumCuadratum);
+    note3.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note3));
     note3.performLayout(ctxt);
     note3.bounds.x += note1.bounds.width + note2.bounds.width + ctxt.intraNeumeSpacing * 2;
 
