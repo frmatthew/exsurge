@@ -888,7 +888,7 @@ export class ChantScore {
         notation.performLayout(ctxt);
         notation.compiled = true;
       }
-    } while (index < this.notations.length && timeout < new Date().getTime());
+    } while (index < this.notations.length && new Date().getTime() < timeout);
 
     // schedule the next block of processing
     setTimeout(() => {
