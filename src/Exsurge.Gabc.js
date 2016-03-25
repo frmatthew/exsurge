@@ -70,12 +70,15 @@ export var Gabc = {
       if (word === '')
         continue;
 
-      word = word.trim()
-
       var matches = [];
       
       while ((match = __syllablesRegex.exec(word)))
         matches.push(match);
+
+      words[i] = word = {
+        word: word,
+        notationIndex: notations.length
+      };
 
       for (var j = 0; j < matches.length; j++) {
         var match = matches[j];
@@ -136,13 +139,14 @@ export var Gabc = {
 
         currSyllable++;
       }
+      word.notationLength = notations.length - word.notationIndex;
     }
     return notations;
   },
 
   updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
-    var oldWords = score.gabcSource;
-    var newWords = score.gabcSource = gabcNotations.match(/\S+/g);
+    var oldWords = score.gabcSource.map(function(word) { return word.word; });
+    var newWords = gabcNotations.match(/\S+/g);
   
     // find the part of the words array that has changed:
     var lenOld = oldWords.length,
@@ -150,7 +154,7 @@ export var Gabc = {
         minLen = Math.min(lenOld,lenNew),
         i = 0;
     // Count how many words are the same at the beginnings of the arrays:
-    while(i < minLen && oldWords[i] == newWords[i]) {
+    while(i < minLen && oldWords[i] === newWords[i]) {
       ++i;
     }
     var sameAtBeginning = i,
@@ -158,16 +162,46 @@ export var Gabc = {
     if(i < minLen) {
       // Count how many words are the same at the ends of the arrays (but only if the shorter array wasn't completely a subset of the longer)
       i = 1;
-      while(i <= minLen && oldWords[lenOld-i] == newWords[lenNew-i]) {
+      while(i <= minLen && oldWords[lenOld-i] === newWords[lenNew-i]) {
         ++i;
       }
       sameAtEnd = i - 1;
     }
+    if(lenOld === lenNew && i === lenOld) {
+      // the gabc source has not been altered.  No need to do anything.
+      return;
+    }
     var numWordsRemoved = lenOld - sameAtEnd - sameAtBeginning;
     var wordsAdded = newWords.slice(sameAtBeginning, lenNew - sameAtEnd);
     var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, score.startingClef);
+    // splice the added words into the gabcSource array
+    var wordsRemoved = [].splice.apply(score.gabcSource, [sameAtBeginning, numWordsRemoved].concat(wordsAdded));
+    // calculate index to put the new notations in the notations array, based on where the last identical word's notations are
+    // calculate length of notations to remove based on where the last removed word's notations are.
+    var notationIndex = 0, numNotationsRemoved = 0;
+    if(wordsRemoved.length) {
+      notationIndex = wordsRemoved[0].notationIndex;
+      var lastWordRemoved = wordsRemoved[wordsRemoved.length - 1];
+      numNotationsRemoved = lastWordRemoved.notationIndex + lastWordRemoved.notationLength - notationIndex;
+    } else {
+      var lastSameWord = score.gabcSource[sameAtBeginning - 1];
+      if(lastSameWord) notationIndex = lastSameWord.notationIndex + lastSameWord.notationLength;
+    }
+    if(notationIndex) {
+      wordsAdded.forEach(function(word) {
+        word.notationIndex += notationIndex;
+      });
+    }
+    // the words that have not changed are now associated with notations that may have shifted position in the notations array
+    var notationOffset = newNotations.length - numNotationsRemoved;
+    if(notationOffset) {
+      score.gabcSource.slice(sameAtBeginning + wordsAdded.length).forEach(function(word){
+        word.notationIndex += notationOffset
+      });
+    }
 
-    [].splice.apply(score.notations, [sameAtBeginning, numWordsRemoved].concat(newNotations));
+    // splice the added notations into the notations array
+    [].splice.apply(score.notations, [notationIndex, numNotationsRemoved].concat(newNotations));
     score.compiled = false;
   },
 
