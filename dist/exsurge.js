@@ -1363,7 +1363,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "y": 125.27399444580078
 	    }
 	  },
-	  "Apostropha": {
+	  "Stropha": {
 	    "svgSrc": "<path d=\"M1.22-73.438c4.165 13.02 12.238 27.084 24.217 42.188L49.657 0 34.812 27.344C18.666 55.47-.084 72.396-21.438 78.124c4.687-3.645 7.03-8.593 7.03-14.843 0-8.853-4.947-20.572-14.843-35.155L-48 0 1.22-73.438z\"/>",
 	    "paths": [{
 	      "type": "positive",
@@ -1987,8 +1987,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  None: "None",
 	
 	  AcuteAccent: "AcuteAccent",
-	  Apostropha: "Apostropha",
-	  //  ApostrophaLiquescent: "ApostrophaLiquescent",
+	  Stropha: "Stropha",
+	  //  StrophaLiquescent: "StrophaLiquescent",
 	
 	  BeginningAscLiquescent: "BeginningAscLiquescent",
 	  BeginningDesLiquescent: "BeginningDesLiquescent",
@@ -3099,7 +3099,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  OriscusAscending: 5,
 	  OriscusDescending: 6,
 	
-	  Apostropha: 7,
+	  Stropha: 7,
 	
 	  AscLiquescent: 8,
 	  DesLiquescent: 9
@@ -4934,7 +4934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      handle: function handle(currNote, prevNote) {
 	
 	        switch (currNote.shape) {
-	          case _Exsurge3.NoteShape.Apostropha:
+	          case _Exsurge3.NoteShape.Stropha:
 	            return apostrophaState;
 	          case _Exsurge3.NoteShape.Cavum:
 	            return createNeume(new Neumes.Punctum(), true);
@@ -5204,7 +5204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	
 	        case 's':
-	          note.shape = _Exsurge3.NoteShape.Apostropha;
+	          note.shape = _Exsurge3.NoteShape.Stropha;
 	          break;
 	
 	        case 'v':
@@ -5712,7 +5712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // determine the glyph to use
 	            var note = this.notes[0];
 	
-	            if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.ApostrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.StrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Stropha);
 	
 	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
@@ -5721,6 +5721,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.origin.y = note.origin.y;
 	
 	            this.finishLayout(ctxt);
+	        }
+	    }], [{
+	        key: 'determineNoteGlyphCode',
+	        value: function determineNoteGlyphCode(note) {
+	
+	            switch (note.shape) {
+	                case _Exsurge3.NoteShape.Stropha:
+	                    return _Exsurge2.GlyphCode.Stropha;
+	                case _Exsurge3.NoteShape.Cavum:
+	                    return _Exsurge2.GlyphCode.PunctumCavum;
+	                default:
+	                    return _Exsurge2.GlyphCode.PunctumCuadratum;
+	            }
 	        }
 	    }]);
 	
@@ -5863,9 +5876,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
 	                note = this.notes[i];
 	
-	                if (note.isLiquescent === _Exsurge3.LiquescentType.LargeAscending || note.isLiquescent === _Exsurge3.LiquescentType.LargeDescending)
+	                if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending || note.liquescent === _Exsurge3.LiquescentType.LargeDescending)
 	                    // fixme: is the large inclinatum liquescent the same as the apostropha?
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.isLiquescent === _Exsurge3.LiquescentType.SmallAscending || note.isLiquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
+	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.liquescent === _Exsurge3.LiquescentType.SmallAscending || note.liquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
 	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
 	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
@@ -5962,7 +5975,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (lower.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
+	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending || lower.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
 	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
 	                smallLiquescent = true;
@@ -6038,11 +6051,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note1 = this.notes[0];
 	            var note2 = this.notes[1];
 	
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
 	            note1.performLayout(ctxt);
 	
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
 	            note2.performLayout(ctxt);
+	
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
 	            this.addVisualizer(note1);
@@ -6222,7 +6236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
 	                var note = this.notes[i];
 	
-	                if (note.isLiquescent) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
+	                if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
 	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
 	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
 	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
@@ -6309,7 +6323,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var lower = this.notes[0];
 	            var upper = this.notes[1];
 	            var overhangUpperNote = true;
-	            var needsConnectingLine = upper.staffPosition - lower.staffPosition > 1;
 	
 	            if (lower.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
 	
@@ -6318,39 +6331,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
 	                overhangUpperNote = false;
-	                needsConnectingLine = true; // always true for initio debilis
 	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                    overhangUpperNote = false;
-	                } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	                    overhangUpperNote = false;
-	                } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	                } else {
-	                    // standard shape
-	                    lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                    upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	                }
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	            } else {
+	                // standard shape
+	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            }
 	
 	            // allow a quilisma pes
 	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
-	            upper.performLayout(ctxt);
 	            lower.performLayout(ctxt);
+	            upper.performLayout(ctxt);
 	
 	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	
 	            line.bounds.x = lower.bounds.right() - line.bounds.width;
+	            this.addVisualizer(line);
 	
-	            if (overhangUpperNote === true) upper.bounds.x += lower.bounds.right() - upper.bounds.width;else upper.bounds.x += lower.bounds.right() - line.bounds.width;
+	            // if it's overhanging, then right align the glyph
+	            if (overhangUpperNote === true) upper.bounds.x += line.bounds.right() - upper.bounds.width;else upper.bounds.x += line.bounds.x;
 	
 	            // add the elements
 	            this.addVisualizer(lower);
-	            this.addVisualizer(line);
 	            this.addVisualizer(upper);
 	
 	            this.origin.x = lower.origin.x;
@@ -6433,14 +6445,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // add the connecting line
 	            if (thirdStaffPosition - secondStaffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
-	                line.bounds.x = x - line.bounds.width;
+	                x -= line.bounds.width;
+	                line.bounds.x = x;
 	                this.addVisualizer(line);
 	            }
 	
-	            if (third.isLiquescent) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            var overhangThirdNote = true;
+	
+	            if (third.liquescent === _Exsurge3.LiquescentType.SmallAscending) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else if (third.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                overhangThirdNote = false;
+	            } else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	
 	            third.performLayout(ctxt);
-	            third.bounds.x = second.bounds.right() - third.bounds.width;
+	
+	            if (overhangThirdNote) third.bounds.x = second.bounds.right() - third.bounds.width;else third.bounds.x = x;
 	
 	            this.addVisualizer(third);
 	
@@ -6582,11 +6601,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var note = this.notes[0];
 	
-	            if (note.isLiquescent) {
-	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
-	                    // fixme: implement two types of punctum liquescents
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                }
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) {
+	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
 	            } else {
 	                switch (note.shape) {
 	                    case _Exsurge3.NoteShape.Cavum:
@@ -6822,16 +6838,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note1 = this.notes[0];
 	            var note2 = this.notes[1];
 	            var note3 = this.notes[2];
+	            var drawFirstLine = note2.staffPosition - note1.staffPosition > 1;
+	            var note3SmallLiquescent = false;
 	            var line;
 	
-	            // fixme: implement liquescents
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (note1.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
+	                note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                drawFirstLine = true; // always draw first line with an initio debilis
+	            } else note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            var staffPos1 = note1.staffPosition;
-	            var staffPos2 = note2.staffPosition;
-	            var staffPos3 = note3.staffPosition;
+	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	            if (note3.liquescent === _Exsurge3.LiquescentType.LargeAscending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.LargeDescending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.SmallAscending || note3.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
+	                note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                note3SmallLiquescent = true;
+	            } else note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            note1.performLayout(ctxt);
 	            note2.performLayout(ctxt);
@@ -6840,7 +6861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var x = note1.bounds.right();
 	
 	            // do we need to draw the first (ascending) line?
-	            if (staffPos2 - staffPos1 > 1) {
+	            if (drawFirstLine) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note1, note2, false);
 	                x -= line.bounds.width;
 	                line.bounds.x = x;
@@ -6851,14 +6872,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            x += note2.bounds.width;
 	
 	            // do we need to draw a descending line?
-	            if (staffPos2 - staffPos3 > 1) {
+	            if (note2.staffPosition - note3.staffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note2, note3, false);
 	                x -= line.bounds.width;
 	                line.bounds.x = x;
 	                this.addVisualizer(line);
 	            }
 	
-	            note3.bounds.x = x;
+	            if (note3SmallLiquescent) note3.bounds.x = x - note3.bounds.width;else note3.bounds.x = x;
 	
 	            this.addVisualizer(note1);
 	            this.addVisualizer(note2);
@@ -7133,14 +7154,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var staffPosition = note1.staffPosition;
 	
-	            note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
 	            note1.performLayout(ctxt);
 	
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
 	            note2.performLayout(ctxt);
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
-	            note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note3.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note3));
 	            note3.performLayout(ctxt);
 	            note3.bounds.x += note1.bounds.width + note2.bounds.width + ctxt.intraNeumeSpacing * 2;
 	
