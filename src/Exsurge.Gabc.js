@@ -50,18 +50,18 @@ export var Gabc = {
   },
 
   parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
+    var passByRef = {
+      activeClef: null
+    };
 
     // split the notations on whitespace boundaries
     var words = score.gabcSource = gabcNotations.match(/\S+/g);
-    score.notations = this.parseChantWords(ctxt, words, score, createDropCap);
+    score.notations = this.parseChantWords(ctxt, words, score, createDropCap, passByRef);
   },
 
-  parseChantWords: function (ctxt, words, score, createDropCap, activeClef = null) {
+  parseChantWords: function (ctxt, words, score, createDropCap, passByRef) {
     var notations = [];
-    var passByRef = {
-      activeClef: activeClef
-    };
-
+    
     for (var i = 0; i < words.length; i++) {
       var word = words[i];
 
@@ -147,7 +147,7 @@ export var Gabc = {
 
   updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
     var oldWords = score.gabcSource.map(function(word) { return word.word; });
-    var newWords = gabcNotations.match(/\S+/g);
+    var newWords = gabcNotations.match(/\S+/g) || [];
   
     // find the part of the words array that has changed:
     var lenOld = oldWords.length,
@@ -172,6 +172,10 @@ export var Gabc = {
       // the gabc source has not been altered.  No need to do anything.
       return;
     }
+    if(numSameWordsAtBeginning == 0) {
+      // if even the first word changed, we need to reset the clef:
+      score.startingClef = null;
+    }
     
     var dcIndex = score.gabcSource.dropCapIndex;
     // if there is a drop cap, and it is not among the words at the beginning that have remained the same,
@@ -182,28 +186,12 @@ export var Gabc = {
 
     var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
     var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
-    var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, score.startingClef);
+    var wordsRemoved = score.gabcSource.slice(numSameWordsAtBeginning, numSameWordsAtBeginning + numWordsRemoved);
 
-    if(createDropCap) {
-      // If we lost the drop cap, we need to go through, parsing the old words, until we find a new drop cap or get to the end.
-      while(score.dropCap === null && numSameWordsAtEnd > 0) {
-        var oldWord = oldWords.slice(-numSameWordsAtEnd);
-        newNotations = newNotations.concat(this.parseChantWords(ctxt, oldWord, createDropCap, score.startingClef));
-        wordsAdded.dropCapIndex = oldWord.dropCapIndex;
-        --numSameWordsAtEnd;
-      }
-    }
-    
-    // if there was a dropcap handled in the word that was added, we need to update the dropCapIndex in score.gabcSource
-    if(typeof wordsAdded.dropCapIndex == 'number') {
-      score.gabcSource.dropCapIndex = wordsAdded.dropCapIndex + numSameWordsAtBeginning;
-    }
-    // splice the added words into the gabcSource array
-    var wordsRemoved = [].splice.apply(score.gabcSource, [numSameWordsAtBeginning, numWordsRemoved].concat(wordsAdded));
     // calculate index to put the new notations in the notations array, based on where the last identical word's notations are
     // calculate length of notations to remove based on where the last removed word's notations are.
     var notationIndex = 0, numNotationsRemoved = 0;
-    if(wordsRemoved.length) {
+    if(numWordsRemoved) {
       notationIndex = wordsRemoved[0].notationIndex;
       var lastWordRemoved = wordsRemoved[wordsRemoved.length - 1];
       numNotationsRemoved = lastWordRemoved.notationIndex + lastWordRemoved.notationLength - notationIndex;
@@ -211,11 +199,41 @@ export var Gabc = {
       var lastSameWord = score.gabcSource[numSameWordsAtBeginning - 1];
       if(lastSameWord) notationIndex = lastSameWord.notationIndex + lastSameWord.notationLength;
     }
+    
+    // Find the last active clef
+    var clefs = score.notations.slice(0,notationIndex).filter(function(notation) { return notation.isClef; });
+    var activeClef = clefs.length? clefs[clefs.length - 1] : score.startingClef;
+    var passByRef = {
+      activeClef: activeClef
+    };
+
+    // Parse the words that were added:
+    var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, passByRef);
+
+    if(createDropCap) {
+      // If we lost the drop cap, we need to go through, parsing the old words, until we find a new drop cap or get to the end.
+      while(score.dropCap === null && numSameWordsAtEnd > 0) {
+        var oldWord = oldWords.slice(-numSameWordsAtEnd);
+        newNotations = newNotations.concat(this.parseChantWords(ctxt, oldWord, createDropCap, passByRef));
+        wordsAdded.dropCapIndex = oldWord.dropCapIndex;
+        --numSameWordsAtEnd;
+      }
+    }
+
+    // Update the notation index on words that have just been added.
     if(notationIndex) {
       wordsAdded.forEach(function(word) {
         word.notationIndex += notationIndex;
       });
     }
+    
+    // if there was a dropcap handled in the word that was added, we need to update the dropCapIndex in score.gabcSource
+    if(typeof wordsAdded.dropCapIndex == 'number') {
+      score.gabcSource.dropCapIndex = wordsAdded.dropCapIndex + numSameWordsAtBeginning;
+    }
+    // splice the added words into the gabcSource array
+    [].splice.apply(score.gabcSource, [numSameWordsAtBeginning, numWordsRemoved].concat(wordsAdded));
+    
     // the words that have not changed are now associated with notations that may have shifted position in the notations array
     var notationOffset = newNotations.length - numNotationsRemoved;
     if(notationOffset) {
@@ -300,7 +318,7 @@ export var Gabc = {
         else if (notation.resetsAccidentals)
           passByRef.activeClef.resetAccidentals();
 
-          notations.push(notation);
+        notations.push(notation);
       }
     };
 
