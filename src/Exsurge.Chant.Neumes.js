@@ -141,8 +141,7 @@ export class Neume extends ChantNotationElement {
         note.liquescent === LiquescentType.LargeDescending)
         // fixme: is the large inclinatum liquescent the same as the apostropha?
         note.setGlyph(ctxt, GlyphCode.Apostropha);
-      else if (note.liquescent === LiquescentType.SmallAscending ||
-        note.liquescent === LiquescentType.SmallDescending)
+      else if (note.liquescent & LiquescentType.Small)
         note.setGlyph(ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else
         // fixme: some climaci in the new chant books end with a punctum cuadratum
