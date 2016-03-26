@@ -4,7 +4,7 @@
   "description": "A JavaScript library for rendering Gregorian Chant in square note notation",
   "main": "dist/exsurge.js",
   "scripts": {
-    "build": "webpack --mode=build",
+    "build": "webpack --mode=build & webpack --mode=dev",
     "dev": "webpack --progress --colors --watch --mode=dev",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.js"
   },
