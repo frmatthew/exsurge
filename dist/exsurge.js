@@ -1601,6 +1601,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "y": 75.40599822998047
 	    }
 	  },
+	  "OriscusLiquescent": {
+	    "svgSrc": "<path d=\"M 19.05539,78.886528 C 20.242277,78.486807 21.532179,77.890297 22.925106,77.09701 24.317891,76.303653 26.700882,74.417241 30.074091,71.437777 33.447144,68.45824 36.523539,64.985185 39.303286,61.018598 42.082855,57.051975 44.562739,51.395765 46.742952,44.049969 48.922975,36.704172 50.01304,28.671032 50.013135,19.950525 L 50.013135,-34.225545 C 50.01304,-54.464261 42.07377,-64.583661 26.195289,-64.583768 20.248326,-64.583661 11.518758,-61.410372 0.00656131,-55.06389 -11.505742,-48.717218 -20.23531,-45.543929 -26.182179,-45.544024 -34.515109,-45.543929 -40.567968,-48.520405 -44.340791,-54.473441 -48.113613,-60.426286 -50.000025,-67.369373 -50.000025,-75.302702 L -50.000025,30.069925 C -50.000025,49.909039 -42.060754,59.828603 -26.182179,59.828615 -21.022584,59.828603 -12.38991,56.455465 -0.28412107,49.709203 11.821549,42.96294 20.648023,39.589803 26.195289,39.589803 29.368506,40.776762 30.361665,44.249817 29.17479,50.00897 27.987759,55.768122 26.00143,62.020829 23.215789,68.767116 z\"/>",
+	    "paths": [{
+	      "type": "positive",
+	      "data": "M 19.05539,78.886528 C 20.242277,78.486807 21.532179,77.890297 22.925106,77.09701 24.317891,76.303653 26.700882,74.417241 30.074091,71.437777 33.447144,68.45824 36.523539,64.985185 39.303286,61.018598 42.082855,57.051975 44.562739,51.395765 46.742952,44.049969 48.922975,36.704172 50.01304,28.671032 50.013135,19.950525 L 50.013135,-34.225545 C 50.01304,-54.464261 42.07377,-64.583661 26.195289,-64.583768 20.248326,-64.583661 11.518758,-61.410372 0.00656131,-55.06389 -11.505742,-48.717218 -20.23531,-45.543929 -26.182179,-45.544024 -34.515109,-45.543929 -40.567968,-48.520405 -44.340791,-54.473441 -48.113613,-60.426286 -50.000025,-67.369373 -50.000025,-75.302702 L -50.000025,30.069925 C -50.000025,49.909039 -42.060754,59.828603 -26.182179,59.828615 -21.022584,59.828603 -12.38991,56.455465 -0.28412107,49.709203 11.821549,42.96294 20.648023,39.589803 26.195289,39.589803 29.368506,40.776762 30.361665,44.249817 29.17479,50.00897 27.987759,55.768122 26.00143,62.020829 23.215789,68.767116 z"
+	    }],
+	    "bounds": {
+	      "x": 0,
+	      "y": 0,
+	      "width": 100,
+	      "height": 147.656005859375
+	    },
+	    "origin": {
+	      "x": 50,
+	      "y": 75.40599822998047
+	    }
+	  },
 	  "PodatusLower": {
 	    "svgSrc": "<path d=\"M-4.688-30.28c22.396 0 34.636-.262 36.72-.782 5.728-1.563 8.593-5.21 8.593-10.938H50v97.656c0 2.604-1.302 4.167-3.906 4.688-5.21.52-21.355.78-48.438.78-23.958 0-38.54-.26-43.75-.78-2.604 0-3.906-1.302-3.906-3.906v-82.032c0-3.646 1.302-5.468 3.906-5.468h2.344c2.604.52 15.625.78 39.063.78z\"/>",
 	    "paths": [{
@@ -1789,6 +1806,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "origin": {
 	      "x": 50,
 	      "y": 75.77999877929688
+	    }
+	  },
+	  "PunctumInclinatumLiquescent": {
+	    "svgSrc": "<path d=\"M 0,-53.164062 35,-0.1171875 0,52.382812 -35,-0.1171875 0,-53.164062 z\"/>",
+	    "paths": [{
+	      "type": "positive",
+	      "data": "M 0,-53.164062 35,-0.1171875 0,52.382812 -35,-0.1171875 0,-53.164062 z"
+	    }],
+	    "bounds": {
+	      "x": 0,
+	      "y": 0,
+	      "width": 70,
+	      "height": 105.546
+	    },
+	    "origin": {
+	      "x": 35,
+	      "y": 53.164062
 	    }
 	  },
 	  "Quilisma": {
@@ -2006,6 +2040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Natural: "Natural",
 	  OriscusAsc: "OriscusAsc",
 	  OriscusDes: "OriscusDes",
+	  OriscusLiquescent: "OriscusLiquescent",
 	
 	  PodatusLower: "PodatusLower",
 	  PodatusUpper: "PodatusUpper",
@@ -2451,13 +2486,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this4.glyph = null;
 	
-	    _this4.setGlyphShape(ctxt, glyphCode);
+	    _this4.setGlyph(ctxt, glyphCode);
 	    return _this4;
 	  }
 	
 	  _createClass(GlyphVisualizer, [{
-	    key: 'setGlyphShape',
-	    value: function setGlyphShape(ctxt, glyphCode) {
+	    key: 'setGlyph',
+	    value: function setGlyph(ctxt, glyphCode) {
 	
 	      if (this.glyphCode === glyphCode) return;
 	
@@ -2543,6 +2578,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  return new MarkupStackFrame(symbol, startIndex, properties);
+	};
+	
+	// for escaping html strings before they go into the svgs
+	// adapted from http://stackoverflow.com/a/12034334/5720160
+	var __subsForTspans = {
+	  "&": "&amp;",
+	  "<": "&lt;",
+	  ">": "&gt;"
 	};
 	
 	var TextElement = exports.TextElement = function (_ChantLayoutElement5) {
@@ -2697,7 +2740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (this.spans[i].properties) options['style'] = this.spans[i].properties;
 	
-	        spans += QuickSvg.createFragment('tspan', options, this.spans[i].text);
+	        spans += QuickSvg.createFragment('tspan', options, TextElement.escapeForTspan(this.spans[i].text));
 	      }
 	
 	      var styleProperties = "font-family:" + this.fontFamily + ";font-size:" + this.fontSize + "px" + ";font-kerning:normal;" + this.getExtraStyleProperties(ctxt);
@@ -2710,6 +2753,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'dominant-baseline': this.dominantBaseline,
 	        'style': styleProperties
 	      }, spans);
+	    }
+	  }], [{
+	    key: 'escapeForTspan',
+	    value: function escapeForTspan(string) {
+	      return String(string).replace(/[&<>]/g, function (s) {
+	        return __subsForTspans[s];
+	      });
 	    }
 	  }]);
 	
@@ -3031,7 +3081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.ChantDocument = exports.ChantScore = exports.ChantLine = exports.ChantLineBreak = exports.FaClef = exports.DoClef = exports.Clef = exports.Note = exports.NoteShape = exports.LiquescentType = undefined;
+	exports.ChantDocument = exports.ChantScore = exports.ChantLine = exports.ChantLineBreak = exports.FaClef = exports.DoClef = exports.Clef = exports.Note = exports.NoteShapeModifiers = exports.NoteShape = exports.LiquescentType = undefined;
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
@@ -3082,27 +3132,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var LiquescentType = exports.LiquescentType = {
 	  None: 0,
-	  LargeAscending: 1,
-	  LargeDescending: 2,
-	  SmallAscending: 3,
-	  SmallDescending: 4,
-	  InitioDebilis: 5
+	
+	  // flags that can be combined, though of course it
+	  // it doesn't make sense to combine some!
+	  Large: 1 << 0,
+	  Small: 1 << 1,
+	  Ascending: 1 << 2,
+	  Descending: 1 << 3,
+	  InitioDebilis: 1 << 4,
+	
+	  // handy liquescent types
+	  LargeAscending: 1 << 0 | 1 << 2,
+	  LargeDescending: 1 << 0 | 1 << 3,
+	  SmallAscending: 1 << 1 | 1 << 2,
+	  SmallDescending: 1 << 1 | 1 << 3
 	};
 	
 	var NoteShape = exports.NoteShape = {
+	  // shapes
 	  Default: 0,
-	
-	  Inclinatum: 1,
-	  Virga: 2,
+	  Virga: 1,
+	  Inclinatum: 2,
 	  Quilisma: 3,
-	  Cavum: 4,
-	  OriscusAscending: 5,
-	  OriscusDescending: 6,
+	  Stropha: 4,
+	  Oriscus: 5
+	};
 	
-	  Stropha: 7,
+	var NoteShapeModifiers = exports.NoteShapeModifiers = {
 	
-	  AscLiquescent: 8,
-	  DesLiquescent: 9
+	  // flags which modify the shape
+	  // not all of them apply to every shape of course
+	  None: 0,
+	  Ascending: 1 << 0,
+	  Descending: 1 << 1,
+	  Cavum: 1 << 2,
+	  Stemmed: 1 << 3
 	};
 	
 	/**
@@ -3131,22 +3195,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.staffPosition = 0;
 	    _this.liquescent = LiquescentType.None;
 	    _this.shape = NoteShape.Default;
+	    _this.shapeModifiers = NoteShapeModifiers.None;
 	    _this.markings = [];
 	    return _this;
 	  }
 	
 	  _createClass(Note, [{
-	    key: 'setGlyphShape',
-	    value: function setGlyphShape(ctxt, glyphCode) {
-	      if (this.glyphVisualizer) this.glyphVisualizer.setGlyphShape(ctxt, glyphCode);else this.glyphVisualizer = new _Exsurge2.GlyphVisualizer(ctxt, glyphCode);
-	    }
-	  }, {
-	    key: 'performLayout',
-	    value: function performLayout(ctxt) {
-	
-	      if (this.glyphVisualizer === null) {
-	        console.log("Tried to perform layout on a note with no glyphCode assigned!");
-	      }
+	    key: 'setGlyph',
+	    value: function setGlyph(ctxt, glyphCode) {
+	      if (this.glyphVisualizer) this.glyphVisualizer.setGlyph(ctxt, glyphCode);else this.glyphVisualizer = new _Exsurge2.GlyphVisualizer(ctxt, glyphCode);
 	
 	      this.glyphVisualizer.setStaffPosition(ctxt, this.staffPosition);
 	
@@ -3158,6 +3215,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.origin.x = this.glyphVisualizer.origin.x;
 	      this.origin.y = this.glyphVisualizer.origin.y;
+	    }
+	
+	    // a utility function for modifiers
+	
+	  }, {
+	    key: 'shapeModifierMatches',
+	    value: function shapeModifierMatches(shapeModifier) {
+	      if (shapeModifier === NoteShapeModifiers.None) return this.shapeModifier === NoteShapeModifiers.None;else return this.shapeModifier & shapeModifier !== 0;
 	    }
 	  }, {
 	    key: 'draw',
@@ -3961,7 +4026,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      do {
 	        var notation = this.notations[index++];
 	        notation.performLayout(ctxt);
-	      } while (index < this.notations.length && timeout < new Date().getTime());
+	      } while (index < this.notations.length && new Date().getTime() < timeout);
 	
 	      // schedule the next block of processing
 	      setTimeout(function () {
@@ -4595,7 +4660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// THE SOFTWARE.
 	//
 	
-	var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
+	var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 	
 	var Gabc = exports.Gabc = {
 	
@@ -4933,20 +4998,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        switch (currNote.shape) {
-	          case _Exsurge3.NoteShape.Stropha:
-	            return apostrophaState;
-	          case _Exsurge3.NoteShape.Cavum:
-	            return createNeume(new Neumes.Punctum(), true);
-	          case _Exsurge3.NoteShape.OriscusAscending:
-	            return oriscusState;
-	          case _Exsurge3.NoteShape.OriscusDescending:
-	            return oriscusState;
-	          case _Exsurge3.NoteShape.Virga:
-	            return virgaState;
-	          default:
-	            return punctumState;
-	        }
+	        if (currNote.shape === _Exsurge3.NoteShape.Virga) return virgaState;else if (currNote.shape === _Exsurge3.NoteShape.Stropha) return apostrophaState;else if (currNote.shape === _Exsurge3.NoteShape.Oriscus) return oriscusState;else if (currNote.shapeModifiers & _Exsurge3.NoteShapeModifiers.Cavum) return createNeume(new Neumes.Punctum(), true);else return punctumState;
 	      }
 	    };
 	
@@ -4968,10 +5020,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      },
 	      handle: function handle(currNote, prevNote) {
 	
-	        if (currNote.shape === _Exsurge3.NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) {
-	          // force previous oriscus to be ascending
-	          prevNote.shape = _Exsurge3.NoteShape.OriscusAscending;
-	          return createNeume(new Neumes.PesQuassus(), true);
+	        if (currNote.shape === _Exsurge3.NoteShape.Default) {
+	
+	          if (currNote.staffPosition > prevNote.staffPosition) {
+	            prevNote.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Ascending;
+	            return createNeume(new Neumes.PesQuassus(), true);
+	          } else if (currNote.staffPosition < prevNote.staffPosition) {
+	            prevNote.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Descending;
+	            return createNeume(new Neumes.Clivis(), true);
+	          }
 	        } else
 	          // stand alone oriscus
 	          return createNeume(new Neumes.Oriscus(), true);
@@ -4985,7 +5042,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      handle: function handle(currNote, prevNote) {
 	
 	        if (currNote.staffPosition > prevNote.staffPosition) {
-	          return scandicusState;
+	
+	          if (prevNote.shape === _Exsurge3.NoteShape.Oriscus) return salicusState;else return scandicusState;
 	        } else if (currNote.staffPosition < prevNote.staffPosition) {
 	          if (currNote.shape === _Exsurge3.NoteShape.Inclinatum) return pesSubpunctisState;else return torculusState;
 	        } else return createNeume(new Neumes.Podatus(), false);
@@ -5028,6 +5086,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      handle: function handle(currNote, prevNote) {
 	
 	        if (currNote.shape !== _Exsurge3.NoteShape.Inclinatum) return createNeume(new Neumes.PesSubpunctis(), false);else return state;
+	      }
+	    };
+	
+	    var salicusState = {
+	      neume: function neume() {
+	        return new Neumes.Salicus();
+	      },
+	      handle: function handle(currNote, prevNote) {
+	
+	        if (currNote.staffPosition < prevNote.staffPosition) return salicusFlexusState;else return createNeume(new Neumes.Salicus(), false);
+	      }
+	    };
+	
+	    var salicusFlexusState = {
+	      neume: function neume() {
+	        return new Neumes.SalicusFlexus();
+	      },
+	      handle: function handle(currNote, prevNote) {
+	        return createNeume(new Neumes.SalicusFlexus(), false);
 	      }
 	    };
 	
@@ -5075,7 +5152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Apostropha();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Apostropha) return distrophaState;else return createNeume(new Neumes.Apostropha(), false);
+	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Stropha) return distrophaState;else return createNeume(new Neumes.Apostropha(), false);
 	      }
 	    };
 	
@@ -5084,7 +5161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Neumes.Distropha();
 	      },
 	      handle: function handle(currNote, prevNote) {
-	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Apostropha) return createNeume(new Neumes.Tristropha(), true);else return createNeume(new Neumes.Distropha(), false);
+	        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === _Exsurge3.NoteShape.Stropha) return createNeume(new Neumes.Tristropha(), true);else return createNeume(new Neumes.Distropha(), false);
 	      }
 	    };
 	
@@ -5200,7 +5277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (haveLookahead && lookahead === '1') {
 	            note.markings.push(new Markings.AcuteAccent(note));
 	            i++;
-	          } else note.shape = _Exsurge3.NoteShape.Cavum;
+	          } else note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Cavum;
 	          break;
 	
 	        case 's':
@@ -5216,24 +5293,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	
 	        case 'o':
+	          note.shape = _Exsurge3.NoteShape.Oriscus;
 	          if (haveLookahead && lookahead === '<') {
-	            note.shape = _Exsurge3.NoteShape.OriscusAscending;
+	            note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Ascending;
 	            i++;
 	          } else if (haveLookahead && lookahead === '>') {
-	            note.shape = _Exsurge3.NoteShape.OriscusDescending;
+	            note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Descending;
 	            i++;
-	          } else note.shape = _Exsurge3.NoteShape.OriscusAscending;
+	          } else note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Ascending;
+	          break;
+	
+	        case 'O':
+	          note.shape = _Exsurge3.NoteShape.Oriscus;
+	          if (haveLookahead && lookahead === '<') {
+	            note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Ascending | _Exsurge3.NoteShapeModifiers.Stemmed;
+	            i++;
+	          } else if (haveLookahead && lookahead === '>') {
+	            note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Descending | _Exsurge3.NoteShapeModifiers.Stemmed;
+	            i++;
+	          } else note.shapeModifiers |= _Exsurge3.NoteShapeModifiers.Ascending | _Exsurge3.NoteShapeModifiers.Stemmed;
 	          break;
 	
 	        // liquescents
 	        case '~':
-	          if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.liquescent = _Exsurge3.LiquescentType.SmallDescending;else if (note.shape === _Exsurge3.NoteShape.OriscusAscending || note.shape === _Exsurge3.NoteShape.OriscusDescending) note.liquescent = _Exsurge3.LiquescentType.LargeAscending;else note.liquescent = _Exsurge3.LiquescentType.SmallAscending;
+	          if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.liquescent |= _Exsurge3.LiquescentType.Small;else if (note.shape === _Exsurge3.NoteShape.Oriscus) note.liquescent |= _Exsurge3.LiquescentType.Large;else note.liquescent |= _Exsurge3.LiquescentType.Small;
 	          break;
 	        case '<':
-	          note.liquescent = _Exsurge3.LiquescentType.LargeAscending;
+	          note.liquescent |= _Exsurge3.LiquescentType.Ascending;
 	          break;
 	        case '>':
-	          note.liquescent = _Exsurge3.LiquescentType.LargeDescending;
+	          note.liquescent |= _Exsurge3.LiquescentType.Descending;
 	          break;
 	
 	        // accidentals
@@ -5592,7 +5681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Virga = exports.Tristropha = exports.TorculusResupinusFlexus = exports.TorculusResupinus = exports.Torculus = exports.TextOnly = exports.ScandicusFlexus = exports.Scandicus = exports.Punctum = exports.PorrectusFlexus = exports.Porrectus = exports.Podatus = exports.PesSubpunctis = exports.PesQuassus = exports.Oriscus = exports.Distropha = exports.Clivis = exports.Climacus = exports.Trivirga = exports.Bivirga = exports.Apostropha = exports.Neume = undefined;
+	exports.Virga = exports.Tristropha = exports.TorculusResupinusFlexus = exports.TorculusResupinus = exports.Torculus = exports.TextOnly = exports.ScandicusFlexus = exports.Scandicus = exports.SalicusFlexus = exports.Salicus = exports.Punctum = exports.PorrectusFlexus = exports.Porrectus = exports.Podatus = exports.PesSubpunctis = exports.PesQuassus = exports.Oriscus = exports.Distropha = exports.Clivis = exports.Climacus = exports.Trivirga = exports.Bivirga = exports.Apostropha = exports.Neume = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -5605,6 +5694,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Exsurge2 = __webpack_require__(4);
 	
 	var _Exsurge3 = __webpack_require__(6);
+	
+	var _Exsurge4 = __webpack_require__(3);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5685,6 +5776,102 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'positionMarkings',
 	        value: function positionMarkings() {}
+	    }, {
+	        key: 'layoutNotesAsPodatus',
+	        value: function layoutNotesAsPodatus(ctxt, lowerNote, upperNote, startingX) {
+	
+	            startingX = startingX || 0;
+	
+	            var overhangUpperNote = true;
+	
+	            if (lowerNote.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
+	
+	                // liquescent upper note or not?
+	                if (upperNote.liquescent === _Exsurge3.LiquescentType.None) upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);else upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	
+	                lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upperNote.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
+	                lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upperNote.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                overhangUpperNote = false;
+	            } else if (upperNote.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
+	                lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	            } else {
+	                // standard shape
+	                lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                upperNote.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            }
+	
+	            // allow a quilisma pes
+	            if (lowerNote.shape === _Exsurge3.NoteShape.Quilisma) lowerNote.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	
+	            lowerNote.bounds.x = startingX;
+	
+	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lowerNote, upperNote, false);
+	            line.bounds.x = lowerNote.bounds.right() - line.bounds.width;
+	            this.addVisualizer(line);
+	
+	            // if it's overhanging, then right align the glyph
+	            if (overhangUpperNote === true) upperNote.bounds.x += line.bounds.right() - upperNote.bounds.width;else upperNote.bounds.x += line.bounds.x;
+	
+	            // add the elements
+	            this.addVisualizer(lowerNote);
+	            this.addVisualizer(upperNote);
+	        }
+	
+	        // lays out a sequence of notes that are inclinati (e.g., climacus, pes subpunctis)
+	
+	    }, {
+	        key: 'layoutNotesAsInclinati',
+	        value: function layoutNotesAsInclinati(ctxt, notes, startingX) {
+	
+	            var staffPosition = notes[0].staffPosition,
+	                prevStaffPosition = notes[0].staffPosition;
+	
+	            // it is important to advance by the width of the inclinatum glyph itself
+	            // rather than by individual note widths, so that any liquescents are spaced
+	            // the same as non-liquscents
+	            var advanceWidth = _Exsurge4.Glyphs.PunctumInclinatum.bounds.width * ctxt.glyphScaling;
+	
+	            // now add all the punctum inclinati
+	            for (var i = 0; i < notes.length; i++, prevStaffPosition = staffPosition) {
+	                var note = notes[i];
+	
+	                if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending || note.liquescent === _Exsurge3.LiquescentType.LargeDescending)
+	                    // fixme: is the large inclinatum liquescent the same as the apostropha?
+	                    note.setGlyph(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.liquescent === _Exsurge3.LiquescentType.SmallAscending || note.liquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
+	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
+	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
+	                    note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
+	
+	                staffPosition = note.staffPosition;
+	
+	                // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
+	                var multiple;
+	                switch (Math.abs(prevStaffPosition - staffPosition)) {
+	                    case 0:
+	                        multiple = 0;
+	                        break;
+	                    case 1:
+	                        multiple = 0.8;
+	                        break;
+	                    default:
+	                        multiple = 1.2;
+	                        break;
+	                }
+	
+	                startingX += advanceWidth * multiple;
+	                note.bounds.x += startingX;
+	
+	                this.addVisualizer(note);
+	            }
+	        }
 	    }]);
 	
 	    return Neume;
@@ -5712,9 +5899,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // determine the glyph to use
 	            var note = this.notes[0];
 	
-	            if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.StrophaLiquescent);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Stropha);
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyph(ctxt, _Exsurge2.GlyphCode.StrophaLiquescent);else note.setGlyph(ctxt, _Exsurge2.GlyphCode.Stropha);
 	
-	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
 	
 	            this.origin.x = note.origin.x;
@@ -5726,14 +5912,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'determineNoteGlyphCode',
 	        value: function determineNoteGlyphCode(note) {
 	
-	            switch (note.shape) {
-	                case _Exsurge3.NoteShape.Stropha:
-	                    return _Exsurge2.GlyphCode.Stropha;
-	                case _Exsurge3.NoteShape.Cavum:
-	                    return _Exsurge2.GlyphCode.PunctumCavum;
-	                default:
-	                    return _Exsurge2.GlyphCode.PunctumCuadratum;
-	            }
+	            if (note.shape === _Exsurge3.NoteShape.Stropha) return _Exsurge2.GlyphCode.Stropha;
+	
+	            if (note.shapeModifiers & _Exsurge3.NoteShapeModifiers.Cavum) return _Exsurge2.GlyphCode.PunctumCavum;
+	
+	            return _Exsurge2.GlyphCode.PunctumCuadratum;
 	        }
 	    }]);
 	
@@ -5765,11 +5948,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note1 = this.notes[0];
 	            var note2 = this.notes[1];
 	
-	            note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note1.performLayout(ctxt);
+	            note1.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	            note2.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
 	
-	            note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note2.performLayout(ctxt);
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
 	            this.addVisualizer(note1);
@@ -5811,15 +5992,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note2 = this.notes[1];
 	            var note3 = this.notes[2];
 	
-	            note1.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, Virga.getGlyphCode(note1.staffPosition));
-	            note2.performLayout(ctxt);
+	            note1.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
+	            note2.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
-	            note3.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
-	            note3.performLayout(ctxt);
+	            note3.setGlyph(ctxt, Virga.getGlyphCode(staffPosition));
 	            note3.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing + note2.bounds.width + ctxt.intraNeumeSpacing;
 	
 	            this.addVisualizer(note1);
@@ -5856,56 +6033,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _get(Object.getPrototypeOf(Climacus.prototype), 'performLayout', this).call(this, ctxt);
 	
 	            // the first note is always a virga...
-	            var staffPosition, prevStaffPosition;
-	            var x = 0;
+	            var virga = this.notes[0];
+	            virga.setGlyph(ctxt, Virga.getGlyphCode(virga.staffPosition));
 	
-	            var note = this.notes[0];
-	            staffPosition = note.staffPosition;
-	            note.setGlyphShape(ctxt, Virga.getGlyphCode(staffPosition));
-	            note.performLayout(ctxt);
+	            this.addVisualizer(virga);
 	
-	            x += note.bounds.width * 1.2; // fixme: correct spacing after virga
+	            this.layoutNotesAsInclinati(ctxt, this.notes.slice(1), virga.bounds.right() + ctxt.intraNeumeSpacing / 2);
 	
-	            this.addVisualizer(note);
-	
-	            this.origin.x = note.origin.x;
-	            this.origin.y = note.origin.y;
-	
-	            // now add all the punctum inclinati
-	            prevStaffPosition = this.notes[1].staffPosition;
-	            for (var i = 1; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
-	                note = this.notes[i];
-	
-	                if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending || note.liquescent === _Exsurge3.LiquescentType.LargeDescending)
-	                    // fixme: is the large inclinatum liquescent the same as the apostropha?
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Apostropha);else if (note.liquescent === _Exsurge3.LiquescentType.SmallAscending || note.liquescent === _Exsurge3.LiquescentType.SmallDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else
-	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
-	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	
-	                staffPosition = note.staffPosition;
-	
-	                note.performLayout(ctxt);
-	
-	                // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
-	                var multiple;
-	                switch (Math.abs(prevStaffPosition - staffPosition)) {
-	                    case 0:
-	                        multiple = 0;
-	                        break;
-	                    case 1:
-	                        multiple = 0.8;
-	                        break;
-	                    default:
-	                        multiple = 1.2;
-	                        break;
-	                }
-	
-	                x += note.bounds.width * multiple;
-	                note.bounds.x += x;
-	
-	                this.addVisualizer(note);
-	            }
+	            this.origin.x = virga.origin.x;
+	            this.origin.y = virga.origin.y;
 	
 	            this.finishLayout(ctxt);
 	        }
@@ -5964,54 +6100,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _get(Object.getPrototypeOf(Clivis.prototype), 'performLayout', this).call(this, ctxt);
 	
 	            var line;
-	            var smallLiquescent = false;
 	
 	            var upper = this.notes[0];
 	            var lower = this.notes[1];
 	
-	            if (lower.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	            } else if (lower.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	            } else if (lower.liquescent === _Exsurge3.LiquescentType.SmallDescending || lower.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningDesLiquescent);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
-	                smallLiquescent = true;
-	            } else {
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (upper.shape === _Exsurge3.NoteShape.Oriscus) upper.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusDes);else {
+	                upper.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	                // add an ascending line
+	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, true);
+	                line.bounds.x = upper.bounds.x;
+	                this.addVisualizer(line);
 	            }
 	
-	            var upperStaffPos = upper.staffPosition;
-	            var lowerStaffPos = lower.staffPosition;
-	
-	            upper.performLayout(ctxt);
-	            lower.performLayout(ctxt);
-	
-	            // add the ascending line
-	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, true);
-	            line.bounds.x = upper.bounds.x;
-	
-	            this.addVisualizer(line);
-	            line = null;
+	            if (lower.liquescent & _Exsurge3.LiquescentType.Small) {
+	                lower.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                lower.bounds.x -= lower.bounds.width; // right aligned
+	            } else if (lower.liquescent === _Exsurge3.LiquescentType.Ascending) lower.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (lower.liquescent === _Exsurge3.LiquescentType.Descending) lower.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else lower.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            var x = upper.bounds.right();
 	
 	            // do we need to draw a descending line?
-	            if (upperStaffPos - lowerStaffPos > 1) {
+	            if (upper.staffPosition - lower.staffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, upper, lower, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
+	                line.bounds.x = x - line.bounds.width;
 	                this.addVisualizer(line);
+	
+	                if (!(lower.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.width;
 	            }
 	
-	            if (smallLiquescent) {
-	                if (line !== null) x -= lower.bounds.width - line.bounds.width;else x -= lower.bounds.width;
-	            }
-	
-	            lower.bounds.x = x;
+	            lower.bounds.x += x;
 	
 	            this.addVisualizer(upper);
 	            this.addVisualizer(lower);
@@ -6051,12 +6169,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note1 = this.notes[0];
 	            var note2 = this.notes[1];
 	
-	            note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
-	            note1.performLayout(ctxt);
-	
-	            note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
-	            note2.performLayout(ctxt);
-	
+	            note1.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note1));
+	            note2.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note2));
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
 	            this.addVisualizer(note1);
@@ -6094,9 +6208,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // determine the glyph to use
 	            var note = this.notes[0];
 	
-	            if (note.shape === _Exsurge3.NoteShape.OriscusAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusDes);
+	            if (note.liquescent !== _Exsurge3.LiquescentType.None) {
+	                note.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusLiquescent);
+	            } else {
+	                if (note.shapeModifiers & _Exsurge3.NoteShapeModifiers.Ascending) note.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else note.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusDes);
+	            }
 	
-	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
 	
 	            this.origin.x = note.origin.x;
@@ -6137,11 +6254,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var lowerStaffPos = lower.staffPosition;
 	            var upperStaffPos = upper.staffPosition;
 	
-	            if (lower.shape === _Exsurge3.NoteShape.OriscusAscending) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (lower.shape === _Exsurge3.NoteShape.Oriscus) lower.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusAsc);else lower.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) upper.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else upper.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            lower.performLayout(ctxt);
 	            lower.bounds.x = x;
 	            this.addVisualizer(lower);
 	
@@ -6157,7 +6273,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            upper.bounds.x = x;
 	
-	            upper.performLayout(ctxt);
 	            upper.bounds.x = x;
 	            this.addVisualizer(upper);
 	
@@ -6200,74 +6315,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function performLayout(ctxt) {
 	            _get(Object.getPrototypeOf(PesSubpunctis.prototype), 'performLayout', this).call(this, ctxt);
 	
-	            var lower = this.notes[0];
-	            var upper = this.notes[1];
-	            var staffPosition, prevStaffPosition;
-	            var x = 0;
+	            // layout is a podatus followed by inclinati
+	            this.layoutNotesAsPodatus(ctxt, this.notes[0], this.notes[1]);
+	            this.layoutNotesAsInclinati(ctxt, this.notes.slice(2), this.notes[0].bounds.right() + ctxt.intraNeumeSpacing / 2);
 	
-	            if (lower.isLiquescent || upper.isLiquescent) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
-	
-	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            lower.performLayout(ctxt);
-	            upper.performLayout(ctxt);
-	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	
-	            line.bounds.x = lower.bounds.right() - line.bounds.width;
-	            upper.bounds.x = lower.bounds.right() - upper.bounds.width;
-	
-	            // add the elements
-	            this.addVisualizer(lower);
-	            this.addVisualizer(line);
-	            this.addVisualizer(upper);
-	
-	            x += Math.max(lower.bounds.width, upper.bounds.width) * 1.2; // fixme: correct spacing after podatus
-	
-	            // now add all the punctum inclinati
-	            staffPosition = upper.staffPosition;
-	            prevStaffPosition = lower.staffPosition;
-	            for (var i = 2; i < this.notes.length; i++, prevStaffPosition = staffPosition) {
-	                var note = this.notes[i];
-	
-	                if (note.liquescent !== _Exsurge3.LiquescentType.None) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else {
-	                    // fixme: some climaci in the new chant books end with a punctum cuadratum
-	                    // (see, for example, the antiphon "Sancta Maria" for October 7).
-	                    note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                }
-	
-	                staffPosition = note.staffPosition;
-	
-	                note.performLayout(ctxt);
-	
-	                // fixme: how do these calculations look for puncti inclinati based on staff position offsets?
-	                var multiple;
-	                switch (Math.abs(prevStaffPosition - staffPosition)) {
-	                    case 0:
-	                        multiple = 0;
-	                        break;
-	                    case 1:
-	                        multiple = 0.8;
-	                        break;
-	                    default:
-	                        multiple = 1.2;
-	                        break;
-	                }
-	
-	                x += note.bounds.width * multiple;
-	                note.bounds.x += x;
-	
-	                this.addVisualizer(note);
-	            }
-	
-	            this.origin.x = lower.origin.x;
-	            this.origin.y = lower.origin.y;
+	            this.origin.x = this.notes[0].origin.x;
+	            this.origin.y = this.notes[0].origin.y;
 	
 	            this.finishLayout(ctxt);
 	        }
@@ -6320,53 +6373,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function performLayout(ctxt) {
 	            _get(Object.getPrototypeOf(Podatus.prototype), 'performLayout', this).call(this, ctxt);
 	
-	            var lower = this.notes[0];
-	            var upper = this.notes[1];
-	            var overhangUpperNote = true;
+	            this.layoutNotesAsPodatus(ctxt, this.notes[0], this.notes[1]);
 	
-	            if (lower.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
-	
-	                // liquescent upper note or not?
-	                if (upper.liquescent === _Exsurge3.LiquescentType.None) upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);else upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
-	                overhangUpperNote = false;
-	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeAscending) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);
-	                overhangUpperNote = false;
-	            } else if (upper.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
-	                overhangUpperNote = false;
-	            } else if (upper.liquescent === _Exsurge3.LiquescentType.SmallAscending) {
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
-	            } else {
-	                // standard shape
-	                lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                upper.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	            }
-	
-	            // allow a quilisma pes
-	            if (lower.shape === _Exsurge3.NoteShape.Quilisma) lower.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            lower.performLayout(ctxt);
-	            upper.performLayout(ctxt);
-	
-	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, lower, upper, false);
-	            line.bounds.x = lower.bounds.right() - line.bounds.width;
-	            this.addVisualizer(line);
-	
-	            // if it's overhanging, then right align the glyph
-	            if (overhangUpperNote === true) upper.bounds.x += line.bounds.right() - upper.bounds.width;else upper.bounds.x += line.bounds.x;
-	
-	            // add the elements
-	            this.addVisualizer(lower);
-	            this.addVisualizer(upper);
-	
-	            this.origin.x = lower.origin.x;
-	            this.origin.y = lower.origin.y;
+	            this.origin.x = this.notes[0].origin.x;
+	            this.origin.y = this.notes[0].origin.y;
 	
 	            this.finishLayout(ctxt);
 	        }
@@ -6406,29 +6416,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (firstStaffPosition - secondStaffPosition) {
 	                case 1:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus1);
 	                    break;
 	                case 2:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus2);
 	                    break;
 	                case 3:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus3);
 	                    break;
 	                case 4:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus4);
 	                    break;
 	                default:
 	                    // fixme: should we generate an error here?
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	                    break;
 	            }
 	
-	            first.performLayout(ctxt);
-	
 	            // the second glyph does not draw anything, but it still has logical importance for the editing
 	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            second.performLayout(ctxt);
+	            second.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	
 	            // add the first line and the swash
 	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
@@ -6452,12 +6459,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var overhangThirdNote = true;
 	
-	            if (third.liquescent === _Exsurge3.LiquescentType.SmallAscending) third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else if (third.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	            if (third.liquescent === _Exsurge3.LiquescentType.SmallAscending) third.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else if (third.liquescent === _Exsurge3.LiquescentType.LargeDescending) {
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
 	                overhangThirdNote = false;
-	            } else third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
-	
-	            third.performLayout(ctxt);
+	            } else third.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	
 	            if (overhangThirdNote) third.bounds.x = second.bounds.right() - third.bounds.width;else third.bounds.x = x;
 	
@@ -6506,24 +6511,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (firstStaffPosition - secondStaffPosition) {
 	                case 1:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus1);
 	                    break;
 	                case 2:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus2);
 	                    break;
 	                case 3:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus3);
 	                    break;
 	                case 4:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus4);
 	                    break;
 	                default:
 	                    // fixme: should we generate an error here?
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	                    break;
 	            }
-	
-	            first.performLayout(ctxt);
 	
 	            // add the first line and the swash
 	            line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, true);
@@ -6535,8 +6538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // the second glyph does not draw anything, but it still has logical importance for the editing
 	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            second.performLayout(ctxt);
+	            second.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	            second.bounds.x = x;
 	            x = second.bounds.right();
 	            this.addVisualizer(second);
@@ -6549,8 +6551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            third.performLayout(ctxt);
+	            third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	            third.bounds.x = x;
 	            x = third.bounds.right();
 	            this.addVisualizer(third);
@@ -6563,8 +6564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fourth.performLayout(ctxt);
+	            fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	            fourth.bounds.x = x;
 	            this.addVisualizer(fourth);
 	
@@ -6602,28 +6602,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note = this.notes[0];
 	
 	            if (note.liquescent !== _Exsurge3.LiquescentType.None) {
-	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeDescending) note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
+	                if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumInclinatumLiquescent);else if (note.shape === _Exsurge3.NoteShape.Oriscus) note.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeAscending) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note.liquescent === _Exsurge3.LiquescentType.LargeDescending) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);
 	            } else {
-	                switch (note.shape) {
-	                    case _Exsurge3.NoteShape.Cavum:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCavum);
-	                        break;
 	
-	                    case _Exsurge3.NoteShape.Inclinatum:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);
-	                        break;
-	
-	                    case _Exsurge3.NoteShape.Quilisma:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	                        break;
-	
-	                    default:
-	                        note.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	                        break;
-	                }
+	                if (note.shapeModifiers & _Exsurge3.NoteShapeModifiers.Cavum) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCavum);else if (note.shape === _Exsurge3.NoteShape.Inclinatum) note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumInclinatum);else if (note.shape === _Exsurge3.NoteShape.Quilisma) note.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);else note.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	            }
 	
-	            note.performLayout(ctxt);
 	            this.addVisualizer(note);
 	
 	            this.origin.x = note.origin.x;
@@ -6641,8 +6625,196 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var Scandicus = exports.Scandicus = function (_Neume14) {
-	    _inherits(Scandicus, _Neume14);
+	var Salicus = exports.Salicus = function (_Neume14) {
+	    _inherits(Salicus, _Neume14);
+	
+	    function Salicus() {
+	        _classCallCheck(this, Salicus);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Salicus).apply(this, arguments));
+	    }
+	
+	    _createClass(Salicus, [{
+	        key: 'performLayout',
+	        value: function performLayout(ctxt) {
+	            _get(Object.getPrototypeOf(Salicus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	            var first = this.notes[0];
+	            var second = this.notes[1];
+	            var third = this.notes[2];
+	
+	            var x = 0;
+	
+	            // first note of a salicus is always a punctum cuadratum
+	            first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            x += first.bounds.width;
+	
+	            // if the next note doesn't require a stem connector, then add a tad bit
+	            // of spacing here
+	            if (!(second.shapeModifiers & _Exsurge3.NoteShapeModifiers.Stemmed)) x += ctxt.intraNeumeSpacing;
+	
+	            // second note is always an oriscus, which may or may not be stemmed
+	            // to the first
+	            second.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusAsc);
+	
+	            // do we need a line between first and second notes?
+	            if (second.shapeModifiers & _Exsurge3.NoteShapeModifiers.Stemmed && second.staffPosition - first.staffPosition > 1) {
+	                // need stem when notes are greater than 1 space apart
+	
+	                var line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
+	                x -= line.bounds.width;
+	                line.bounds.x = x;
+	                this.addVisualizer(line);
+	            }
+	
+	            second.bounds.x = x;
+	            x += second.bounds.width;
+	
+	            // third note can be a punctum cuadratum or various liquescent forms
+	            if (third.liquescent === _Exsurge3.LiquescentType.LargeAscending) third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (third.liquescent === _Exsurge3.LiquescentType.LargeDescending) third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else if (third.liquescent & _Exsurge3.LiquescentType.Small) {
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	                third.bounds.x -= third.bounds.width; // right aligned
+	            } else {
+	                    // virga terminator
+	                    third.setGlyph(ctxt, Virga.getGlyphCode(third.staffPosition));
+	                }
+	
+	            // do we need a line between second and third notes?
+	            if (third.staffPosition - second.staffPosition > 1) {
+	
+	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	                line.bounds.x = second.bounds.right() - line.bounds.width;
+	                this.addVisualizer(line);
+	
+	                if (!(third.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.width;
+	            }
+	
+	            third.bounds.x += x;
+	
+	            // add the note elements
+	            this.addVisualizer(first);
+	            this.addVisualizer(second);
+	            this.addVisualizer(third);
+	
+	            this.origin.x = first.origin.x;
+	            this.origin.y = first.origin.y;
+	
+	            this.finishLayout(ctxt);
+	        }
+	    }]);
+	
+	    return Salicus;
+	}(Neume);
+	
+	/*
+	 * Scandicus
+	 */
+	
+	
+	var SalicusFlexus = exports.SalicusFlexus = function (_Neume15) {
+	    _inherits(SalicusFlexus, _Neume15);
+	
+	    function SalicusFlexus() {
+	        _classCallCheck(this, SalicusFlexus);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(SalicusFlexus).apply(this, arguments));
+	    }
+	
+	    _createClass(SalicusFlexus, [{
+	        key: 'performLayout',
+	        value: function performLayout(ctxt) {
+	            _get(Object.getPrototypeOf(SalicusFlexus.prototype), 'performLayout', this).call(this, ctxt);
+	
+	            var first = this.notes[0];
+	            var second = this.notes[1];
+	            var third = this.notes[2];
+	            var fourth = this.notes[3];
+	
+	            var x = 0;
+	
+	            // first note of a salicus is always a punctum cuadratum
+	            first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            x += first.bounds.width;
+	
+	            // if the next note doesn't require a stem connector, then add a tad bit
+	            // of spacing here
+	            if (!(second.shapeModifiers & _Exsurge3.NoteShapeModifiers.Stemmed)) x += ctxt.intraNeumeSpacing;
+	
+	            // second note is always an oriscus, which may or may not be stemmed
+	            // to the first
+	            second.setGlyph(ctxt, _Exsurge2.GlyphCode.OriscusAsc);
+	
+	            // do we need a line between first and second notes?
+	            if (second.shapeModifiers & _Exsurge3.NoteShapeModifiers.Stemmed && second.staffPosition - first.staffPosition > 1) {
+	                // need stem when notes are greater than 1 space apart
+	
+	                var line = new _Exsurge2.NeumeLineVisualizer(ctxt, first, second, false);
+	                x -= line.bounds.width;
+	                line.bounds.x = x;
+	                this.addVisualizer(line);
+	            }
+	
+	            second.bounds.x = x;
+	            x += second.bounds.width;
+	
+	            // third note can be a punctum cuadratum or various liquescent forms,
+	            // ...based on note four though!
+	            if (fourth.liquescent & _Exsurge3.LiquescentType.Small) third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else third.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	            // do we need a line between second and third notes?
+	            if (third.staffPosition - second.staffPosition > 1) {
+	
+	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
+	                line.bounds.x = second.bounds.right() - line.bounds.width;
+	                this.addVisualizer(line);
+	
+	                x -= line.bounds.width;
+	            }
+	
+	            third.bounds.x += x;
+	            x += third.bounds.width;
+	
+	            // finally, do the fourth note
+	            if (fourth.liquescent === _Exsurge3.LiquescentType.LargeAscending) fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (fourth.liquescent === _Exsurge3.LiquescentType.LargeDescending) fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else if (fourth.liquescent & _Exsurge3.LiquescentType.Small) {
+	                fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                fourth.bounds.x -= fourth.bounds.width; // right-aligned
+	            } else fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	
+	            // do we need a line between second and third notes?
+	            if (third.staffPosition - fourth.staffPosition > 1) {
+	
+	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, third, fourth, false);
+	                line.bounds.x = third.bounds.right() - line.bounds.width;
+	                this.addVisualizer(line);
+	
+	                if (!(fourth.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.width;
+	            }
+	
+	            fourth.bounds.x += x;
+	
+	            // add the note elements
+	            this.addVisualizer(first);
+	            this.addVisualizer(second);
+	            this.addVisualizer(third);
+	            this.addVisualizer(fourth);
+	
+	            this.origin.x = first.origin.x;
+	            this.origin.y = first.origin.y;
+	
+	            this.finishLayout(ctxt);
+	        }
+	    }]);
+	
+	    return SalicusFlexus;
+	}(Neume);
+	
+	/*
+	 * Scandicus
+	 */
+	
+	
+	var Scandicus = exports.Scandicus = function (_Neume16) {
+	    _inherits(Scandicus, _Neume16);
 	
 	    function Scandicus() {
 	        _classCallCheck(this, Scandicus);
@@ -6666,22 +6838,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var second = this.notes[1];
 	            var third = this.notes[2];
 	
-	            first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            if (second.isLiquescent || third.isLiquescent) {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	                second.setGlyph(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
 	            } else {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	                second.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	            }
 	
 	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            first.performLayout(ctxt);
-	            second.performLayout(ctxt);
-	            third.performLayout(ctxt);
+	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
 	
@@ -6710,8 +6878,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var ScandicusFlexus = exports.ScandicusFlexus = function (_Neume15) {
-	    _inherits(ScandicusFlexus, _Neume15);
+	var ScandicusFlexus = exports.ScandicusFlexus = function (_Neume17) {
+	    _inherits(ScandicusFlexus, _Neume17);
 	
 	    function ScandicusFlexus() {
 	        _classCallCheck(this, ScandicusFlexus);
@@ -6732,23 +6900,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var third = this.notes[2];
 	            var fourth = this.notes[3];
 	
-	            first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            if (second.iisLiquescent || third.isLiquescent) {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
+	            if (second.isLiquescent || third.isLiquescent) {
+	                second.setGlyph(ctxt, _Exsurge2.GlyphCode.BeginningAscLiquescent);
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);
 	            } else {
-	                second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusLower);
-	                third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	                second.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusLower);
+	                third.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	            }
 	
 	            // fixme: can a scandicus have a quilisma like this?
-	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
-	
-	            first.performLayout(ctxt);
-	            second.performLayout(ctxt);
-	            third.performLayout(ctxt);
-	            fourth.performLayout(ctxt);
+	            if (second.shape === _Exsurge3.NoteShape.Quilisma) second.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	
 	            var line = new _Exsurge2.NeumeLineVisualizer(ctxt, second, third, false);
 	
@@ -6789,8 +6952,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var TextOnly = exports.TextOnly = function (_Neume16) {
-	    _inherits(TextOnly, _Neume16);
+	var TextOnly = exports.TextOnly = function (_Neume18) {
+	    _inherits(TextOnly, _Neume18);
 	
 	    function TextOnly() {
 	        _classCallCheck(this, TextOnly);
@@ -6821,8 +6984,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var Torculus = exports.Torculus = function (_Neume17) {
-	    _inherits(Torculus, _Neume17);
+	var Torculus = exports.Torculus = function (_Neume19) {
+	    _inherits(Torculus, _Neume19);
 	
 	    function Torculus() {
 	        _classCallCheck(this, Torculus);
@@ -6839,24 +7002,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var note2 = this.notes[1];
 	            var note3 = this.notes[2];
 	            var drawFirstLine = note2.staffPosition - note1.staffPosition > 1;
-	            var note3SmallLiquescent = false;
 	            var line;
 	
 	            if (note1.liquescent === _Exsurge3.LiquescentType.InitioDebilis) {
-	                note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                note1.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
 	                drawFirstLine = true; // always draw first line with an initio debilis
-	            } else note1.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            } else note1.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            note2.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	            note2.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
-	            if (note3.liquescent === _Exsurge3.LiquescentType.LargeAscending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.LargeDescending) note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else if (note3.liquescent === _Exsurge3.LiquescentType.SmallAscending || note3.liquescent === _Exsurge3.LiquescentType.SmallDescending) {
-	                note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
-	                note3SmallLiquescent = true;
-	            } else note3.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	
-	            note1.performLayout(ctxt);
-	            note2.performLayout(ctxt);
-	            note3.performLayout(ctxt);
+	            if (note3.liquescent & _Exsurge3.LiquescentType.Small) {
+	                note3.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingDesLiquescent);
+	                note3.bounds.x -= note3.bounds.width; // right aligned
+	            } else if (note3.liquescent & _Exsurge3.LiquescentType.Ascending) note3.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumAscLiquescent);else if (note3.liquescent & _Exsurge3.LiquescentType.Descending) note3.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratumDesLiquescent);else note3.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	
 	            var x = note1.bounds.right();
 	
@@ -6874,12 +7032,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // do we need to draw a descending line?
 	            if (note2.staffPosition - note3.staffPosition > 1) {
 	                line = new _Exsurge2.NeumeLineVisualizer(ctxt, note2, note3, false);
-	                x -= line.bounds.width;
-	                line.bounds.x = x;
+	                line.bounds.x = x - line.bounds.width;
 	                this.addVisualizer(line);
+	
+	                if (!(note3.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.x;
 	            }
 	
-	            if (note3SmallLiquescent) note3.bounds.x = x - note3.bounds.width;else note3.bounds.x = x;
+	            note3.bounds.x += x;
 	
 	            this.addVisualizer(note1);
 	            this.addVisualizer(note2);
@@ -6900,8 +7059,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var TorculusResupinus = exports.TorculusResupinus = function (_Neume18) {
-	    _inherits(TorculusResupinus, _Neume18);
+	var TorculusResupinus = exports.TorculusResupinus = function (_Neume20) {
+	    _inherits(TorculusResupinus, _Neume20);
 	
 	    function TorculusResupinus() {
 	        _classCallCheck(this, TorculusResupinus);
@@ -6929,15 +7088,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (first.shape) {
 	                case _Exsurge3.NoteShape.Quilisma:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	                    break;
 	
 	                default:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	                    break;
 	            }
 	
-	            first.performLayout(ctxt);
 	            x = first.bounds.right();
 	            this.addVisualizer(first);
 	
@@ -6951,32 +7109,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (Math.abs(secondStaffPosition - thirdStaffPosition)) {
 	                case 1:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus1);
 	                    break;
 	                case 2:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus2);
 	                    break;
 	                case 3:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus3);
 	                    break;
 	                case 4:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus4);
 	                    break;
 	                default:
 	                    // fixme: this should be an error!
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus1);
 	                    break;
 	            }
 	
-	            second.performLayout(ctxt);
 	            second.bounds.x = x;
 	            x = second.bounds.right();
 	            this.addVisualizer(second);
 	
 	            // the third glyph does not draw anything, but it still has logical importance for the editing
 	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            third.performLayout(ctxt);
+	            third.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	
 	            // do we need an ascending line after the porrectus swash?
 	            if (fourthStaffPosition - thirdStaffPosition > 1) {
@@ -6985,9 +7141,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            if (fourth.isLiquescent) fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
+	            if (fourth.isLiquescent) fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.TerminatingAscLiquescent);else fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PodatusUpper);
 	
-	            fourth.performLayout(ctxt);
 	            fourth.bounds.x += x;
 	            this.addVisualizer(fourth);
 	
@@ -7006,8 +7161,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var TorculusResupinusFlexus = exports.TorculusResupinusFlexus = function (_Neume19) {
-	    _inherits(TorculusResupinusFlexus, _Neume19);
+	var TorculusResupinusFlexus = exports.TorculusResupinusFlexus = function (_Neume21) {
+	    _inherits(TorculusResupinusFlexus, _Neume21);
 	
 	    function TorculusResupinusFlexus() {
 	        _classCallCheck(this, TorculusResupinusFlexus);
@@ -7036,15 +7191,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (first.shape) {
 	                case _Exsurge3.NoteShape.Quilisma:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Quilisma);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.Quilisma);
 	                    break;
 	
 	                default:
-	                    first.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
+	                    first.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	                    break;
 	            }
 	
-	            first.performLayout(ctxt);
 	            x = first.bounds.right();
 	            this.addVisualizer(first);
 	
@@ -7058,32 +7212,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            switch (secondStaffPosition - thirdStaffPosition) {
 	                case 1:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus1);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus1);
 	                    break;
 	                case 2:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus2);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus2);
 	                    break;
 	                case 3:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus3);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus3);
 	                    break;
 	                case 4:
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.Porrectus4);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.Porrectus4);
 	                    break;
 	                default:
 	                    // fixme: should we generate an error here?
-	                    second.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
+	                    second.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	                    break;
 	            }
 	
-	            second.performLayout(ctxt);
 	            second.bounds.x = x;
 	            x = second.bounds.right();
 	            this.addVisualizer(second);
 	
 	            // the second glyph does not draw anything, but it still has logical importance for the editing
 	            // environment...it can respond to changes which will then change the swash glyph of the first.
-	            third.setGlyphShape(ctxt, _Exsurge2.GlyphCode.None);
-	            third.performLayout(ctxt);
+	            third.setGlyph(ctxt, _Exsurge2.GlyphCode.None);
 	            third.bounds.x = x;
 	            x = third.bounds.right();
 	            this.addVisualizer(third);
@@ -7096,8 +7248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            fourth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fourth.performLayout(ctxt);
+	            fourth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	            fourth.bounds.x = x;
 	            x = fourth.bounds.right();
 	            this.addVisualizer(fourth);
@@ -7110,8 +7261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            fifth.setGlyphShape(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
-	            fifth.performLayout(ctxt);
+	            fifth.setGlyph(ctxt, _Exsurge2.GlyphCode.PunctumCuadratum);
 	            fifth.bounds.x = x;
 	            this.addVisualizer(fifth);
 	
@@ -7134,8 +7284,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var Tristropha = exports.Tristropha = function (_Neume20) {
-	    _inherits(Tristropha, _Neume20);
+	var Tristropha = exports.Tristropha = function (_Neume22) {
+	    _inherits(Tristropha, _Neume22);
 	
 	    function Tristropha() {
 	        _classCallCheck(this, Tristropha);
@@ -7154,15 +7304,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var staffPosition = note1.staffPosition;
 	
-	            note1.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note1));
-	            note1.performLayout(ctxt);
+	            note1.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note1));
 	
-	            note2.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note2));
-	            note2.performLayout(ctxt);
+	            note2.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note2));
 	            note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 	
-	            note3.setGlyphShape(ctxt, Apostropha.determineNoteGlyphCode(note3));
-	            note3.performLayout(ctxt);
+	            note3.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note3));
 	            note3.bounds.x += note1.bounds.width + note2.bounds.width + ctxt.intraNeumeSpacing * 2;
 	
 	            this.addVisualizer(note1);
@@ -7184,8 +7331,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	
-	var Virga = exports.Virga = function (_Neume21) {
-	    _inherits(Virga, _Neume21);
+	var Virga = exports.Virga = function (_Neume23) {
+	    _inherits(Virga, _Neume23);
 	
 	    function Virga() {
 	        _classCallCheck(this, Virga);
@@ -7203,8 +7350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var staffPosition = note.staffPosition;
 	
 	            var glyphCode = Virga.getGlyphCode(staffPosition);
-	            note.setGlyphShape(ctxt, glyphCode);
-	            note.performLayout(ctxt);
+	            note.setGlyph(ctxt, glyphCode);
 	
 	            this.addVisualizer(note);
 	

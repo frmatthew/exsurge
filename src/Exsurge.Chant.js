@@ -33,27 +33,41 @@ import { Gabc } from './Exsurge.Gabc'
 
 export var LiquescentType = {
   None: 0,
-  LargeAscending: 1,
-  LargeDescending: 2,
-  SmallAscending: 3,
-  SmallDescending: 4,
-  InitioDebilis: 5
+
+  // flags that can be combined, though of course it
+  // it doesn't make sense to combine some!
+  Large: 1 << 0,
+  Small: 1 << 1,
+  Ascending: 1 << 2,
+  Descending: 1 << 3,
+  InitioDebilis: 1 << 4,
+
+  // handy liquescent types
+  LargeAscending: 1 << 0 | 1 << 2,
+  LargeDescending: 1 << 0 | 1 << 3,
+  SmallAscending: 1 << 1 | 1 << 2,
+  SmallDescending: 1 << 1 | 1 << 3
 };
 
 export var NoteShape = {
-  Default: 0,
+  // shapes
+  Default:    0,
+  Virga:      1,
+  Inclinatum: 2,
+  Quilisma:   3,
+  Stropha:    4,
+  Oriscus:    5
+};
 
-  Inclinatum: 1,
-  Virga: 2,
-  Quilisma: 3,
-  Cavum: 4,
-  OriscusAscending: 5,
-  OriscusDescending: 6,
+export var NoteShapeModifiers = {
 
-  Stropha: 7,
-
-  AscLiquescent: 8,
-  DesLiquescent: 9
+  // flags which modify the shape
+  // not all of them apply to every shape of course
+  None:       0,
+  Ascending:  1 << 0,
+  Descending: 1 << 1,
+  Cavum:      1 << 2,
+  Stemmed:    1 << 3
 };
 
 /**
@@ -80,21 +94,15 @@ export class Note extends ChantLayoutElement {
     this.staffPosition = 0;
     this.liquescent = LiquescentType.None;
     this.shape = NoteShape.Default;
+    this.shapeModifiers = NoteShapeModifiers.None;
     this.markings = [];
   }
 
-  setGlyphShape(ctxt, glyphCode) {
+  setGlyph(ctxt, glyphCode) {
     if (this.glyphVisualizer)
-      this.glyphVisualizer.setGlyphShape(ctxt, glyphCode);
+      this.glyphVisualizer.setGlyph(ctxt, glyphCode);
     else
       this.glyphVisualizer = new GlyphVisualizer(ctxt, glyphCode);
-  }
-
-  performLayout(ctxt) {
-
-    if (this.glyphVisualizer === null) {
-      console.log("Tried to perform layout on a note with no glyphCode assigned!");
-    }
 
     this.glyphVisualizer.setStaffPosition(ctxt, this.staffPosition);
 
@@ -106,6 +114,14 @@ export class Note extends ChantLayoutElement {
 
     this.origin.x = this.glyphVisualizer.origin.x;
     this.origin.y = this.glyphVisualizer.origin.y;
+  }
+
+  // a utility function for modifiers
+  shapeModifierMatches(shapeModifier) {
+    if (shapeModifier === NoteShapeModifiers.None)
+      return this.shapeModifier === NoteShapeModifiers.None;
+    else
+      return this.shapeModifier & shapeModifier !== 0;
   }
 
   draw(ctxt) {
