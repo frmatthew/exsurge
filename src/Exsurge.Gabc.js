@@ -95,6 +95,7 @@ export var Gabc = {
         if (createDropCap && score.dropCap === null && lyricText !== "") {
           score.dropCap = new DropCap(ctxt, lyricText.substring(0, 1));
           lyricText = lyricText.substring(1);
+          words.dropCapIndex = i;
         }
 
         // create lyric if we have it...
@@ -157,25 +158,42 @@ export var Gabc = {
     while(i < minLen && oldWords[i] === newWords[i]) {
       ++i;
     }
-    var sameAtBeginning = i,
-        sameAtEnd = 0;
+    var numSameWordsAtBeginning = i,
+        numSameWordsAtEnd = 0;
     if(i < minLen) {
       // Count how many words are the same at the ends of the arrays (but only if the shorter array wasn't completely a subset of the longer)
       i = 1;
       while(i <= minLen && oldWords[lenOld-i] === newWords[lenNew-i]) {
         ++i;
       }
-      sameAtEnd = i - 1;
+      numSameWordsAtEnd = i - 1;
     }
     if(lenOld === lenNew && i === lenOld) {
       // the gabc source has not been altered.  No need to do anything.
       return;
     }
-    var numWordsRemoved = lenOld - sameAtEnd - sameAtBeginning;
-    var wordsAdded = newWords.slice(sameAtBeginning, lenNew - sameAtEnd);
+    
+    var dcIndex = score.gabcSource.dropCapIndex;
+    if(typeof dcIndex == 'number' && dcIndex >= numSameWordsAtBeginning && dcIndex <= (lenOld - numSameWordsAtEnd)) {
+      // if the drop cap was among the words removed (or if new words were inserted before it),
+      // we need to remove it from the score, so that it will make a new one...
+      score.dropCap = null;
+      // recompile the next words as well, if there is one, in case it has the new lyric for the drop cap.
+      if(numSameWordsAtEnd > 0) {
+        --numSameWordsAtEnd;
+      }
+    }
+
+    var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
+    var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
     var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, score.startingClef);
+    
+    // if there was a dropcap handled in the word that was added, we need to update the dropCapIndex in score.gabcSource
+    if(typeof wordsAdded.dropCapIndex == 'number') {
+      score.gabcSource.dropCapIndex = wordsAdded.dropCapIndex + numSameWordsAtBeginning;
+    }
     // splice the added words into the gabcSource array
-    var wordsRemoved = [].splice.apply(score.gabcSource, [sameAtBeginning, numWordsRemoved].concat(wordsAdded));
+    var wordsRemoved = [].splice.apply(score.gabcSource, [numSameWordsAtBeginning, numWordsRemoved].concat(wordsAdded));
     // calculate index to put the new notations in the notations array, based on where the last identical word's notations are
     // calculate length of notations to remove based on where the last removed word's notations are.
     var notationIndex = 0, numNotationsRemoved = 0;
@@ -184,7 +202,7 @@ export var Gabc = {
       var lastWordRemoved = wordsRemoved[wordsRemoved.length - 1];
       numNotationsRemoved = lastWordRemoved.notationIndex + lastWordRemoved.notationLength - notationIndex;
     } else {
-      var lastSameWord = score.gabcSource[sameAtBeginning - 1];
+      var lastSameWord = score.gabcSource[numSameWordsAtBeginning - 1];
       if(lastSameWord) notationIndex = lastSameWord.notationIndex + lastSameWord.notationLength;
     }
     if(notationIndex) {
@@ -195,7 +213,7 @@ export var Gabc = {
     // the words that have not changed are now associated with notations that may have shifted position in the notations array
     var notationOffset = newNotations.length - numNotationsRemoved;
     if(notationOffset) {
-      score.gabcSource.slice(sameAtBeginning + wordsAdded.length).forEach(function(word){
+      score.gabcSource.slice(numSameWordsAtBeginning + wordsAdded.length).forEach(function(word){
         word.notationIndex += notationOffset
       });
     }
