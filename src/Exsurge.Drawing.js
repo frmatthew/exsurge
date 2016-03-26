@@ -548,7 +548,7 @@ MarkupStackFrame.createStackFrame = function(symbol, startIndex) {
       properties = 'fill:#f00;'; // SVG text color is set by the fill property
       break;
     case smallCapsMarkup:
-      properties = "font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
+      properties = "font-variant:small-caps;font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
       break;
   }
 
