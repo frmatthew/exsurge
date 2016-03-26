@@ -4708,17 +4708,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (items.length === 0) continue;
 	
-	        // if we are to create a dropCap and we haven't done so yet, do it now
-	        if (createDropCap && score.dropCap === null && lyricText !== "") {
-	          score.dropCap = new _Exsurge2.DropCap(ctxt, lyricText.substring(0, 1));
-	          lyricText = lyricText.substring(1);
-	        }
-	
 	        // create lyric if we have it...
 	        if (lyricText !== "") {
 	
 	          var lyricType;
 	          if (currSyllable === 0 && matches.length === 1) lyricType = _Exsurge2.LyricType.SingleSyllable;else if (currSyllable === 0 && matches.length > 1) lyricType = _Exsurge2.LyricType.BeginningSyllable;else if (currSyllable === matches.length - 1) lyricType = _Exsurge2.LyricType.EndingSyllable;else lyricType = _Exsurge2.LyricType.MiddleSyllable;
+	
+	          // if we are to create a dropCap and we haven't done so yet, do it now
+	          if (createDropCap && score.dropCap === null) {
+	            score.dropCap = new _Exsurge2.DropCap(ctxt, lyricText.substring(0, 1));
+	
+	            // if the dropcap is a single character syllable (vowel) that is the
+	            // beginning of the word, then we use a hyphen in place of the lyric text
+	            // and treat it as a single syllable.
+	            if (lyricText.length === 1 && lyricType === _Exsurge2.LyricType.BeginningSyllable) {
+	              lyricText = ctxt.syllableConnector;
+	              lyricType = _Exsurge2.LyricType.SingleSyllable;
+	            } else lyricText = lyricText.substring(1);
+	          }
 	
 	          // add the lyrics to the first notation that makes sense...
 	          var notationWithLyrics = null;
