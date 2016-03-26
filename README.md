@@ -44,9 +44,15 @@ score.performLayout(ctxt, function() {
 
 Very few good chant layout software exist for developers. exsurge allows web developers to insert beautiful chant into their workflow with the simplicity of a little JavaScript.
 
-## Installation
+## Developer Installation
 
-Under construction...
+After grabbing the repo from github, it's a simple matter of using `npm` to build exsurge:
+
+```npm install
+npm run build
+```
+
+Alternatively, you can run `npm run dev` which will watch and compile the library after saved each change.
 
 ## API Reference
 
