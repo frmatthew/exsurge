@@ -1,13 +1,14 @@
 FROM node:argon
 
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /src
 
-COPY package.json /usr/src/app/
-RUN npm install
+ADD package.json /src
+RUN cd /src && npm install
 
 # Bundle app source
-COPY . /usr/src/app
+ADD . /src
 
-# CMD [ "npm", "run", "build" ]
+RUN npm run build
+
+# CMD [ "npm", "run build" ]
