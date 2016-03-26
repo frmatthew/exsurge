@@ -72,7 +72,7 @@ export class Latin extends Language {
     // some words that are simply exceptions to standard syllabification rules!
     var wordExceptions = new Object();
 
-    // ui combos pronounced as dipthongs
+    // ui combos pronounced as diphthongs
     wordExceptions["huius"] = ["hui", "us"];
     wordExceptions["cuius"] = ["cui", "us"];
     wordExceptions["huic"] = ["huic"];
@@ -280,8 +280,14 @@ export class Latin extends Language {
     for (i = 0, end = this.vowels.length; i < end; i++) {
       index = workingString.indexOf(this.vowels[i], startIndex);
 
-      if (index >= 0)
+      if (index >= 0) {
+        // if the first vowel found is a U, and it is immediately followed by another vowel, (e.g., sanguis, quis), the first u counts as a consonant:
+        // (in practice, this only affects words such as equus that contain a uu, since the alphabetically earlier vowel would be found before the U)
+        if(this.vowels[i] == 'u' && this.isVowel(workingString[index + 1])) {
+          ++index;
+        }
         return { found: true, startIndex: index, length: 1 };
+      }
     }
 
     // no vowels sets found after startIndex!
@@ -306,11 +312,11 @@ export class Spanish extends Language {
     this.strongVowels = ['a', 'e', 'o', 'á', 'é', 'í', 'ó', 'ú'];
 
 
-    this.dipthongs = ["ai", "ei", "oi", "ui", "ia", "ie", "io", "iu", "au", "eu", "ou", "ua", "ue", "uo",
+    this.diphthongs = ["ai", "ei", "oi", "ui", "ia", "ie", "io", "iu", "au", "eu", "ou", "ua", "ue", "uo",
                        "ái", "éi", "ói", "úi", "iá", "ié", "ió", "iú", "áu", "éu", "óu", "uá", "ué", "uó",
                        "üe", "üi"];
 
-    this.uDipthongExpections = ["gue", "gui", "qua", "que", "qui", "quo"];
+    this.uDiphthongExceptions = ["gue", "gui", "qua", "que", "qui", "quo"];
   }
 
   // c must be lowercase!
@@ -522,8 +528,8 @@ export class Spanish extends Language {
         if (d[0] === 'u' && index > 0) {
           var tripthong = s.substr(index - 1, 3).toLowerCase();
 
-          for (j = 0, endj = this.uDipthongExpections.length; i < endj; j++) {
-            if (tripthong === this.uDipthongExpections[j]) {
+          for (j = 0, endj = this.uDiphthongExceptions.length; i < endj; j++) {
+            if (tripthong === this.uDiphthongExceptions[j]) {
               // search from after the u...
               return this.findVowelSegment(s, index + 1);
             }
