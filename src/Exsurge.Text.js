@@ -283,7 +283,7 @@ export class Latin extends Language {
       if (index >= 0) {
         // if the first vowel found is a U, and it is immediately followed by another vowel, (e.g., sanguis, quis), the first u counts as a consonant:
         // (in practice, this only affects words such as equus that contain a uu, since the alphabetically earlier vowel would be found before the U)
-        if(this.vowels[i] == 'u' && this.isVowel(workingString[index + 1])) {
+        if(this.vowels[i] === 'u' && this.isVowel(workingString[index + 1])) {
           ++index;
         }
         return { found: true, startIndex: index, length: 1 };
