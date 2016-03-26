@@ -174,19 +174,25 @@ export var Gabc = {
     }
     
     var dcIndex = score.gabcSource.dropCapIndex;
-    if(typeof dcIndex == 'number' && dcIndex >= numSameWordsAtBeginning && dcIndex <= (lenOld - numSameWordsAtEnd)) {
-      // if the drop cap was among the words removed (or if new words were inserted before it),
+    // if there is a drop cap, and it is not among the words at the beginning that have remained the same,
+    if(typeof dcIndex == 'number' && dcIndex >= numSameWordsAtBeginning) {
       // we need to remove it from the score, so that it will make a new one...
       score.dropCap = null;
-      // recompile the next words as well, if there is one, in case it has the new lyric for the drop cap.
-      if(numSameWordsAtEnd > 0) {
-        --numSameWordsAtEnd;
-      }
     }
 
     var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
     var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
     var newNotations = this.parseChantWords(ctxt, wordsAdded, score, createDropCap, score.startingClef);
+
+    if(createDropCap) {
+      // If we lost the drop cap, we need to go through, parsing the old words, until we find a new drop cap or get to the end.
+      while(score.dropCap === null && numSameWordsAtEnd > 0) {
+        var oldWord = oldWords.slice(-numSameWordsAtEnd);
+        newNotations = newNotations.concat(this.parseChantWords(ctxt, oldWord, createDropCap, score.startingClef));
+        wordsAdded.dropCapIndex = oldWord.dropCapIndex;
+        --numSameWordsAtEnd;
+      }
+    }
     
     // if there was a dropcap handled in the word that was added, we need to update the dropCapIndex in score.gabcSource
     if(typeof wordsAdded.dropCapIndex == 'number') {
