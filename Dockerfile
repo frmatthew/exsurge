@@ -10,5 +10,5 @@ RUN cd /src && npm install
 ADD . /src
 
 
-RUN npm run build
+RUN npm start
 
