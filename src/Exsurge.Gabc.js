@@ -25,7 +25,7 @@
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
 import { LyricType, Lyric, DropCap } from 'Exsurge.Drawing'
-import { Note, LiquescentType, NoteShape, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
+import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
@@ -35,7 +35,7 @@ import { ctxt } from 'Exsurge.Drawing'
 
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
-var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][owWvVrRsxy#~\+><_\.'012345]*/g;
+var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 
 export var Gabc = {
 
@@ -396,21 +396,17 @@ export var Gabc = {
         return new Neumes.Punctum();
       },
       handle: function(currNote, prevNote) {
-      
-        switch (currNote.shape) {
-          case NoteShape.Stropha:
-            return apostrophaState;
-          case NoteShape.Cavum:
-            return createNeume(new Neumes.Punctum(), true);
-          case NoteShape.OriscusAscending:
-            return oriscusState;
-          case NoteShape.OriscusDescending:
-            return oriscusState;
-          case NoteShape.Virga:
-            return virgaState;
-          default:
-            return punctumState;
-        }
+
+        if (currNote.shape === NoteShape.Virga)
+          return virgaState;
+        else if (currNote.shape === NoteShape.Stropha)
+          return apostrophaState;
+        else if (currNote.shape === NoteShape.Oriscus)
+          return oriscusState;
+        else if (currNote.shapeModifiers & NoteShapeModifiers.Cavum)
+          return createNeume(new Neumes.Punctum(), true);
+        else
+          return punctumState;
       }
     };
 
@@ -438,10 +434,15 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         
-        if (currNote.shape === NoteShape.Default && currNote.staffPosition > prevNote.staffPosition) {
-          // force previous oriscus to be ascending
-          prevNote.shape = NoteShape.OriscusAscending;
-          return createNeume(new Neumes.PesQuassus(), true);
+        if (currNote.shape === NoteShape.Default) {
+
+          if (currNote.staffPosition > prevNote.staffPosition) {
+            prevNote.shapeModifiers |= NoteShapeModifiers.Ascending;
+            return createNeume(new Neumes.PesQuassus(), true);
+          } else if (currNote.staffPosition < prevNote.staffPosition) {
+            prevNote.shapeModifiers |= NoteShapeModifiers.Descending;
+            return createNeume(new Neumes.Clivis(), true);
+          }
         } else
           // stand alone oriscus
           return createNeume(new Neumes.Oriscus(), true);
@@ -455,7 +456,12 @@ export var Gabc = {
       handle: function(currNote, prevNote) {
 
         if (currNote.staffPosition > prevNote.staffPosition) {
-          return scandicusState;
+
+          if (prevNote.shape === NoteShape.Oriscus)
+            return salicusState;
+          else
+            return scandicusState;
+
         } else if (currNote.staffPosition < prevNote.staffPosition) {
           if (currNote.shape === NoteShape.Inclinatum)
             return pesSubpunctisState;
@@ -517,6 +523,28 @@ export var Gabc = {
       }
     };
 
+    var salicusState = {
+      neume: function() {
+        return new Neumes.Salicus();
+      },
+      handle: function(currNote, prevNote) {
+
+        if (currNote.staffPosition < prevNote.staffPosition)
+          return salicusFlexusState;
+        else
+          return createNeume(new Neumes.Salicus(), false);
+      }
+    };
+
+    var salicusFlexusState = {
+      neume: function() {
+        return new Neumes.SalicusFlexus();
+      },
+      handle: function(currNote, prevNote) {
+        return createNeume(new Neumes.SalicusFlexus(), false);
+      }
+    };
+
     var scandicusState = {
       neume: function() {
         return new Neumes.Scandicus();
@@ -572,7 +600,7 @@ export var Gabc = {
         return new Neumes.Apostropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Apostropha)
+        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
           return distrophaState;
         else
           return createNeume(new Neumes.Apostropha(), false);
@@ -584,7 +612,7 @@ export var Gabc = {
         return new Neumes.Distropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Apostropha)
+        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
           return createNeume(new Neumes.Tristropha(), true);
         else
           return createNeume(new Neumes.Distropha(), false);
@@ -719,13 +747,13 @@ export var Gabc = {
           note.markings.push(mark);
           break;
 
-          //note shapes
+        //note shapes
         case 'r':
           if (haveLookahead && lookahead === '1') {
             note.markings.push(new Markings.AcuteAccent(note));
             i++;
           } else
-            note.shape = NoteShape.Cavum;
+            note.shapeModifiers |= NoteShapeModifiers.Cavum;
           break;
 
         case 's':
@@ -741,31 +769,43 @@ export var Gabc = {
           break;
 
         case 'o':
+          note.shape = NoteShape.Oriscus;
           if (haveLookahead && lookahead === '<') {
-            note.shape = NoteShape.OriscusAscending;
+            note.shapeModifiers |= NoteShapeModifiers.Ascending;
             i++;
           } else if (haveLookahead && lookahead === '>') {
-            note.shape = NoteShape.OriscusDescending;
+            note.shapeModifiers |= NoteShapeModifiers.Descending;
             i++;
           } else
-            note.shape = NoteShape.OriscusAscending;
+            note.shapeModifiers |= NoteShapeModifiers.Ascending;
+          break;
+
+        case 'O':
+          note.shape = NoteShape.Oriscus;
+          if (haveLookahead && lookahead === '<') {
+            note.shapeModifiers |= NoteShapeModifiers.Ascending | NoteShapeModifiers.Stemmed;
+            i++;
+          } else if (haveLookahead && lookahead === '>') {
+            note.shapeModifiers |= NoteShapeModifiers.Descending | NoteShapeModifiers.Stemmed;
+            i++;
+          } else
+            note.shapeModifiers |= NoteShapeModifiers.Ascending | NoteShapeModifiers.Stemmed;
           break;
 
         // liquescents
         case '~':
           if (note.shape === NoteShape.Inclinatum)
-            note.liquescent = LiquescentType.SmallDescending;
-          else if (note.shape === NoteShape.OriscusAscending ||
-            note.shape === NoteShape.OriscusDescending)
-            note.liquescent = LiquescentType.LargeAscending;
+            note.liquescent |= LiquescentType.Small;
+          else if (note.shape === NoteShape.Oriscus)
+            note.liquescent |= LiquescentType.Large;
           else
-            note.liquescent = LiquescentType.SmallAscending;
+            note.liquescent |= LiquescentType.Small;
           break;
         case '<':
-          note.liquescent = LiquescentType.LargeAscending;
+          note.liquescent |= LiquescentType.Ascending;
           break;
         case '>':
-          note.liquescent = LiquescentType.LargeDescending;
+          note.liquescent |= LiquescentType.Descending;
           break;
 
         // accidentals

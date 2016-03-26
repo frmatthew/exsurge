@@ -31,6 +31,7 @@ import { Latin } from 'Exsurge.Text'
 // load in the web font for special chant characters here:
 var __exsurgeCharactersFont = require("url?limit=30000!../assets/fonts/ExsurgeChar.otf");
 
+
 export let GlyphCode = {
 
   None: "None",
@@ -55,6 +56,7 @@ export let GlyphCode = {
   Natural: "Natural",
   OriscusAsc: "OriscusAsc",
   OriscusDes: "OriscusDes",
+  OriscusLiquescent: "OriscusLiquescent",
 
   PodatusLower: "PodatusLower",
   PodatusUpper: "PodatusUpper",
@@ -461,10 +463,10 @@ export class GlyphVisualizer extends ChantLayoutElement {
 
     this.glyph = null;
 
-    this.setGlyphShape(ctxt, glyphCode);
+    this.setGlyph(ctxt, glyphCode);
   }
 
-  setGlyphShape(ctxt, glyphCode) {
+  setGlyph(ctxt, glyphCode) {
 
     if (this.glyphCode === glyphCode)
       return;
@@ -553,6 +555,14 @@ MarkupStackFrame.createStackFrame = function(symbol, startIndex) {
   return new MarkupStackFrame(symbol, startIndex, properties);
 };
 
+
+// for escaping html strings before they go into the svgs
+// adapted from http://stackoverflow.com/a/12034334/5720160
+var __subsForTspans = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;"
+};
 
 export class TextElement extends ChantLayoutElement {
 
@@ -690,6 +700,12 @@ export class TextElement extends ChantLayoutElement {
     return "";
   }
 
+  static escapeForTspan(string) {
+    return String(string).replace(/[&<>]/g, function (s) {
+      return __subsForTspans[s];
+    });
+  }
+
   createDrawable(ctxt) {
 
     var spans = "";
@@ -700,7 +716,7 @@ export class TextElement extends ChantLayoutElement {
       if (this.spans[i].properties)
         options['style'] = this.spans[i].properties;
 
-      spans += QuickSvg.createFragment('tspan', options, this.spans[i].text);
+      spans += QuickSvg.createFragment('tspan', options, TextElement.escapeForTspan(this.spans[i].text));
     }
 
     var styleProperties = "font-family:" + this.fontFamily +
