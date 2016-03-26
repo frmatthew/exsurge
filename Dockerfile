@@ -9,6 +9,6 @@ RUN cd /src && npm install
 # Bundle app source
 ADD . /src
 
+
 RUN npm run build
 
-# CMD [ "npm", "run build" ]
