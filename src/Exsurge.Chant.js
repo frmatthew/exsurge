@@ -916,8 +916,7 @@ export class ChantScore {
     var y = 0;
     var currIndex = 0;
 
-    if (ctxt.activeClef === null)
-      ctxt.activeClef = this.startingClef;
+    ctxt.activeClef = this.startingClef;
 
     do {
 
