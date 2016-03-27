@@ -85,17 +85,17 @@ export class Neume extends ChantNotationElement {
 
       lowerNote.setGlyph(ctxt, GlyphCode.TerminatingDesLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.LargeAscending) {
+    } else if (upperNote.liquescent & LiquescentType.Small) {
+      lowerNote.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
+      upperNote.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
+    } else if (upperNote.liquescent & LiquescentType.Ascending) {
       lowerNote.setGlyph(ctxt, GlyphCode.PunctumCuadratum);
       upperNote.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.LargeDescending) {
+    } else if (upperNote.liquescent & LiquescentType.Descending) {
       lowerNote.setGlyph(ctxt, GlyphCode.PunctumCuadratum);
       upperNote.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.SmallAscending) {
-      lowerNote.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
-      upperNote.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
     } else {
       // standard shape
       lowerNote.setGlyph(ctxt, GlyphCode.PodatusLower);
@@ -1133,7 +1133,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
     }
 
-    note2.bounds.x = x;
+    note2.bounds.x += x;
     x += note2.bounds.width;
 
     // do we need to draw a descending line?
@@ -1143,7 +1143,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
 
       if (!(note3.liquescent & LiquescentType.Small))
-        x -= line.bounds.x;
+        x -= line.bounds.width;
     }
 
     note3.bounds.x += x;
