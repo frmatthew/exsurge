@@ -180,14 +180,14 @@ export var Gabc = {
       // the gabc source has not been altered.  No need to do anything.
       return;
     }
-    if(numSameWordsAtBeginning == 0) {
+    if(numSameWordsAtBeginning === 0) {
       // if even the first word changed, we need to reset the clef:
       score.startingClef = null;
     }
     
     var dcIndex = score.gabcSource.dropCapIndex;
     // if there is a drop cap, and it is not among the words at the beginning that have remained the same,
-    if(typeof dcIndex == 'number' && dcIndex >= numSameWordsAtBeginning) {
+    if(typeof dcIndex === 'number' && dcIndex >= numSameWordsAtBeginning) {
       // we need to remove it from the score, so that it will make a new one...
       score.dropCap = null;
     }
@@ -236,7 +236,7 @@ export var Gabc = {
     }
     
     // if there was a dropcap handled in the word that was added, we need to update the dropCapIndex in score.gabcSource
-    if(typeof wordsAdded.dropCapIndex == 'number') {
+    if(typeof wordsAdded.dropCapIndex === 'number') {
       score.gabcSource.dropCapIndex = wordsAdded.dropCapIndex + numSameWordsAtBeginning;
     }
     // splice the added words into the gabcSource array
