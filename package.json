@@ -5,6 +5,7 @@
   "main": "dist/exsurge.js",
   "scripts": {
     "build": "webpack --mode=build",
+    "build-dev": "webpack --mode=dev",
     "dev": "webpack --progress --colors --watch --mode=dev",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.js"
   },
@@ -20,6 +21,7 @@
     "eslint-loader": "^1.2.1",
     "file-loader": "^0.8.5",
     "mocha": "^2.4.5",
+    "surge": "^0.17.7",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
     "yargs": "^4.1.0"
@@ -33,5 +35,12 @@
   "bugs": {
     "url": "https://github.com/frmatthew/exsurge/issues"
   },
-  "homepage": "https://github.com/frmatthew/exsurge#readme"
+  "homepage": "https://github.com/frmatthew/exsurge#readme",
+  "keywords": [
+    "gregorian",
+    "chant",
+    "square",
+    "note",
+    "solesmes"
+  ]
 }
