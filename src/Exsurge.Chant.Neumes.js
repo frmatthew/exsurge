@@ -1133,7 +1133,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
     }
 
-    note2.bounds.x = x;
+    note2.bounds.x += x;
     x += note2.bounds.width;
 
     // do we need to draw a descending line?
@@ -1143,7 +1143,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
 
       if (!(note3.liquescent & LiquescentType.Small))
-        x -= line.bounds.x;
+        x -= line.bounds.width;
     }
 
     note3.bounds.x += x;

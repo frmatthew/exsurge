@@ -2580,7 +2580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      properties = 'fill:#f00;'; // SVG text color is set by the fill property
 	      break;
 	    case smallCapsMarkup:
-	      properties = "font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
+	      properties = "font-variant:small-caps;font-feature-settings:'smcp';-webkit-font-feature-settings:'smcp';";
 	      break;
 	  }
 	
@@ -4049,7 +4049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var y = 0;
 	      var currIndex = 0;
 	
-	      if (ctxt.activeClef === null) ctxt.activeClef = this.startingClef;
+	      ctxt.activeClef = this.startingClef;
 	
 	      do {
 	
@@ -7040,7 +7040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addVisualizer(line);
 	            }
 	
-	            note2.bounds.x = x;
+	            note2.bounds.x += x;
 	            x += note2.bounds.width;
 	
 	            // do we need to draw a descending line?
@@ -7049,7 +7049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                line.bounds.x = x - line.bounds.width;
 	                this.addVisualizer(line);
 	
-	                if (!(note3.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.x;
+	                if (!(note3.liquescent & _Exsurge3.LiquescentType.Small)) x -= line.bounds.width;
 	            }
 	
 	            note3.bounds.x += x;
