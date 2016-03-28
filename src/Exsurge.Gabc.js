@@ -145,6 +145,47 @@ export var Gabc = {
         currSyllable++;
       }
     }
+
+    // after parsing all of the notations, we need to make one pass over
+    // the neumes/notes to update custods without ref neumes and automatic oriscus
+    // directions (ascending or descending)
+    //
+    // fixme: should we also automatically resolve liquescent ascending/descending?
+    var custodToUpdate = null;
+    var oriscusToUpdate = null;
+    for (i = 0; i < score.notations.length; i++) {
+      var notation = score.notations[i];
+
+      if (notation.constructor.name === Signs.Custod.name && notation.note === null) {
+        custodToUpdate = notation;
+        continue;
+      }
+
+      // ignore notations that aren't neumes
+      if (typeof notation.notes === 'undefined')
+        continue;
+
+      if (custodToUpdate !== null) {
+        custodToUpdate.referringNeume = notation;
+        custodToUpdate = null;
+      }
+
+      for (j = 0; j < notation.notes.length; j++) {
+        var note = notation.notes[j];
+
+        if (oriscusToUpdate !== null) {
+          if (oriscusToUpdate.pitch.isHigherThan(note.pitch))
+            oriscusToUpdate.shapeModifiers |= NoteShapeModifiers.Descending;
+          else if (oriscusToUpdate.pitch.isLowerThan(note.pitch))
+            oriscusToUpdate.shapeModifiers |= NoteShapeModifiers.Ascending;
+
+          oriscusToUpdate = null;
+        }
+
+        if (note.shape === NoteShape.Oriscus)
+          oriscusToUpdate = note;
+      }
+    }
   },
 
   makeLyric: function (ctxt, text, lyricType) {
@@ -226,7 +267,7 @@ export var Gabc = {
 
     for (var i = 0; i < atoms.length; i++) {
 
-      var atom = atoms[i], lineBreak = null;
+      var atom = atoms[i];
 
       // handle the clefs and dividers here
       switch (atom) {
@@ -288,15 +329,13 @@ export var Gabc = {
           break;
 
           case "z":
-            lineBreak = new ChantLineBreak(true);
-            addNotation(lineBreak);
+            addNotation(new ChantLineBreak(true));
             break;
           case "Z":
-            lineBreak = new ChantLineBreak(false);
-            addNotation(lineBreak);
+            addNotation(new ChantLineBreak(false));
             break;
           case "z0":
-            // unsupported for now...
+            addNotation(new Signs.Custod());
             break;
 
           // spacing indicators
@@ -324,9 +363,9 @@ export var Gabc = {
             // might be a custod, might be an accidental, or might be a note
             if (atom.length > 1 && atom[1] === '+') {
               // custod
-              var custod = new Custod();
+              var custod = new Signs.Custod();
 
-              custod.note = new Note(this.convertGabcStaffPositionToScribamPitch(passByRef.activeClef, data[0]));
+              custod.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
 
               addNotation(custod);
 
@@ -376,8 +415,6 @@ export var Gabc = {
     
     var neumes = [];
     var intraNeumeSpacing = ctxt.intraNeumeSpacing;
-
-    var prevNote = null, currNote = null;
     var firstNoteIndex = 0;
     var currNoteIndex = 0;
 
@@ -389,10 +426,20 @@ export var Gabc = {
     // determine what to do...either transition to a different neume/state, or
     // continue building the neume of that state. handle() returns the next state
 
-    var createNeume = function (neume, includeCurrNote) {
+    var createNeume = function (neume, includeCurrNote, includePrevNote = true) {
 
       // add the notes to the neume
-      var lastNoteIndex = includeCurrNote ? currNoteIndex : currNoteIndex - 1;
+      var lastNoteIndex;
+      if (includeCurrNote)
+        lastNoteIndex = currNoteIndex;
+      else if (includePrevNote)
+        lastNoteIndex = currNoteIndex - 1;
+      else
+        lastNoteIndex = currNoteIndex - 2;
+
+      if (lastNoteIndex < 0)
+        return;
+
       while (firstNoteIndex <= lastNoteIndex)
         neume.notes.push(notes[firstNoteIndex++]);
 
@@ -400,6 +447,10 @@ export var Gabc = {
 
       if (includeCurrNote === false) {
         currNoteIndex--;
+
+        if (includePrevNote === false)
+        currNoteIndex--;
+
         neume.keepWithNext = true;
         neume.trailingSpace = intraNeumeSpacing;
       }
@@ -616,7 +667,7 @@ export var Gabc = {
         return new Neumes.Apostropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
+        if (currNote.staffPosition === prevNote.staffPosition)
           return distrophaState;
         else
           return createNeume(new Neumes.Apostropha(), false);
@@ -628,10 +679,18 @@ export var Gabc = {
         return new Neumes.Distropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
+        if (currNote.staffPosition === prevNote.staffPosition)
           return createNeume(new Neumes.Tristropha(), true);
         else
-          return createNeume(new Neumes.Distropha(), false);
+          return createNeume(apostrophaState.neume(), false, false);
+
+        // distropha state is interesting because we have to be able to
+        // unwind back to an apostropha/punctum if necessary... hh gets us to
+        // the distropha state, but if the next note is a g, then instead
+        // of a distropha, we want a punctum/podatus. so the only
+        // way to create a distropha is be manually terminating it with
+        // some gabc spacing, or ending the notation run entirely (which
+        // will end up calling distrophaState.neume())
       }
     };
 
@@ -663,8 +722,8 @@ export var Gabc = {
 
     while (currNoteIndex < notes.length) {
 
-      prevNote = currNote;
-      currNote = notes[currNoteIndex];
+      var prevNote = currNoteIndex > 0 ? notes[currNoteIndex - 1] : null;
+      var currNote = notes[currNoteIndex];
 
       state = state.handle(currNote, prevNote);
 
@@ -706,7 +765,7 @@ export var Gabc = {
     if (data[0] === data[0].toUpperCase())
       note.shape = NoteShape.Inclinatum;
 
-    note.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(clef, data[0]);
+    note.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
     note.pitch = pitch;
 
     var mark;
@@ -854,13 +913,13 @@ export var Gabc = {
   },
 
   // returns pitch
-  convertGabcStaffPositionToScribamStaffPosition: function (clef, gabcStaffPos) {
+  convertGabcStaffPositionToScribamStaffPosition: function (gabcStaffPos) {
     return gabcStaffPos.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0) - 6;
   },
 
   // returns pitch
   convertGabcStaffPositionToScribamPitch: function (clef, gabcStaffPos) {
-    var scribamStaffPosition = this.convertGabcStaffPositionToScribamStaffPosition(clef, gabcStaffPos)
+    var scribamStaffPosition = this.convertGabcStaffPositionToScribamStaffPosition(gabcStaffPos)
 
     var pitch = clef.staffPositionToPitch(scribamStaffPosition);
 
