@@ -4,16 +4,15 @@ var path = require('path');
 var env = require('yargs').argv.mode;
 
 var package = require("./package.json");
-var outputFileBaseName = package.name + '-' + package.version;
 
 var plugins = [];
 var outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = outputFileBaseName + '.min.js';
+  outputFile = package.name + '.min.js';
 } else {
-  outputFile = outputFileBaseName + '.js';
+  outputFile = package.name + '.js';
 }
 
 var config = {
