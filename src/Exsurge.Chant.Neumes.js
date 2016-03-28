@@ -630,20 +630,17 @@ export class Porrectus extends Neume {
       this.addVisualizer(line);
     }
 
-    var overhangThirdNote = true;
-
-    if (third.liquescent & LiquescentType.Small)
+    if (third.liquescent & LiquescentType.Small) {
       third.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
-    else if (third.liquescent & LiquescentType.Descending) {
+      third.bounds.x -= third.bounds.width; // right aligned
+    } else if (third.liquescent & LiquescentType.Descending)
       third.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
-      overhangThirdNote = false;
-    } else
+    else {
       third.setGlyph(ctxt, GlyphCode.PodatusUpper);
+      third.bounds.x -= third.bounds.width; // right aligned
+    }
 
-    if (overhangThirdNote)
-      third.bounds.x = second.bounds.right() - third.bounds.width;
-    else
-      third.bounds.x = x;
+    third.bounds.x += x;
 
     this.addVisualizer(third);
 
@@ -1239,7 +1236,7 @@ export class TorculusResupinus extends Neume {
     else
       fourth.setGlyph(ctxt, GlyphCode.PodatusUpper);
 
-    fourth.bounds.x += x;
+    fourth.bounds.x += x - fourth.bounds.width; // fourth note is always right aligned
     this.addVisualizer(fourth);
 
     this.origin.x = first.origin.x;
