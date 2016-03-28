@@ -394,17 +394,33 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
   constructor(ctxt, note0, note1, hanging) {
     super();
 
-    var y0 = ctxt.calculateHeightFromStaffPosition(note0.staffPosition);
-    var y1 = ctxt.calculateHeightFromStaffPosition(note1.staffPosition);
+    var staffPosition0 = note0.staffPosition;
+    var staffPosition1 = note1.staffPosition;
 
-    if (y0 > y1) {
-      var temp = y0;
-      y0 = y1;
-      y1 = temp;
+    // note0 should be the upper one for our calculations here
+    if (staffPosition0 < staffPosition1) {
+      var temp = staffPosition0;
+      staffPosition0 = staffPosition1;
+      staffPosition1 = temp;
     }
 
-    if (hanging)
+    var y0 = ctxt.calculateHeightFromStaffPosition(staffPosition0);
+    var y1 = 0;
+
+    if (hanging) {
+
+      // if the difference between the notes is only one, and the upper
+      // note is on a line, and the lower note is within the four staff lines,
+      // then our hanging line goes past the lower note by a whole
+      // staff interval
+      if (staffPosition0 - staffPosition1 === 1 && Math.abs(staffPosition0) % 2 === 1 &&
+          staffPosition1 > -3)
+        staffPosition1--;
+
       y1 += ctxt.glyphPunctumHeight * ctxt.glyphScaling / 2.2;
+    }
+
+    y1 += ctxt.calculateHeightFromStaffPosition(staffPosition1);
 
     this.bounds.x = 0;
     this.bounds.y = y0;
