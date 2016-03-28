@@ -21,6 +21,7 @@
     "eslint-loader": "^1.2.1",
     "file-loader": "^0.8.5",
     "mocha": "^2.4.5",
+    "surge": "^0.17.7",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
     "yargs": "^4.1.0"
@@ -34,5 +35,12 @@
   "bugs": {
     "url": "https://github.com/frmatthew/exsurge/issues"
   },
-  "homepage": "https://github.com/frmatthew/exsurge#readme"
+  "homepage": "https://github.com/frmatthew/exsurge#readme",
+  "keywords": [
+    "gregorian",
+    "chant",
+    "square",
+    "note",
+    "solesmes"
+  ]
 }

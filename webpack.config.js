@@ -3,15 +3,16 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
 var env = require('yargs').argv.mode;
 
-var libraryName = 'exsurge';
+var package = require("./package.json");
 
-var plugins = [], outputFile;
+var plugins = [];
+var outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
+  outputFile = package.name + '.min.js';
 } else {
-  outputFile = libraryName + '.js';
+  outputFile = package.name + '.js';
 }
 
 var config = {
@@ -20,7 +21,7 @@ var config = {
   output: {
     path: __dirname + '/dist',
     filename: outputFile,
-    library: libraryName,
+    library: package.name,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
