@@ -49,17 +49,21 @@ export var Gabc = {
     return score;
   },
 
+  splitWords: function (gabcNotations) {
+    // split the notations on whitespace boundaries, unless the space is inside
+    // of parentheses. Prior to doing that, we replace all whitespace with
+    // spaces, which prevents tabs and newlines from ending up in the notation
+    // data.
+    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
+    return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+  },
+
   parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
     var passByRef = {
       activeClef: null
     };
 
-    // split the notations on whitespace boundaries, unless the space is inside
-    // of parentheses. Prior to doing that, we replace all whitespace with
-    // spaces, which prevents tabs and newlines from ending up in the notation
-    // data.
-    gabcNotations = gabcNotations.replace(/\s/g, ' ');
-    var words = gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+    var words = score.gabcSource = this.splitWords(gabcNotations);
     score.notations = this.parseChantWords(ctxt, words, score, createDropCap, passByRef);
   },
 
@@ -67,7 +71,7 @@ export var Gabc = {
     var notations = [];
 
     for (var i = 0; i < words.length; i++) {
-      var word = words[i].trim();
+      var word = words[i];
 
       var currSyllable = 0;
 
@@ -159,7 +163,7 @@ export var Gabc = {
 
   updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
     var oldWords = score.gabcSource.map(function(word) { return word.word; });
-    var newWords = gabcNotations.match(/\S+/g) || [];
+    var newWords = this.splitWords(gabcNotations) || [];
   
     // find the part of the words array that has changed:
     var lenOld = oldWords.length,
