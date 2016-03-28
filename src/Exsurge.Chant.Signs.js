@@ -45,9 +45,9 @@ export class Custod extends ChantNotationElement {
 
     if (this.referringNeume !== null) {
       if (this.referringNeume.notes.length > 0)
-        staffPosition = this.referringNeume.notes[0].staffPosition;
-    } else if (note !== null)
-      staffPosition = this.note.staffPosition;
+        staffPosition = ctxt.activeClef.pitchToStaffPosition(this.referringNeume.notes[0].pitch);
+    } else if (this.note !== null)
+      staffPosition = ctxt.activeClef.pitchToStaffPosition(this.note.pitch);
 
     glyphCode = Custod.getGlyphCode(staffPosition);
 
