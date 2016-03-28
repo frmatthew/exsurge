@@ -35,7 +35,7 @@ import { ctxt } from 'Exsurge.Drawing'
 
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
-var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/|\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
+var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 
 export var Gabc = {
 
@@ -54,16 +54,20 @@ export var Gabc = {
       activeClef: null
     };
 
-    // split the notations on whitespace boundaries
-    var words = score.gabcSource = gabcNotations.match(/\S+/g);
+    // split the notations on whitespace boundaries, unless the space is inside
+    // of parentheses. Prior to doing that, we replace all whitespace with
+    // spaces, which prevents tabs and newlines from ending up in the notation
+    // data.
+    gabcNotations = gabcNotations.replace(/\s/g, ' ');
+    var words = gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
     score.notations = this.parseChantWords(ctxt, words, score, createDropCap, passByRef);
   },
 
   parseChantWords: function (ctxt, words, score, createDropCap, passByRef) {
     var notations = [];
-    
+
     for (var i = 0; i < words.length; i++) {
-      var word = words[i];
+      var word = words[i].trim();
 
       var currSyllable = 0;
 
@@ -417,6 +421,12 @@ export var Gabc = {
             addNotation(null);
             break;
           case "//":
+            out.trailingSpace = ctxt.intraNeumeSpacing * 2;
+            addNotation(null);
+            break;
+          case ' ':
+            // fixme: is this correct? logically what is the difference in gabc
+            // between putting a space between notes vs putting '//' between notes?
             out.trailingSpace = ctxt.intraNeumeSpacing * 2;
             addNotation(null);
             break;
