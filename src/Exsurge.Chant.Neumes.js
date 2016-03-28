@@ -85,17 +85,17 @@ export class Neume extends ChantNotationElement {
 
       lowerNote.setGlyph(ctxt, GlyphCode.TerminatingDesLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.LargeAscending) {
+    } else if (upperNote.liquescent & LiquescentType.Small) {
+      lowerNote.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
+      upperNote.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
+    } else if (upperNote.liquescent & LiquescentType.Ascending) {
       lowerNote.setGlyph(ctxt, GlyphCode.PunctumCuadratum);
       upperNote.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.LargeDescending) {
+    } else if (upperNote.liquescent & LiquescentType.Descending) {
       lowerNote.setGlyph(ctxt, GlyphCode.PunctumCuadratum);
       upperNote.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
       overhangUpperNote = false;
-    } else if (upperNote.liquescent === LiquescentType.SmallAscending) {
-      lowerNote.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
-      upperNote.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
     } else {
       // standard shape
       lowerNote.setGlyph(ctxt, GlyphCode.PodatusLower);
@@ -137,14 +137,12 @@ export class Neume extends ChantNotationElement {
     for (var i = 0; i < notes.length; i++, prevStaffPosition = staffPosition) {
       var note = notes[i];
 
-      if (note.liquescent === LiquescentType.LargeAscending ||
-        note.liquescent === LiquescentType.LargeDescending)
+      if (note.liquescent & LiquescentType.Small)
+        note.setGlyph(ctxt, GlyphCode.PunctumInclinatumLiquescent);
+      else if (note.liquescent & LiquescentType.Large)
         // fixme: is the large inclinatum liquescent the same as the apostropha?
         note.setGlyph(ctxt, GlyphCode.Apostropha);
-      else if (note.liquescent === LiquescentType.SmallAscending ||
-        note.liquescent === LiquescentType.SmallDescending)
-        note.setGlyph(ctxt, GlyphCode.PunctumInclinatumLiquescent);
-      else
+      else 
         // fixme: some climaci in the new chant books end with a punctum cuadratum
         // (see, for example, the antiphon "Sancta Maria" for October 7).
         note.setGlyph(ctxt, GlyphCode.PunctumInclinatum);
@@ -634,9 +632,9 @@ export class Porrectus extends Neume {
 
     var overhangThirdNote = true;
 
-    if (third.liquescent === LiquescentType.SmallAscending)
+    if (third.liquescent & LiquescentType.Small)
       third.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
-    else if (third.liquescent === LiquescentType.LargeDescending) {
+    else if (third.liquescent & LiquescentType.Descending) {
       third.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
       overhangThirdNote = false;
     } else
@@ -761,9 +759,9 @@ export class Punctum extends Neume {
         note.setGlyph(ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else if (note.shape === NoteShape.Oriscus)
         note.setGlyph(ctxt, GlyphCode.OriscusLiquescent);
-      else if (note.liquescent === LiquescentType.LargeAscending)
+      else if (note.liquescent & LiquescentType.Ascending)
         note.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
-      else if (note.liquescent === LiquescentType.LargeDescending)
+      else if (note.liquescent & LiquescentType.Descending)
         note.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
 
     } else {
@@ -828,14 +826,14 @@ export class Salicus extends Neume {
     x += second.bounds.width;
 
     // third note can be a punctum cuadratum or various liquescent forms
-    if (third.liquescent === LiquescentType.LargeAscending)
-      third.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
-    else if (third.liquescent === LiquescentType.LargeDescending)
-      third.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
-    else if (third.liquescent & LiquescentType.Small) {
+    if (third.liquescent & LiquescentType.Small) {
       third.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
       third.bounds.x -= third.bounds.width; // right aligned
-    } else {
+    } else if (third.liquescent === LiquescentType.Ascending)
+      third.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
+    else if (third.liquescent === LiquescentType.Descending)
+      third.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+    else {
       // virga terminator
       third.setGlyph(ctxt, Virga.getGlyphCode(third.staffPosition));
     }
@@ -927,14 +925,14 @@ export class SalicusFlexus extends Neume {
     x += third.bounds.width;
 
     // finally, do the fourth note
-    if (fourth.liquescent === LiquescentType.LargeAscending)
-      fourth.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
-    else if (fourth.liquescent === LiquescentType.LargeDescending)
-      fourth.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
-    else if (fourth.liquescent & LiquescentType.Small) {
+    if (fourth.liquescent & LiquescentType.Small) {
       fourth.setGlyph(ctxt, GlyphCode.TerminatingDesLiquescent);
       fourth.bounds.x -= fourth.bounds.width; // right-aligned
-    } else
+    } else if (fourth.liquescent & LiquescentType.Ascending)
+      fourth.setGlyph(ctxt, GlyphCode.PunctumCuadratumAscLiquescent);
+    else if (fourth.liquescent & LiquescentType.Descending)
+      fourth.setGlyph(ctxt, GlyphCode.PunctumCuadratumDesLiquescent);
+    else 
       fourth.setGlyph(ctxt, GlyphCode.PunctumCuadratum);
 
     // do we need a line between second and third notes?
@@ -1133,7 +1131,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
     }
 
-    note2.bounds.x = x;
+    note2.bounds.x += x;
     x += note2.bounds.width;
 
     // do we need to draw a descending line?
@@ -1143,7 +1141,7 @@ export class Torculus extends Neume {
       this.addVisualizer(line);
 
       if (!(note3.liquescent & LiquescentType.Small))
-        x -= line.bounds.x;
+        x -= line.bounds.width;
     }
 
     note3.bounds.x += x;
