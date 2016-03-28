@@ -415,8 +415,6 @@ export var Gabc = {
     
     var neumes = [];
     var intraNeumeSpacing = ctxt.intraNeumeSpacing;
-
-    var prevNote = null, currNote = null;
     var firstNoteIndex = 0;
     var currNoteIndex = 0;
 
@@ -428,10 +426,20 @@ export var Gabc = {
     // determine what to do...either transition to a different neume/state, or
     // continue building the neume of that state. handle() returns the next state
 
-    var createNeume = function (neume, includeCurrNote) {
+    var createNeume = function (neume, includeCurrNote, includePrevNote = true) {
 
       // add the notes to the neume
-      var lastNoteIndex = includeCurrNote ? currNoteIndex : currNoteIndex - 1;
+      var lastNoteIndex;
+      if (includeCurrNote)
+        lastNoteIndex = currNoteIndex;
+      else if (includePrevNote)
+        lastNoteIndex = currNoteIndex - 1;
+      else
+        lastNoteIndex = currNoteIndex - 2;
+
+      if (lastNoteIndex < 0)
+        return;
+
       while (firstNoteIndex <= lastNoteIndex)
         neume.notes.push(notes[firstNoteIndex++]);
 
@@ -439,6 +447,10 @@ export var Gabc = {
 
       if (includeCurrNote === false) {
         currNoteIndex--;
+
+        if (includePrevNote === false)
+        currNoteIndex--;
+
         neume.keepWithNext = true;
         neume.trailingSpace = intraNeumeSpacing;
       }
@@ -655,7 +667,7 @@ export var Gabc = {
         return new Neumes.Apostropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
+        if (currNote.staffPosition === prevNote.staffPosition)
           return distrophaState;
         else
           return createNeume(new Neumes.Apostropha(), false);
@@ -667,10 +679,18 @@ export var Gabc = {
         return new Neumes.Distropha();
       },
       handle: function(currNote, prevNote) {
-        if (currNote.staffPosition === prevNote.staffPosition && currNote.shape === NoteShape.Stropha)
+        if (currNote.staffPosition === prevNote.staffPosition)
           return createNeume(new Neumes.Tristropha(), true);
         else
-          return createNeume(new Neumes.Distropha(), false);
+          return createNeume(apostrophaState.neume(), false, false);
+
+        // distropha state is interesting because we have to be able to
+        // unwind back to an apostropha/punctum if necessary... hh gets us to
+        // the distropha state, but if the next note is a g, then instead
+        // of a distropha, we want a punctum/podatus. so the only
+        // way to create a distropha is be manually terminating it with
+        // some gabc spacing, or ending the notation run entirely (which
+        // will end up calling distrophaState.neume())
       }
     };
 
@@ -702,8 +722,8 @@ export var Gabc = {
 
     while (currNoteIndex < notes.length) {
 
-      prevNote = currNote;
-      currNote = notes[currNoteIndex];
+      var prevNote = currNoteIndex > 0 ? notes[currNoteIndex - 1] : null;
+      var currNote = notes[currNoteIndex];
 
       state = state.handle(currNote, prevNote);
 
