@@ -930,7 +930,7 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.trailingSpace = -1; // if less than zero, this is automatically calculated at layout time
     this.keepWithNext = false;
 
-    this.lyric = null;
+    this.lyrics = [];
 
     this.score = null; // the ChantScore
     this.line = null; // the ChantLine
@@ -938,19 +938,19 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.visualizers = [];
   }
 
-  hasLyric() {
-    if (this.lyric !== null)
+  hasLyrics() {
+    if (this.lyrics.length !== 0)
       return true;
     else
       return false;
   }
 
-  getLyricLeft() {
-    return this.bounds.x + this.lyric.bounds.x;
+  getLyricLeft(index) {
+    return this.bounds.x + this.lyrics[index].bounds.x;
   }
 
-  getLyricRight() {
-    return this.bounds.x + this.lyric.bounds.x + this.lyric.bounds.width;
+  getLyricRight(index) {
+    return this.bounds.x + this.lyrics[index].bounds.x + this.lyrics[index].bounds.width;
   }
 
   // used by subclasses while building up the chant notations.
@@ -988,8 +988,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.visualizers = [];
     this.bounds = new Rect(Infinity, Infinity, -Infinity, -Infinity);
 
-    if (this.hasLyric())
-      this.lyric.recalculateMetrics(ctxt);
+    for (var i = 0; i < this.lyrics.length; i++)
+      this.lyrics[i].recalculateMetrics(ctxt);
   }
 
   // a helper function for subclasses to call after they are done performing layout...
@@ -997,9 +997,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     //this.origin.x -= -this.bounds.x;
     this.bounds.x = 0;
 
-    // add the lyric and line it up
-    if (this.hasLyric())
-      this.lyric.bounds.x = this.origin.x - this.lyric.origin.x;
+    for (var i = 0; i < this.lyrics.length; i++)
+      this.lyrics[i].bounds.x = this.origin.x - this.lyrics[i].origin.x;
   }
 
   createDrawable(ctxt) {
@@ -1008,8 +1007,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     for (var i = 0; i < this.visualizers.length; i++)
       inner += this.visualizers[i].createDrawable(ctxt);
 
-    if (this.lyric)
-      inner += this.lyric.createDrawable(ctxt);
+    for (i = 0; i < this.lyrics.length; i++)
+      inner += this.lyrics[i].createDrawable(ctxt);
 
     return QuickSvg.createFragment('g', {
       'class': 'ChantNotationElement ' + this.constructor.name,

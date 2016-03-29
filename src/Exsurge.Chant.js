@@ -23,12 +23,12 @@
 // THE SOFTWARE.
 //
 
-import * as Exsurge from './Exsurge.Core'
-import { Step, Pitch, Rect, Point, Margins } from './Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from './Exsurge.Drawing'
-import { Glyphs } from './Exsurge.Glyphs'
-import { Custod, AccidentalType } from './Exsurge.Chant.Signs'
-import { Gabc } from './Exsurge.Gabc'
+import * as Exsurge from 'Exsurge.Core'
+import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
+import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from 'Exsurge.Drawing'
+import { Glyphs } from 'Exsurge.Glyphs'
+import { Custod, AccidentalType } from 'Exsurge.Chant.Signs'
+import { Gabc } from 'Exsurge.Gabc'
 
 
 export var LiquescentType = {
@@ -304,8 +304,6 @@ export class ChantLine extends ChantLayoutElement {
     this.notations = [];
     this.notationBounds = null; // Rect
 
-    this.lyricBounds = null; // Rect
-
     this.staffLeft = 0;
     this.staffRight = 0;
 
@@ -344,16 +342,14 @@ export class ChantLine extends ChantLayoutElement {
     for (i = 0; i < this.notations.length; i++)
       this.notationBounds.union(this.notations[i].bounds);
 
-    this.lyricVerticalOffset = this.notationBounds.y + this.notationBounds.height + ctxt.lyricTextSize;
+    var baseLyricVerticalOffset = this.notationBounds.y + this.notationBounds.height + ctxt.lyricTextSize;
 
     // finalize the lyrics placement
     for (i = 0; i < this.notations.length; i++) {
       notation = this.notations[i];
 
-      if (!notation.hasLyric())
-        continue;
-
-      notation.lyric.bounds.y = this.lyricVerticalOffset;
+      for (var j = 0; j < notation.lyrics.length; j++)
+        notation.lyrics[j].bounds.y = baseLyricVerticalOffset + ctxt.lyricTextSize * j;
     }
 
     // dropCap and the annotations
@@ -364,7 +360,7 @@ export class ChantLine extends ChantLayoutElement {
         // drop caps and annotations are drawn from their center, so aligning them
         // horizontally is as easy as this.staffLeft / 2
         this.score.dropCap.bounds.x = this.staffLeft / 2;
-        this.score.dropCap.bounds.y = this.lyricVerticalOffset;
+        this.score.dropCap.bounds.y = baseLyricVerticalOffset;
       }
 
       if (this.score.annotation !== null) {
@@ -479,7 +475,7 @@ export class ChantLine extends ChantLayoutElement {
     this.startingClef.bounds.x = this.staffLeft;
     this.notations.push(this.startingClef);
 
-    var current = this.startingClef, previous = null, previousWithLyric = null;
+    var curr = this.startingClef, prev = null, prevWithLyrics = null;
 
     // todo: estimate how much space we have available to us
     var rightBoundary = this.staffRight - Glyphs.CustodLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custod on the line
@@ -489,18 +485,18 @@ export class ChantLine extends ChantLayoutElement {
 
     for (i = newElementStart; i < scoreNotations.length; i++) {
 
-      if (current.hasLyric())
-        previousWithLyric = current;
+      if (curr.hasLyrics())
+        prevWithLyrics = curr;
 
-      previous = current;
-      current = scoreNotations[i];
+      prev = curr;
+      curr = scoreNotations[i];
 
-      // try to fit the current element on this line.
+      // try to fit the curr element on this line.
       // if it doesn't fit, we finish up here.
-      var fitsOnLine = this.positionNotationElement(ctxt, previousWithLyric, previous, current, rightBoundary);
+      var fitsOnLine = this.positionNotationElement(ctxt, prevWithLyrics, prev, curr, rightBoundary);
       if (fitsOnLine === false) {
 
-        // check if the previous elements want to be kept with this one
+        // check if the prev elements want to be kept with this one
         for (var k = i - 1; k > this.scoreNotationStart; k--) {
           var cne = this.score.notations[k];
 
@@ -515,13 +511,13 @@ export class ChantLine extends ChantLayoutElement {
         break;
       }
 
-      current.chantLine = this;
-      this.notations.push(current);
+      curr.chantLine = this;
+      this.notations.push(curr);
       this.scoreNotationCount++;
 
       // line breaks are a special case indicating to stop processing here
-      if (current.constructor.name === 'ChantLineBreak' && width > 0) {
-        this.justify = current.justify;
+      if (curr.constructor.name === ChantLineBreak.name && width > 0) {
+        this.justify = curr.justify;
         break;
       }
     }
@@ -531,8 +527,8 @@ export class ChantLine extends ChantLayoutElement {
     if (this.notations.length > 0) {
       last = this.notations[this.notations.length - 1];
 
-      if (last.hasLyric() && last.getLyricRight() > (last.bounds.right() + last.trailingSpace))
-        extraSpace = this.staffRight - last.getLyricRight();
+      if (last.hasLyrics() && last.getLyricRight(0) > (last.bounds.right() + last.trailingSpace))
+        extraSpace = this.staffRight - last.getLyricRight(0);
       else
         extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
     }
@@ -592,7 +588,7 @@ export class ChantLine extends ChantLayoutElement {
     // start at 1 to skip the clef
     for (i = 1; i < this.notations.length - 1; i++) {
 
-      if (curr !== null && curr.hasLyric())
+      if (curr !== null && curr.hasLyrics())
         prevWithLyrics = curr;
 
       prev = curr;
@@ -601,10 +597,10 @@ export class ChantLine extends ChantLayoutElement {
       if (prev !== null && prev.keepWithNext === true)
         continue;
 
-      if (prevWithLyrics !== null && prevWithLyrics.lyric.allowsConnector() && !prevWithLyrics.lyric.needsConnector)
+      if (prevWithLyrics !== null && prevWithLyrics.lyrics[0].allowsConnector() && !prevWithLyrics.lyrics[0].needsConnector)
         continue;
 
-      if (curr.constructor.name === 'ChantLineBreak')
+      if (curr.constructor.name === ChantLineBreak.name)
         continue;
 
       // otherwise, we can add space before this element
@@ -745,24 +741,29 @@ export class ChantLine extends ChantLayoutElement {
   // returns true if positioning was able to fit the neume before rightBoundary.
   // returns false if cannot fit before given right margin.
   // fixme: if this returns false, shouldn't we set the connectors on prev to be activated?!
-  positionNotationElement(ctxt, prevWithLyric, prev, curr, rightBoundary) {
+  positionNotationElement(ctxt, prevWithLyrics, prev, curr, rightBoundary) {
+
+    var i;
 
     // To begin we just place the current notation right after the previous,
     // irrespective of lyrics.
     curr.bounds.x = prev.bounds.right() + prev.trailingSpace;
 
-    if (prevWithLyric === null) {
+    // if the previous notation has no lyrics, then we simply make sure the
+    // current notation with lyrics is in the bounds of the line
+    if (prevWithLyrics === null) {
 
       var maxRight = curr.bounds.right() + curr.trailingSpace;
 
       // if the lyric left is negative, then offset the neume appropriately
-      if (curr.hasLyric()) {
-        curr.lyric.setNeedsConnector(false); // we hope for the best!
+      for (i = 0; i < curr.lyrics.length; i++) {
 
-        if (curr.getLyricLeft() < 0)
-          curr.bounds.x += -curr.getLyricLeft();
+        curr.lyrics[i].setNeedsConnector(false); // we hope for the best!
 
-        maxRight = Math.max(maxRight, curr.getLyricRight());
+        if (curr.getLyricLeft(i) < 0)
+          curr.bounds.x += -curr.getLyricLeft(i);
+
+        maxRight = Math.max(maxRight, curr.getLyricRight(i));
       }
 
       if (maxRight > rightBoundary)
@@ -771,25 +772,75 @@ export class ChantLine extends ChantLayoutElement {
         return true;
     }
 
-    if (curr.hasLyric() === false) {
+    // if the curr notation has no lyrics, then we force the prev notation
+    // with lyrics to have syllable connectors.
+    if (curr.hasLyrics() === false) {
 
-      if (prevWithLyric.lyric.allowsConnector())
-        prevWithLyric.lyric.setNeedsConnector(true);
+      for (i = 0; i < prevWithLyrics.lyrics.length; i++) {
+
+        if (prevWithLyrics.lyrics[i] !== null && prevWithLyrics.lyrics[i].allowsConnector())
+          prevWithLyrics.lyrics[i].setNeedsConnector(true);
+      }
 
       if (curr.bounds.right() + curr.trailingSpace < rightBoundary)
         return true;
+      else
+        return false;
+    }
+
+    // if we have multiple lyrics on the current or the previous notation,
+    // then we simplify the process. We don't try to eliminate syllable
+    // connectors but we require them on every syllable in the previous
+    // notation that permits a connector.
+    //
+    // A nice (but probably tricky) enhancement would be to combine lyrics
+    // when possible, taking into consideration hyphenation of each syllable!
+    var lyricCount = Math.max(prevWithLyrics.lyrics.length, curr.lyrics.length);
+
+    if (lyricCount > 1) {
+
+      var prevLyricRightMax = Number.MIN_VALUE;
+      var currLyricLeftMin = Number.MAX_VALUE;
+
+      for (i = 0; i < lyricCount; i++) {
+          
+        if (i < prevWithLyrics.lyrics.length && prevWithLyrics.lyrics[i] !== null) {
+
+          var right = prevWithLyrics.getLyricRight(i);
+
+          if (prevWithLyrics.lyrics[i].allowsConnector()) {
+            prevWithLyrics.lyrics[i].setNeedsConnector(true);
+            right += prevWithLyrics.lyrics[i].widthWithConnector - prevWithLyrics.lyrics[i].widthWithoutConnector;
+          } else
+            right += ctxt.minLyricWordSpacing;
+
+          prevLyricRightMax = Math.max(prevLyricRightMax, right);
+        }
+
+        if (i < curr.lyrics.length && curr.lyrics[i] !== null)
+          currLyricLeftMin = Math.min(currLyricLeftMin, curr.getLyricLeft(i));
+      }
+      
+      // if the lyrics overlap, then we need to shift over the current element a bit
+      if (prevLyricRightMax > currLyricLeftMin)
+        curr.bounds.x += prevLyricRightMax - currLyricLeftMin;
+
+      if (curr.bounds.right() < rightBoundary)
+        return true;
       else {
-        //curr.bounds.x = this.startingClef.bounds.right();
+        curr.bounds.x = 0 ; //StartingClef.Right;
         return false;
       }
     }
+    
+    // handling single lyric lines is a little more nuanced, since we carefully
+    // eliminate syllable connectors when we're able...
+    curr.lyrics[0].setNeedsConnector(false); // we hope for the best!
 
-    curr.lyric.setNeedsConnector(false); // we hope for the best!
+    var currLyricLeft = curr.getLyricLeft(0);
+    var prevLyricRight = prevWithLyrics.getLyricRight(0);
 
-    var currLyricLeft = curr.getLyricLeft();
-    var prevLyricRight = prevWithLyric.getLyricRight();
-
-    if (prevWithLyric.lyric.allowsConnector() === false) {
+    if (prevWithLyrics.lyrics[0].allowsConnector() === false) {
 
       // No connector needed, but include space between words if necessary!
       if (prevLyricRight + ctxt.minLyricWordSpacing > currLyricLeft) {
@@ -811,8 +862,8 @@ export class ChantLine extends ChantLayoutElement {
       } else {
 
         // bummer, looks like we couldn't merge the syllables together. Better add a connector...
-        prevWithLyric.lyric.setNeedsConnector(true);
-        prevLyricRight = prevWithLyric.getLyricRight();
+        prevWithLyrics.lyrics[0].setNeedsConnector(true);
+        prevLyricRight = prevWithLyrics.getLyricRight(0);
 
         if (prevLyricRight > currLyricLeft)
           curr.bounds.x += prevLyricRight - currLyricLeft;
@@ -827,8 +878,8 @@ export class ChantLine extends ChantLayoutElement {
     // and mark the previous lyric as connecting if needed.
     // curr.bounds.x = this.startingClef.bounds.right();
 
-    if (prevWithLyric.lyric !== null && prevWithLyric.lyric.allowsConnector())
-      prevWithLyric.lyric.setNeedsConnector(true);
+    if (prevWithLyrics.hasLyrics() && prevWithLyrics.lyrics[0].allowsConnector())
+      prevWithLyrics.lyrics[0].setNeedsConnector(true);
 
     return false;
   }

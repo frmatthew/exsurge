@@ -134,7 +134,10 @@ export var Gabc = {
               lyric.lyricType === LyricType.SingleSyllable)
               passByRef.activeClef.resetAccidentals();
 
-            cne.lyric = lyric;
+            cne.lyrics.push(lyric);
+
+            // add another one for testing
+            cne.lyrics.push(this.makeLyric(ctxt, "test", LyricType.MiddleSyllable));
 
             break;
           }
