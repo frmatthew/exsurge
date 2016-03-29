@@ -119,25 +119,25 @@ export var Gabc = {
           var notationWithLyrics = null;
           for (var k = 0; k < items.length; k++) {
             var cne = items[k];
+
             if (cne.constructor.name === "Accidental")
               continue;
 
-            notationWithLyrics = cne;
+            // if it's not a neume then make the lyric a directive
+            if (typeof cne.notes === 'undefined')
+              lyricType = LyricType.Directive;
+
+            var lyric = this.makeLyric(ctxt, lyricText, lyricType);
+
+            // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
+            if (lyric.lyricType === LyricType.BeginningSyllable ||
+              lyric.lyricType === LyricType.SingleSyllable)
+              passByRef.activeClef.resetAccidentals();
+
+            cne.lyric = lyric;
+
             break;
           }
-
-          // if it's not a neume then make the lyric a directive
-          if (typeof notationWithLyrics.notes === 'undefined')
-            lyricType = LyricType.Directive;
-
-          var lyric = this.makeLyric(ctxt, lyricText, lyricType);
-
-          // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
-          if (lyric.lyricType === LyricType.BeginningSyllable ||
-            lyric.lyricType === LyricType.SingleSyllable)
-            passByRef.activeClef.resetAccidentals();
-
-          notationWithLyrics.lyric = lyric;
         }
 
         score.notations = score.notations.concat(items);
@@ -385,8 +385,9 @@ export var Gabc = {
                   break;
               }
 
-              var note = this.createNoteFromData(ctxt, passByRef.activeClef, atom);
-              var accidental = new Signs.Accidental(note.staffPosition, accidentalType);
+              var noteArray = [];
+              this.createNoteFromData(ctxt, passByRef.activeClef, atom, noteArray);
+              var accidental = new Signs.Accidental(noteArray[0].staffPosition, accidentalType);
               accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
 
               passByRef.activeClef.activeAccidental = accidental;
@@ -399,7 +400,7 @@ export var Gabc = {
                 passByRef.activeClef = new DoClef(1, 2);
 
               // looks like it's a note
-              notes.push(this.createNoteFromData(ctxt, passByRef.activeClef, atom));
+              this.createNoteFromData(ctxt, passByRef.activeClef, atom, notes);
             }
             break;
       }
@@ -656,7 +657,7 @@ export var Gabc = {
       handle: function(currNote, prevNote) {
     
         if (currNote.shape === NoteShape.Virga && currNote.staffPosition === prevNote.staffPosition)
-          return createNeume(new Neumes.Trivirga(), false);
+          return createNeume(new Neumes.Trivirga(), true);
         else
           return createNeume(new Neumes.Bivirga(), false);
       }
@@ -680,17 +681,28 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         if (currNote.staffPosition === prevNote.staffPosition)
-          return createNeume(new Neumes.Tristropha(), true);
+          return tristrophaState;
         else
-          return createNeume(apostrophaState.neume(), false, false);
+          return createNeume(new Neumes.Apostropha(), false, false);
+      }
+    };
 
-        // distropha state is interesting because we have to be able to
-        // unwind back to an apostropha/punctum if necessary... hh gets us to
-        // the distropha state, but if the next note is a g, then instead
-        // of a distropha, we want a punctum/podatus. so the only
-        // way to create a distropha is be manually terminating it with
-        // some gabc spacing, or ending the notation run entirely (which
-        // will end up calling distrophaState.neume())
+    var tristrophaState = {
+      neume: function() {
+        return new Neumes.Tristropha();
+      },
+      handle: function(currNote, prevNote) {
+        // we only create a tristropha when the note run ends after three
+        // and the neume() function of this state is called. Otherwise
+        // we always interpret the third note to belong to the next sequence
+        // of notes.
+        //
+        // fixme: gabc allows any number of punctum/stropha in succession...
+        // is this a valid neume type? Or is it just multiple *stropha neumes
+        // in succession? Should we simplify the apostropha/distropha/
+        // tristropha classes to a generic stropha neume that can have 1 or
+        // more successive notes?
+        return createNeume(new Neumes.Distropha(), false, false);
       }
     };
 
@@ -744,7 +756,8 @@ export var Gabc = {
     return neumes;
   },
 
-  createNoteFromData: function (ctxt, clef, data) {
+  // appends any notes created to the notes array argument
+  createNoteFromData: function (ctxt, clef, data, notes) {
 
     var note = new Note();
 
@@ -832,10 +845,26 @@ export var Gabc = {
           break;
 
         case 's':
+
+          if (note.shape === NoteShape.Stropha) {
+            // if we're already a stropha, that means this is gabc's
+            // quick stropha feature (e.g., gsss). create a new note
+            notes.push(note);
+            note = new Note();
+          }
+          
           note.shape = NoteShape.Stropha;
           break;
 
         case 'v':
+
+          if (note.shape === NoteShape.Virga) {
+            // if we're already a stropha, that means this is gabc's
+            // quick virga feature (e.g., gvvv). create a new note
+            notes.push(note);
+            note = new Note();
+          }
+
           note.shape = NoteShape.Virga;
           break;
 
@@ -909,7 +938,7 @@ export var Gabc = {
       }
     }
 
-    return note;
+    notes.push(note);
   },
 
   // returns pitch

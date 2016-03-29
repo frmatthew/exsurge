@@ -254,7 +254,7 @@ export class Trivirga extends Neume {
     note2.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
     note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 
-    note3.setGlyph(ctxt, Virga.getGlyphCode(staffPosition));
+    note3.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
     note3.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing + note2.bounds.width + ctxt.intraNeumeSpacing;
 
     this.addVisualizer(note1);
