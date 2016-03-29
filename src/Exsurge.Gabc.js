@@ -681,17 +681,28 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
         if (currNote.staffPosition === prevNote.staffPosition)
-          return createNeume(new Neumes.Tristropha(), true);
+          return tristrophaState;
         else
-          return createNeume(apostrophaState.neume(), false, false);
+          return createNeume(new Neumes.Apostropha(), false, false);
+      }
+    };
 
-        // distropha state is interesting because we have to be able to
-        // unwind back to an apostropha/punctum if necessary... hh gets us to
-        // the distropha state, but if the next note is a g, then instead
-        // of a distropha, we want a punctum/podatus. so the only
-        // way to create a distropha is be manually terminating it with
-        // some gabc spacing, or ending the notation run entirely (which
-        // will end up calling distrophaState.neume())
+    var tristrophaState = {
+      neume: function() {
+        return new Neumes.Tristropha();
+      },
+      handle: function(currNote, prevNote) {
+        // we only create a tristropha when the note run ends after three
+        // and the neume() function of this state is called. Otherwise
+        // we always interpret the third note to belong to the next sequence
+        // of notes.
+        //
+        // fixme: gabc allows any number of punctum/stropha in succession...
+        // is this a valid neume type? Or is it just multiple *stropha neumes
+        // in succession? Should we simplify the apostropha/distropha/
+        // tristropha classes to a generic stropha neume that can have 1 or
+        // more successive notes?
+        return createNeume(new Neumes.Distropha(), false, false);
       }
     };
 
