@@ -68,6 +68,8 @@ export class Latin extends Language {
     // fixme: should we include 'diphthongs' with accented vowels, e.g., áe?
     // fixme: ui is only diphthong in the exceptional cases below (according to Wheelock's Latin)
     this.diphthongs = ["ae", "au", "oe"];
+    // for centering over the vowel, we will need to know any combinations that might be diphthongs:
+    this.possibleDiphthongs = this.diphthongs.concat(["ei", "eu", "ui"]);
 
     // some words that are simply exceptions to standard syllabification rules!
     var wordExceptions = new Object();
@@ -78,6 +80,10 @@ export class Latin extends Language {
     wordExceptions["huic"] = ["huic"];
     wordExceptions["cui"] = ["cui"];
     wordExceptions["hui"] = ["hui"];
+    
+    // eu combos pronounced as diphthongs
+    wordExceptions["euge"] = ["eu", "ge"];
+    wordExceptions["seu"] = ["seu"];
 
     this.vowels = ['a', 'e', 'i', 'o', 'u',
                    'á', 'é', 'í', 'ó', 'ú',
@@ -150,6 +156,19 @@ export class Latin extends Language {
   isDiphthong(s) {
     for (var i = 0, end = this.diphthongs.length; i < end; i++)
       if (this.diphthongs[i] === s)
+        return true;
+
+    return false;
+  }
+
+  /**
+   *
+   * @param {String} s The string to test; must be lowercase
+   * @return {boolean} true if s is a diphthong
+   */
+  isPossibleDiphthong(s) {
+    for (var i = 0, end = this.possibleDiphthongs.length; i < end; i++)
+      if (this.possibleDiphthongs[i] === s)
         return true;
 
     return false;
@@ -282,9 +301,9 @@ export class Latin extends Language {
     var i, end, index;
     var workingString = s.toLowerCase();
 
-    // do we have a diphthongs?
-    for (i = 0, end = this.diphthongs.length; i < end; i++) {
-      var d = this.diphthongs[i];
+    // do we have a diphthong?
+    for (i = 0, end = this.possibleDiphthongs.length; i < end; i++) {
+      var d = this.possibleDiphthongs[i];
       index = workingString.indexOf(d, startIndex);
 
       if (index >= 0)
