@@ -85,6 +85,8 @@ export class Latin extends Language {
                    'ǽ',  // no accented œ in unicode?
                    'y']; // y is treated as a vowel; not native to Latin but useful for words borrowed from Greek
 
+    this.vowelsThatMightBeConsonants = ['i','u'];
+
     this.muteConsonantsAndF = ['b', 'c', 'd', 'g', 'p', 't', 'f'];
 
     this.liquidConsonants = ['l', 'r'];
@@ -97,6 +99,19 @@ export class Latin extends Language {
         return true;
 
     return false;
+  }
+
+  isVowelThatMightBeConsonant(c) {
+    for (var i = 0, end = this.vowelsThatMightBeConsonants.length; i < end; i++)
+      if (this.vowelsThatMightBeConsonants[i] === c)
+        return true;
+
+    return false;
+  }
+  
+  // substring should be a vowel and the character following
+  isVowelActingAsConsonant(substring) {
+    return this.isVowelThatMightBeConsonant(substring[0]) && this.isVowel(substring[1]);
   }
 
   /**
@@ -281,9 +296,9 @@ export class Latin extends Language {
       index = workingString.indexOf(this.vowels[i], startIndex);
 
       if (index >= 0) {
-        // if the first vowel found is a U, and it is immediately followed by another vowel, (e.g., sanguis, quis), the first u counts as a consonant:
+        // if the first vowel found might also be a consonant (U or I), and it is immediately followed by another vowel, (e.g., sanguis, quis), the first u counts as a consonant:
         // (in practice, this only affects words such as equus that contain a uu, since the alphabetically earlier vowel would be found before the U)
-        if(this.vowels[i] === 'u' && this.isVowel(workingString[index + 1])) {
+        if(this.isVowelActingAsConsonant(workingString.substr(index, 2))) {
           ++index;
         }
         return { found: true, startIndex: index, length: 1 };
