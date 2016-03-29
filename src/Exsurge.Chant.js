@@ -344,9 +344,13 @@ export class ChantLine extends ChantLayoutElement {
 
     var baseLyricVerticalOffset = this.notationBounds.y + this.notationBounds.height + ctxt.lyricTextSize;
 
+    var numLyricLines = 0;
+
     // finalize the lyrics placement
     for (i = 0; i < this.notations.length; i++) {
       notation = this.notations[i];
+
+      numLyricLines = Math.max(numLyricLines, notation.lyrics.length);
 
       for (var j = 0; j < notation.lyrics.length; j++)
         notation.lyrics[j].bounds.y = baseLyricVerticalOffset + ctxt.lyricTextSize * j;
@@ -375,7 +379,7 @@ export class ChantLine extends ChantLayoutElement {
     this.bounds.x = 0;
     this.bounds.y = this.notationBounds.y;
     this.bounds.width = this.notationBounds.right();
-    this.bounds.height = this.notationBounds.height;
+    this.bounds.height = this.notationBounds.height + ctxt.lyricTextSize * numLyricLines;
 
     // the origin of the chant line's coordinate space is at the center line of the left extremity of the staff
     this.origin = new Point(this.staffLeft, -this.notationBounds.y);

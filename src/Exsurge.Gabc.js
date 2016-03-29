@@ -51,11 +51,14 @@ export var Gabc = {
 
   parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
 
-    score.notations = [];
+    score.notations = []; 
 
-    var passByRef = {
-      activeClef: null
-    };
+    var changeClefCallback = function(ctxt_, clef) {
+      if (score.startingClef === null)
+        score.startingClef = clef;
+
+      ctxt_.activeClef = clef;
+    }
 
     // split the notations on whitespace boundaries, unless the space is inside
     // of parentheses. Prior to doing that, we replace all whitespace with
@@ -67,86 +70,27 @@ export var Gabc = {
     for (var i = 0; i < words.length; i++) {
       var word = words[i].trim();
 
-      var currSyllable = 0;
-
       if (word === '')
         continue;
 
-      var matches = [];
-      
-      while ((match = __syllablesRegex.exec(word)))
-        matches.push(match);
+      var notations = this.parseWord(ctxt, word, changeClefCallback);
+      score.notations = score.notations.concat(notations);
+    }
 
-      for (var j = 0; j < matches.length; j++) {
-        var match = matches[j];
+    // fixme: if we are to create a dropCap and we haven't done so yet, do it now
+    if (createDropCap && score.dropCap === null) {
 
-        var lyricText = match[1].trim();
-        var notationData = match[2];
-
-        var items = this.createNotations(ctxt, score, notationData, passByRef);
-
-        if (items.length === 0)
-          continue;
-
-        // create lyric if we have it...
-        if (lyricText !== "") {
-
-          var lyricType;
-          if (currSyllable === 0 && matches.length === 1)
-            lyricType = LyricType.SingleSyllable;
-          else if (currSyllable === 0 && matches.length > 1)
-            lyricType = LyricType.BeginningSyllable;
-          else if (currSyllable === matches.length - 1)
-            lyricType = LyricType.EndingSyllable;
-          else
-            lyricType = LyricType.MiddleSyllable;
-
-          // if we are to create a dropCap and we haven't done so yet, do it now
-          if (createDropCap && score.dropCap === null) {
-            score.dropCap = new DropCap(ctxt, lyricText.substring(0, 1));
-
-            // if the dropcap is a single character syllable (vowel) that is the
-            // beginning of the word, then we use a hyphen in place of the lyric text
-            // and treat it as a single syllable.
-            if (lyricText.length === 1 && lyricType === LyricType.BeginningSyllable) {
-              lyricText = ctxt.syllableConnector;
-              lyricType = LyricType.SingleSyllable;
-            } else
-              lyricText = lyricText.substring(1);
-          }
-
-          // add the lyrics to the first notation that makes sense...
-          var notationWithLyrics = null;
-          for (var k = 0; k < items.length; k++) {
-            var cne = items[k];
-
-            if (cne.constructor.name === "Accidental")
-              continue;
-
-            // if it's not a neume then make the lyric a directive
-            if (typeof cne.notes === 'undefined')
-              lyricType = LyricType.Directive;
-
-            var lyric = this.makeLyric(ctxt, lyricText, lyricType);
-
-            // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
-            if (lyric.lyricType === LyricType.BeginningSyllable ||
-              lyric.lyricType === LyricType.SingleSyllable)
-              passByRef.activeClef.resetAccidentals();
-
-            cne.lyrics.push(lyric);
-
-            // add another one for testing
-            cne.lyrics.push(this.makeLyric(ctxt, "test", LyricType.MiddleSyllable));
-
-            break;
-          }
+      // find the first notation with lyrics to use
+      var notationWithLyrics = null;
+      for (i = 0; i < score.notations.length; i++) {
+        if (score.notations[i].hasLyrics() && score.notations[i].lyrics[0] !== null) {
+          notationWithLyrics = score.notations[i];
+          break;
         }
-
-        score.notations = score.notations.concat(items);
-
-        currSyllable++;
       }
+
+      if (notationWithLyrics)
+        score.dropCap = notationWithLyrics.lyrics[0].generateDropCap(ctxt);
     }
 
     // after parsing all of the notations, we need to make one pass over
@@ -173,7 +117,7 @@ export var Gabc = {
         custodToUpdate = null;
       }
 
-      for (j = 0; j < notation.notes.length; j++) {
+      for (var j = 0; j < notation.notes.length; j++) {
         var note = notation.notes[j];
 
         if (oriscusToUpdate !== null) {
@@ -189,6 +133,125 @@ export var Gabc = {
           oriscusToUpdate = note;
       }
     }
+  },
+
+  // returns an array of notations made from the word
+  parseWord: function(ctxt, word, changeClefCallback) {
+
+    var matches = [];
+    var notations = [];
+    var currSyllable = 0;
+    
+    while ((match = __syllablesRegex.exec(word)))
+      matches.push(match);
+
+    for (var j = 0; j < matches.length; j++) {
+      var match = matches[j];
+
+      var lyricText = match[1].trim();
+      var notationData = match[2];
+
+      var items = this.createNotations(ctxt, notationData, changeClefCallback);
+
+      if (items.length === 0)
+        continue;
+
+      notations = notations.concat(items);
+
+      // add the lyrics to the first notation that makes sense...
+      var notationWithLyrics = null;
+      for (var i = 0; i < items.length; i++) {
+        var cne = items[i];
+
+        if (cne.constructor.name === "Accidental")
+          continue;
+
+        notationWithLyrics = cne
+        break;
+      }
+
+      if (notationWithLyrics === null)
+        return notations;
+    
+      var proposedLyricType;
+      
+      // if it's not a neume then make the lyrics a directive
+      if (typeof cne.notes === 'undefined')
+        proposedLyricType = LyricType.Directive;
+      // otherwise trye to guess the lyricType for the first lyric anyway
+      else if (currSyllable === 0 && matches.length === 1)
+        proposedLyricType = LyricType.SingleSyllable;
+      else if (currSyllable === 0 && matches.length > 1)
+        proposedLyricType = LyricType.BeginningSyllable;
+      else if (currSyllable === matches.length - 1)
+        proposedLyricType = LyricType.EndingSyllable;
+      else
+        proposedLyricType = LyricType.MiddleSyllable;
+
+      currSyllable++;
+
+      // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
+      if (proposedLyricType === LyricType.BeginningSyllable ||
+          proposedLyricType === LyricType.SingleSyllable)
+          ctxt.activeClef.resetAccidentals();
+
+      var lyrics = this.parseSyllableLyrics(ctxt, lyricText, proposedLyricType);
+
+      if (lyrics === null || lyrics.length === 0)
+        continue;
+
+      notationWithLyrics.lyrics = lyrics;
+    }
+
+    return notations;
+  },
+
+  // returns an array of lyrics (an array because each syllable can have multiple lyrics)
+  parseSyllableLyrics: function (ctxt, text, proposedLyricType) {
+
+    var lyrics = [];
+
+    // an extension to gabc: multiple lyrics per syllable
+    var lyricTexts = text.split('|');
+
+    for (var i = 0; i < lyricTexts.length; i++) {
+
+      var lyricText = lyricTexts[i];
+
+      // gabc allows lyrics to indicate the centering part of the text by
+      // using braces to indicate how to center the lyric. So a lyric can
+      // look like "f{i}re" or "{fenced}" to center on the i or on the entire
+      // word, respectively. Here we determine if the lyric should be spaced
+      // manually with this method of using braces.
+      var centerStartIndex = lyricText.indexOf('{');
+      var centerLength = 0;
+
+      if (centerStartIndex >= 0) {
+        var indexClosingBracket = lyricText.indexOf('}');
+
+        if (indexClosingBracket >= 0 && indexClosingBracket > centerStartIndex) {
+          centerLength = indexClosingBracket - centerStartIndex - 1;
+
+          // strip out the brackets...is this better than string.replace?
+          lyricText = lyricText.substring(0, centerStartIndex) +
+            lyricText.substring(centerStartIndex + 1, indexClosingBracket) + 
+            lyricText.substring(indexClosingBracket + 1, lyricText.length);
+        } else
+          centerStartIndex = -1; // if there's no closing bracket, don't enable centering
+      }
+
+      var lyric = this.makeLyric(ctxt, lyricText, proposedLyricType);
+
+      // if we have manual lyric centering, then set it now
+      if (centerStartIndex >= 0) {
+        lyric.centerStartIndex = centerStartIndex;
+        lyric.centerLength = centerLength;
+      }
+
+      lyrics.push(lyric);
+    }
+
+    return lyrics;
   },
 
   makeLyric: function (ctxt, text, lyricType) {
@@ -212,13 +275,13 @@ export var Gabc = {
     if (text === "*" || text === "†")
       lyricType = LyricType.Directive;
 
-    var s = new Lyric(ctxt, text, lyricType);
-    s.elidesToNext = elides;
+    var lyric = new Lyric(ctxt, text, lyricType);
+    lyric.elidesToNext = elides;
 
-    return s;
+    return lyric;
   },
 
-  createNotations: function (ctxt, score, data, passByRef) {
+  createNotations: function (ctxt, data, changeClefCallback) {
 
     var notations = [];
 
@@ -238,7 +301,7 @@ export var Gabc = {
       if (notes.length > 0) {
         // create neume(s)
 
-        var neumes = that.createNeumesFromNotes(ctxt, score, notes, out.trailingSpace);
+        var neumes = that.createNeumesFromNotes(ctxt, notes, out.trailingSpace);
         for (var i = 0; i < neumes.length; i++)
           notations.push(neumes[i]);
 
@@ -253,16 +316,14 @@ export var Gabc = {
       if (notation !== null) {
 
         if (notation.isClef) {
-          if (score.startingClef === null) {
-            score.startingClef = notation;
-            return;
-          }
+          changeClefCallback(ctxt, notation);
+          return;
         } else if (notation.isAccidental)
-          passByRef.activeClef.activeAccidental = notation;
+          ctxt.activeClef.activeAccidental = notation;
         else if (notation.resetsAccidentals)
-          passByRef.activeClef.resetAccidentals();
+          ctxt.activeClef.resetAccidentals();
 
-          notations.push(notation);
+        notations.push(notation);
       }
     };
 
@@ -292,43 +353,43 @@ export var Gabc = {
           // other gregorio dividers are not supported
 
         case "c1":
-          passByRef.activeClef = new DoClef(-3, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(-3, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "c2":
-          passByRef.activeClef = new DoClef(-1, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(-1, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "c3":
-          passByRef.activeClef = new DoClef(1, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(1, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "c4":
-          passByRef.activeClef = new DoClef(3, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(3, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "f3":
-          passByRef.activeClef = new FaClef(1, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new FaClef(1, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "f4":
-          passByRef.activeClef = new FaClef(3, 2);
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new FaClef(3, 2));
+          addNotation(ctxt.activeClef);
           break;
 
         case "cb3":
-          passByRef.activeClef = new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat));
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
+          addNotation(ctxt.activeClef);
           break;
 
         case "cb4":
-          passByRef.activeClef = new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat));
-          addNotation(passByRef.activeClef);
+          changeClefCallback(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
+          addNotation(ctxt.activeClef);
           break;
 
           case "z":
@@ -389,21 +450,21 @@ export var Gabc = {
               }
 
               var noteArray = [];
-              this.createNoteFromData(ctxt, passByRef.activeClef, atom, noteArray);
+              this.createNoteFromData(ctxt, ctxt.activeClef, atom, noteArray);
               var accidental = new Signs.Accidental(noteArray[0].staffPosition, accidentalType);
               accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
 
-              passByRef.activeClef.activeAccidental = accidental;
+              ctxt.activeClef.activeAccidental = accidental;
               
               addNotation(accidental);
             } else {
 
               // to make our interpreter more robust, make sure we have a clef to work with
-              if (passByRef.activeClef === null)
-                passByRef.activeClef = new DoClef(1, 2);
+              if (ctxt.activeClef === null)
+                changeClefCallback(new DoClef(1, 2));
 
               // looks like it's a note
-              this.createNoteFromData(ctxt, passByRef.activeClef, atom, notes);
+              this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);
             }
             break;
       }
@@ -415,7 +476,7 @@ export var Gabc = {
     return notations;
   },
 
-  createNeumesFromNotes: function (ctxt, score, notes, finalTrailingSpace) {
+  createNeumesFromNotes: function (ctxt, notes, finalTrailingSpace) {
     
     var neumes = [];
     var intraNeumeSpacing = ctxt.intraNeumeSpacing;

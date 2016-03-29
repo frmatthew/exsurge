@@ -771,7 +771,18 @@ export class Lyric extends TextElement {
     else
       this.lyricType = lyricType;
 
+    // Lyrics keep track of how to center them on notation elements.
+    // centerTextIndex is the index in this.text where the centering starts,
+    // centerLength is how many characters comprise the center point.
+    // performLayout will do the processing
+    this.centerStartIndex = -1;
+    this.centerLength = text.length;
+
     this.needsConnector = false;
+
+    // Lyrics can have their own language defined, which affects the alignment
+    // of the text with the notation element
+    this.language = null;
   }
 
   allowsConnector() {
@@ -815,35 +826,45 @@ export class Lyric extends TextElement {
 
     this.widthWithConnector = this.bounds.width + ctxt.hyphenWidth;
 
-    var activeLanguage = ctxt.defaultLanguage;
+    var activeLanguage = this.language || ctxt.defaultLanguage;
 
     // calculate the point where the text lines up to the staff notation
-    // and offset the rect that much
-    var offset = 0;
+    // and offset the rect that much. By default we just center the text,
+    // but the logic below allows for smarter lyric alignment based
+    // on manual override or language control.
+    var offset = this.widthWithoutConnector / 2, x1, x2;
 
-    if (this.lyricType !== LyricType.Directive) {
+    // some simple checks for sanity, and disable manual centering if the numbers are bad
+    if (this.centerStartIndex >= 0 && (this.centerStartIndex >= this.text.length ||
+      this.centerLength < 0 ||
+      this.centerStartIndex + this.centerLength > this.text.length))
+      this.centerStartIndex = -1;
 
-      // Non-directive elements are lined up to the chant notation based on vowel segments.
-      // First we determine the vowel segment of the text, then we calculate the center point
-      // of that vowel segment.
-      var result = activeLanguage.findVowelSegment(this.text, 0);
-      if (result.found === true) {
-
-        // svgTextMeasurer still has the current lyric in it...
-        
-
-        var x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex);
-        var x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex + result.length);
-
-        offset = x1 + (x2 - x1) / 2;
-      } else {
-        // no vowels found according the text's language. for now we just center the text
-        offset = this.widthWithoutConnector / 2;
-      }
-
+    if (this.text.length === 0) {
+      // if we have no text to work with, then there's nothing to do!
+    } else if (this.centerStartIndex >= 0) {
+      // if we have manually overriden the centering logic for this lyric,
+      // then always use that.
+      // svgTextMeasurer still has the current lyric in it...
+      x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex);
+      x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex + this.centerLength);
+      offset = x1 + (x2 - x1) / 2;
     } else {
-      // directives are always centered on the chant notation
-      offset = this.widthWithoutConnector / 2;
+
+      // if it's a directive with no manual centering override, then
+      // just center the text.
+      if (this.lyricType !== LyricType.Directive) {
+
+        // Non-directive elements are lined up to the chant notation based on vowel segments,
+        var result = activeLanguage.findVowelSegment(this.text, 0);
+      
+        if (result.found === true) {
+          // svgTextMeasurer still has the current lyric in it...
+          x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex);
+          x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex + result.length);
+          offset = x1 + (x2 - x1) / 2;
+        }
+      }
     }
 
     this.bounds.x = -offset;
@@ -853,6 +874,25 @@ export class Lyric extends TextElement {
 
     this.bounds.width = this.widthWithoutConnector;
     this.bounds.height = ctxt.lyricTextSize;
+  }
+
+  generateDropCap(ctxt) {
+
+     var dropCap = new DropCap(ctxt, this.text.substring(0, 1));
+
+    // if the dropcap is a single character syllable (vowel) that is the
+    // beginning of the word, then we use a hyphen in place of the lyric text
+    // and treat it as a single syllable.
+    if (this.text.length === 1) {
+      this.generateSpansFromText(ctxt, ctxt.syllableConnector);
+      this.centerStartIndex = -1;
+      this.lyricType = LyricType.SingleSyllable;
+    } else {
+      this.generateSpansFromText(ctxt, this.text.substring(1));
+      this.centerStartIndex--; // lost a letter, so adjust centering accordingly
+    }
+
+    return dropCap;
   }
 
   getCssClasses() {
