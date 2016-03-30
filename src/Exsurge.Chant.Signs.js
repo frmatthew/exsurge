@@ -62,14 +62,14 @@ export class Custos extends ChantNotationElement {
 
     if (staffPosition <= 2) {
 
-      // ascending custoses
+      // ascending custodes
       if (Math.abs(staffPosition) % 2 === 1)
         return GlyphCode.CustosLong;
       else
         return GlyphCode.CustosShort;
     } else {
 
-      // descending custoses
+      // descending custodes
       if (Math.abs(staffPosition) % 2 === 1)
         return GlyphCode.CustosDescLong;
       else
