@@ -65,11 +65,10 @@ export class Latin extends Language {
   constructor() {
     super("Latin");
 
-    // fixme: should we include 'diphthongs' with accented vowels, e.g., áe?
     // fixme: ui is only diphthong in the exceptional cases below (according to Wheelock's Latin)
-    this.diphthongs = ["ae", "au", "oe"];
+    this.diphthongs = ["ae", "au", "oe", "aé", "áu", "oé"];
     // for centering over the vowel, we will need to know any combinations that might be diphthongs:
-    this.possibleDiphthongs = this.diphthongs.concat(["ei", "eu", "ui"]);
+    this.possibleDiphthongs = this.diphthongs.concat(["ei", "eu", "ui", "éi", "éu", "úi"]);
 
     // some words that are simply exceptions to standard syllabification rules!
     var wordExceptions = new Object();
