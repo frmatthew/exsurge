@@ -964,11 +964,9 @@ export class SalicusFlexus extends Neume {
  */
 export class Scandicus extends Neume {
 
-  // fixme: for now, we render the scandicus as a punctum followed by a podatus. however,
-  // it could also be a podatus followed by a virga...see LU, "Preface," xj.
-  //
-  // perhaps the best way to indicate the virga form is to check if the note shape of
-  // the third note is a virga!
+  // if the third note shape is a virga, then the scadicus is rendered
+  // as a podatus followed by a virga. Otherwise, it's rendered as a
+  // punctum followed by a podatus...
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
@@ -976,31 +974,17 @@ export class Scandicus extends Neume {
     var second = this.notes[1];
     var third = this.notes[2];
 
-    first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
-
-    if (second.isLiquescent || third.isLiquescent) {
-      second.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
-      third.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
+    if (third.shape === NoteShape.Virga) {
+      this.layoutNotesAsPodatus(ctxt, first, second);
+      third.setGlyph(ctxt, Virga.getGlyphCode(third.staffPosition));
+      third.bounds.x = second.bounds.right();
+      this.addVisualizer(third);
     } else {
-      second.setGlyph(ctxt, GlyphCode.PodatusLower);
-      third.setGlyph(ctxt, GlyphCode.PodatusUpper);
+      first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+      this.addVisualizer(first);
+
+      this.layoutNotesAsPodatus(ctxt, second, third, first.bounds.width);
     }
-
-    // fixme: can a scandicus have a quilisma like this?
-    if (second.shape === NoteShape.Quilisma)
-      second.setGlyph(ctxt, GlyphCode.Quilisma);
-
-    var line = new NeumeLineVisualizer(ctxt, second, third, false);
-
-    second.bounds.x = first.bounds.right();
-    line.bounds.x = second.bounds.right() - line.bounds.width;
-    third.bounds.x = second.bounds.right() - third.bounds.width;
-
-    // add the elements
-    this.addVisualizer(first);
-    this.addVisualizer(second);
-    this.addVisualizer(line);
-    this.addVisualizer(third);
 
     this.origin.x = first.origin.x;
     this.origin.y = first.origin.y;
@@ -1024,42 +1008,28 @@ export class ScandicusFlexus extends Neume {
     var third = this.notes[2];
     var fourth = this.notes[3];
 
-    first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
-
-    if (second.isLiquescent || third.isLiquescent) {
-      second.setGlyph(ctxt, GlyphCode.BeginningAscLiquescent);
-      third.setGlyph(ctxt, GlyphCode.TerminatingAscLiquescent);
+    if (third.shape === NoteShape.Virga) {
+      this.layoutNotesAsPodatus(ctxt, first, second);
+      third.setGlyph(ctxt, Virga.getGlyphCode(third.staffPosition));
+      third.bounds.x = second.bounds.right();
+      this.addVisualizer(third);
     } else {
-      second.setGlyph(ctxt, GlyphCode.PodatusLower);
-      third.setGlyph(ctxt, GlyphCode.PodatusUpper);
+      first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+      this.addVisualizer(first);
+
+      this.layoutNotesAsPodatus(ctxt, second, third, first.bounds.width);
     }
 
-    // fixme: can a scandicus have a quilisma like this?
-    if (second.shape === NoteShape.Quilisma)
-      second.setGlyph(ctxt, GlyphCode.Quilisma);
-
-    var line = new NeumeLineVisualizer(ctxt, second, third, false);
-
-    second.bounds.x = first.bounds.right();
-    line.bounds.x = second.bounds.right() - line.bounds.width;
-    third.bounds.x = second.bounds.right() - third.bounds.width;
     fourth.bounds.x = third.bounds.right();
 
     // do we need to draw a descending line?
-    var staffPos3 = third.staffPosition;
-    var staffPos4 = fourth.staffPosition;
-    if (staffPos3 - staffPos4 > 1) {
+    if (third.staffPosition - fourth.staffPosition > 1) {
       var extraLine = new NeumeLineVisualizer(ctxt, third, fourth, false);
       fourth.bounds.x -= extraLine.bounds.width;
       extraLine.bounds.x -= extraLine.bounds.width;
       this.addVisualizer(extraLine);
     }
 
-    // add the elements
-    this.addVisualizer(first);
-    this.addVisualizer(second);
-    this.addVisualizer(line);
-    this.addVisualizer(third);
     this.addVisualizer(fourth);
 
     this.origin.x = first.origin.x;
