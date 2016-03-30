@@ -394,17 +394,33 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
   constructor(ctxt, note0, note1, hanging) {
     super();
 
-    var y0 = ctxt.calculateHeightFromStaffPosition(note0.staffPosition);
-    var y1 = ctxt.calculateHeightFromStaffPosition(note1.staffPosition);
+    var staffPosition0 = note0.staffPosition;
+    var staffPosition1 = note1.staffPosition;
 
-    if (y0 > y1) {
-      var temp = y0;
-      y0 = y1;
-      y1 = temp;
+    // note0 should be the upper one for our calculations here
+    if (staffPosition0 < staffPosition1) {
+      var temp = staffPosition0;
+      staffPosition0 = staffPosition1;
+      staffPosition1 = temp;
     }
 
-    if (hanging)
+    var y0 = ctxt.calculateHeightFromStaffPosition(staffPosition0);
+    var y1 = 0;
+
+    if (hanging) {
+
+      // if the difference between the notes is only one, and the upper
+      // note is on a line, and the lower note is within the four staff lines,
+      // then our hanging line goes past the lower note by a whole
+      // staff interval
+      if (staffPosition0 - staffPosition1 === 1 && Math.abs(staffPosition0) % 2 === 1 &&
+          staffPosition1 > -3)
+        staffPosition1--;
+
       y1 += ctxt.glyphPunctumHeight * ctxt.glyphScaling / 2.2;
+    }
+
+    y1 += ctxt.calculateHeightFromStaffPosition(staffPosition1);
 
     this.bounds.x = 0;
     this.bounds.y = y0;
@@ -755,7 +771,18 @@ export class Lyric extends TextElement {
     else
       this.lyricType = lyricType;
 
+    // Lyrics keep track of how to center them on notation elements.
+    // centerTextIndex is the index in this.text where the centering starts,
+    // centerLength is how many characters comprise the center point.
+    // performLayout will do the processing
+    this.centerStartIndex = -1;
+    this.centerLength = text.length;
+
     this.needsConnector = false;
+
+    // Lyrics can have their own language defined, which affects the alignment
+    // of the text with the notation element
+    this.language = null;
   }
 
   allowsConnector() {
@@ -799,35 +826,45 @@ export class Lyric extends TextElement {
 
     this.widthWithConnector = this.bounds.width + ctxt.hyphenWidth;
 
-    var activeLanguage = ctxt.defaultLanguage;
+    var activeLanguage = this.language || ctxt.defaultLanguage;
 
     // calculate the point where the text lines up to the staff notation
-    // and offset the rect that much
-    var offset = 0;
+    // and offset the rect that much. By default we just center the text,
+    // but the logic below allows for smarter lyric alignment based
+    // on manual override or language control.
+    var offset = this.widthWithoutConnector / 2, x1, x2;
 
-    if (this.lyricType !== LyricType.Directive) {
+    // some simple checks for sanity, and disable manual centering if the numbers are bad
+    if (this.centerStartIndex >= 0 && (this.centerStartIndex >= this.text.length ||
+      this.centerLength < 0 ||
+      this.centerStartIndex + this.centerLength > this.text.length))
+      this.centerStartIndex = -1;
 
-      // Non-directive elements are lined up to the chant notation based on vowel segments.
-      // First we determine the vowel segment of the text, then we calculate the center point
-      // of that vowel segment.
-      var result = activeLanguage.findVowelSegment(this.text, 0);
-      if (result.found === true) {
-
-        // svgTextMeasurer still has the current lyric in it...
-        
-
-        var x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex);
-        var x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex + result.length);
-
-        offset = x1 + (x2 - x1) / 2;
-      } else {
-        // no vowels found according the text's language. for now we just center the text
-        offset = this.widthWithoutConnector / 2;
-      }
-
+    if (this.text.length === 0) {
+      // if we have no text to work with, then there's nothing to do!
+    } else if (this.centerStartIndex >= 0) {
+      // if we have manually overriden the centering logic for this lyric,
+      // then always use that.
+      // svgTextMeasurer still has the current lyric in it...
+      x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex);
+      x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex + this.centerLength);
+      offset = x1 + (x2 - x1) / 2;
     } else {
-      // directives are always centered on the chant notation
-      offset = this.widthWithoutConnector / 2;
+
+      // if it's a directive with no manual centering override, then
+      // just center the text.
+      if (this.lyricType !== LyricType.Directive) {
+
+        // Non-directive elements are lined up to the chant notation based on vowel segments,
+        var result = activeLanguage.findVowelSegment(this.text, 0);
+      
+        if (result.found === true) {
+          // svgTextMeasurer still has the current lyric in it...
+          x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex);
+          x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex + result.length);
+          offset = x1 + (x2 - x1) / 2;
+        }
+      }
     }
 
     this.bounds.x = -offset;
@@ -837,6 +874,25 @@ export class Lyric extends TextElement {
 
     this.bounds.width = this.widthWithoutConnector;
     this.bounds.height = ctxt.lyricTextSize;
+  }
+
+  generateDropCap(ctxt) {
+
+     var dropCap = new DropCap(ctxt, this.text.substring(0, 1));
+
+    // if the dropcap is a single character syllable (vowel) that is the
+    // beginning of the word, then we use a hyphen in place of the lyric text
+    // and treat it as a single syllable.
+    if (this.text.length === 1) {
+      this.generateSpansFromText(ctxt, ctxt.syllableConnector);
+      this.centerStartIndex = -1;
+      this.lyricType = LyricType.SingleSyllable;
+    } else {
+      this.generateSpansFromText(ctxt, this.text.substring(1));
+      this.centerStartIndex--; // lost a letter, so adjust centering accordingly
+    }
+
+    return dropCap;
   }
 
   getCssClasses() {
@@ -914,7 +970,7 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.trailingSpace = -1; // if less than zero, this is automatically calculated at layout time
     this.keepWithNext = false;
 
-    this.lyric = null;
+    this.lyrics = [];
 
     this.score = null; // the ChantScore
     this.line = null; // the ChantLine
@@ -922,19 +978,19 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.visualizers = [];
   }
 
-  hasLyric() {
-    if (this.lyric !== null)
+  hasLyrics() {
+    if (this.lyrics.length !== 0)
       return true;
     else
       return false;
   }
 
-  getLyricLeft() {
-    return this.bounds.x + this.lyric.bounds.x;
+  getLyricLeft(index) {
+    return this.bounds.x + this.lyrics[index].bounds.x;
   }
 
-  getLyricRight() {
-    return this.bounds.x + this.lyric.bounds.x + this.lyric.bounds.width;
+  getLyricRight(index) {
+    return this.bounds.x + this.lyrics[index].bounds.x + this.lyrics[index].bounds.width;
   }
 
   // used by subclasses while building up the chant notations.
@@ -972,8 +1028,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.visualizers = [];
     this.bounds = new Rect(Infinity, Infinity, -Infinity, -Infinity);
 
-    if (this.hasLyric())
-      this.lyric.recalculateMetrics(ctxt);
+    for (var i = 0; i < this.lyrics.length; i++)
+      this.lyrics[i].recalculateMetrics(ctxt);
   }
 
   // a helper function for subclasses to call after they are done performing layout...
@@ -981,9 +1037,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     //this.origin.x -= -this.bounds.x;
     this.bounds.x = 0;
 
-    // add the lyric and line it up
-    if (this.hasLyric())
-      this.lyric.bounds.x = this.origin.x - this.lyric.origin.x;
+    for (var i = 0; i < this.lyrics.length; i++)
+      this.lyrics[i].bounds.x = this.origin.x - this.lyrics[i].origin.x;
   }
 
   createDrawable(ctxt) {
@@ -992,8 +1047,8 @@ export class ChantNotationElement extends ChantLayoutElement {
     for (var i = 0; i < this.visualizers.length; i++)
       inner += this.visualizers[i].createDrawable(ctxt);
 
-    if (this.lyric)
-      inner += this.lyric.createDrawable(ctxt);
+    for (i = 0; i < this.lyrics.length; i++)
+      inner += this.lyrics[i].createDrawable(ctxt);
 
     return QuickSvg.createFragment('g', {
       'class': 'ChantNotationElement ' + this.constructor.name,

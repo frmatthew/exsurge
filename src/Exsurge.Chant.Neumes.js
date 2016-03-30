@@ -182,11 +182,7 @@ export class Apostropha extends Neume {
     // determine the glyph to use
     var note = this.notes[0];
 
-    if (note.liquescent !== LiquescentType.None)
-      note.setGlyph(ctxt, GlyphCode.StrophaLiquescent);
-    else
-      note.setGlyph(ctxt, GlyphCode.Stropha);
-
+    note.setGlyph(ctxt, Apostropha.determineNoteGlyphCode(note));
     this.addVisualizer(note);
 
     this.origin.x = note.origin.x;
@@ -199,6 +195,9 @@ export class Apostropha extends Neume {
 
     if (note.shape === NoteShape.Stropha)
       return GlyphCode.Stropha;
+
+    if (note.liquescent !== LiquescentType.None)
+      note.setGlyph(ctxt, GlyphCode.StrophaLiquescent);
 
     if (note.shapeModifiers & NoteShapeModifiers.Cavum)
       return GlyphCode.PunctumCavum;
@@ -255,7 +254,7 @@ export class Trivirga extends Neume {
     note2.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
     note2.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing;
 
-    note3.setGlyph(ctxt, Virga.getGlyphCode(staffPosition));
+    note3.setGlyph(ctxt, Virga.getGlyphCode(note1.staffPosition));
     note3.bounds.x += note1.bounds.width + ctxt.intraNeumeSpacing + note2.bounds.width + ctxt.intraNeumeSpacing;
 
     this.addVisualizer(note1);
@@ -625,9 +624,11 @@ export class Porrectus extends Neume {
     // add the connecting line
     if (thirdStaffPosition - secondStaffPosition > 1) {
       line = new NeumeLineVisualizer(ctxt, second, third, false);
-      x -= line.bounds.width;
-      line.bounds.x = x;
+      line.bounds.x = x - line.bounds.width;
       this.addVisualizer(line);
+
+      if (third.liquescent & LiquescentType.Descending)
+        x -= line.bounds.width;
     }
 
     if (third.liquescent & LiquescentType.Small) {
