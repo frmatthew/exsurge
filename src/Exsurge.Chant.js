@@ -27,7 +27,7 @@ import * as Exsurge from 'Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from 'Exsurge.Drawing'
 import { Glyphs } from 'Exsurge.Glyphs'
-import { Custod, AccidentalType } from 'Exsurge.Chant.Signs'
+import { Custos, AccidentalType } from 'Exsurge.Chant.Signs'
 import { Gabc } from 'Exsurge.Gabc'
 
 
@@ -307,7 +307,7 @@ export class ChantLine extends ChantLayoutElement {
     this.staffLeft = 0;
     this.staffRight = 0;
 
-    this.custod = null;
+    this.custos = null;
 
     this.justify = true;
 
@@ -482,7 +482,7 @@ export class ChantLine extends ChantLayoutElement {
     var curr = this.startingClef, prev = null, prevWithLyrics = null;
 
     // todo: estimate how much space we have available to us
-    var rightBoundary = this.staffRight - Glyphs.CustodLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custod on the line
+    var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custos on the line
 
     // todo: iterate through the notations, fittng what we can on this line
     var i, scoreNotations = this.score.notations;
@@ -537,27 +537,27 @@ export class ChantLine extends ChantLayoutElement {
         extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
     }
 
-    // create the custod at the end of the line (if we need it!)
-    // if we find an element following this one that is a neume, we create a custod for it
+    // create the custos at the end of the line (if we need it!)
+    // if we find an element following this one that is a neume, we create a custos for it
     for (i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
       var notation = this.score.notations[i];
 
       if ('notes' in notation && notation.notes.length > 0) {
 
-        var custod = new Custod();
-        custod.referringNeume = notation;
+        var custos = new Custos();
+        custos.referringNeume = notation;
 
-        custod.performLayout(ctxt);
+        custos.performLayout(ctxt);
 
         if (this.notations.length > 0) {
           last = this.notations[this.notations.length - 1];
-          custod.bounds.x = last.bounds.x + last.bounds.width;
+          custos.bounds.x = last.bounds.x + last.bounds.width;
         }
 
-        this.custod = custod;
-        this.notations.push(custod);
+        this.custos = custos;
+        this.notations.push(custos);
 
-        extraSpace -= custod.bounds.width + custod.leadingSpace;
+        extraSpace -= custos.bounds.width + custos.leadingSpace;
 
         // nothing more to see here...
         break;
@@ -584,9 +584,9 @@ export class ChantLine extends ChantLayoutElement {
 
     var i, prev = null, curr = null, prevWithLyrics = null;
 
-    // if we have a custod, place it at the end of the line
-    if (this.custod !== null) 
-      this.custod.bounds.x = this.staffRight - this.custod.bounds.width - this.custod.leadingSpace;
+    // if we have a custos, place it at the end of the line
+    if (this.custos !== null) 
+      this.custos.bounds.x = this.staffRight - this.custos.bounds.width - this.custos.leadingSpace;
 
     // first pass: determine the neumes we can space apart
     // start at 1 to skip the clef
@@ -616,7 +616,7 @@ export class ChantLine extends ChantLayoutElement {
 
     var offset = 0;
     var increment = extraSpace / indices.length;
-    var lastIndex = (this.notations[this.notations.length - 1].constructor.name === 'Custod') ? this.notations.length - 1 : this.notations.length;
+    var lastIndex = (this.notations[this.notations.length - 1].constructor.name === 'Custos') ? this.notations.length - 1 : this.notations.length;
     for (i = 1; i < lastIndex; i++) {
 
       curr = this.notations[i];

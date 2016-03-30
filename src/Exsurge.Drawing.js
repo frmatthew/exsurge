@@ -43,10 +43,10 @@ export let GlyphCode = {
   BeginningAscLiquescent: "BeginningAscLiquescent",
   BeginningDesLiquescent: "BeginningDesLiquescent",
 
-  CustodDescLong: "CustodDescLong",
-  CustodDescShort: "CustodDescShort",
-  CustodLong: "CustodLong",
-  CustodShort: "CustodShort",
+  CustosDescLong: "CustosDescLong",
+  CustosDescShort: "CustosDescShort",
+  CustosLong: "CustosLong",
+  CustosShort: "CustosShort",
 
   // clefs and other markings
   DoClef: "DoClef",
