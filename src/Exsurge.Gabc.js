@@ -430,7 +430,7 @@ export var Gabc = {
       if (notation !== null) {
 
         if (notation.isClef) {
-          score.changeClefCallback(ctxt, notation);
+          score.changeClef(ctxt, notation);
           return;
         } else if (notation.isAccidental)
           ctxt.activeClef.activeAccidental = notation;
@@ -467,42 +467,42 @@ export var Gabc = {
           // other gregorio dividers are not supported
 
         case "c1":
-          score.changeClefCallback(ctxt, new DoClef(-3, 2));
+          score.changeClef(ctxt, new DoClef(-3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c2":
-          score.changeClefCallback(ctxt, new DoClef(-1, 2));
+          score.changeClef(ctxt, new DoClef(-1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c3":
-          score.changeClefCallback(ctxt, new DoClef(1, 2));
+          score.changeClef(ctxt, new DoClef(1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c4":
-          score.changeClefCallback(ctxt, new DoClef(3, 2));
+          score.changeClef(ctxt, new DoClef(3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "f3":
-          score.changeClefCallback(ctxt, new FaClef(1, 2));
+          score.changeClef(ctxt, new FaClef(1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "f4":
-          score.changeClefCallback(ctxt, new FaClef(3, 2));
+          score.changeClef(ctxt, new FaClef(3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "cb3":
-          score.changeClefCallback(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
+          score.changeClef(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
           addNotation(ctxt.activeClef);
           break;
 
         case "cb4":
-          score.changeClefCallback(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
+          score.changeClef(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
           addNotation(ctxt.activeClef);
           break;
 
@@ -575,7 +575,7 @@ export var Gabc = {
 
               // to make our interpreter more robust, make sure we have a clef to work with
               if (ctxt.activeClef === null)
-                score.changeClefCallback(new DoClef(1, 2));
+                score.changeClef(ctxt, new DoClef(1, 2));
 
               // looks like it's a note
               this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);

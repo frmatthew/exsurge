@@ -913,11 +913,11 @@ export class ChantScore {
     this.bounds = new Rect();
   }
 
-  changeClefCallback(ctxt_, clef) {
+  changeClef(ctxt, clef) {
     if (this.startingClef === null)
       this.startingClef = clef;
 
-    ctxt_.activeClef = clef;
+    ctxt.activeClef = clef;
   }
 
   performLayout(ctxt, finishedCallback) {
