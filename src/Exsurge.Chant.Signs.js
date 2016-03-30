@@ -29,7 +29,7 @@ import { ctxt, GlyphCode, GlyphVisualizer, DividerLineVisualizer, ChantNotationE
 /*
  *
  */
-export class Custod extends ChantNotationElement {
+export class Custos extends ChantNotationElement {
 
   constructor() {
     super();
@@ -49,7 +49,7 @@ export class Custod extends ChantNotationElement {
     } else if (this.note !== null)
       staffPosition = ctxt.activeClef.pitchToStaffPosition(this.note.pitch);
 
-    glyphCode = Custod.getGlyphCode(staffPosition);
+    glyphCode = Custos.getGlyphCode(staffPosition);
 
     var glyph = new GlyphVisualizer(ctxt, glyphCode);
     glyph.setStaffPosition(ctxt, staffPosition);
@@ -64,16 +64,16 @@ export class Custod extends ChantNotationElement {
 
       // ascending custodes
       if (Math.abs(staffPosition) % 2 === 1)
-        return GlyphCode.CustodLong;
+        return GlyphCode.CustosLong;
       else
-        return GlyphCode.CustodShort;
+        return GlyphCode.CustosShort;
     } else {
 
       // descending custodes
       if (Math.abs(staffPosition) % 2 === 1)
-        return GlyphCode.CustodDescLong;
+        return GlyphCode.CustosDescLong;
       else
-        return GlyphCode.CustodDescShort;
+        return GlyphCode.CustosDescShort;
     }
   }
 }

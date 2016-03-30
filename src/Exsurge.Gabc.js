@@ -93,17 +93,17 @@ export var Gabc = {
     }
 
     // after parsing all of the notations, we need to make one pass over
-    // the neumes/notes to update custods without ref neumes and automatic oriscus
+    // the neumes/notes to update custodes without ref neumes and automatic oriscus
     // directions (ascending or descending)
     //
     // fixme: should we also automatically resolve liquescent ascending/descending?
-    var custodToUpdate = null;
+    var custosToUpdate = null;
     var oriscusToUpdate = null;
     for (i = 0; i < score.notations.length; i++) {
       var notation = score.notations[i];
 
-      if (notation.constructor.name === Signs.Custod.name && notation.note === null) {
-        custodToUpdate = notation;
+      if (notation.constructor.name === Signs.Custos.name && notation.note === null) {
+        custosToUpdate = notation;
         continue;
       }
 
@@ -111,9 +111,9 @@ export var Gabc = {
       if (typeof notation.notes === 'undefined')
         continue;
 
-      if (custodToUpdate !== null) {
-        custodToUpdate.referringNeume = notation;
-        custodToUpdate = null;
+      if (custosToUpdate !== null) {
+        custosToUpdate.referringNeume = notation;
+        custosToUpdate = null;
       }
 
       for (var j = 0; j < notation.notes.length; j++) {
@@ -398,7 +398,7 @@ export var Gabc = {
             addNotation(new ChantLineBreak(false));
             break;
           case "z0":
-            addNotation(new Signs.Custod());
+            addNotation(new Signs.Custos());
             break;
 
           // spacing indicators
@@ -423,14 +423,14 @@ export var Gabc = {
 
 
           default:
-            // might be a custod, might be an accidental, or might be a note
+            // might be a custos, might be an accidental, or might be a note
             if (atom.length > 1 && atom[1] === '+') {
-              // custod
-              var custod = new Signs.Custod();
+              // custos
+              var custos = new Signs.Custos();
 
-              custod.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
+              custos.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
 
-              addNotation(custod);
+              addNotation(custos);
 
             } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
 
