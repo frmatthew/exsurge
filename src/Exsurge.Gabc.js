@@ -42,8 +42,7 @@ export var Gabc = {
   loadChantScore: function (ctxt, gabcNotations, createDropCap) {
 
     var score = new ChantScore();
-
-    // fixme: no dropcap until the text engine is working again
+    
     this.parseChantNotations(ctxt, gabcNotations, score, createDropCap);
 
     return score;
@@ -77,7 +76,7 @@ export var Gabc = {
       score.notations = score.notations.concat(notations);
     }
 
-    // fixme: if we are to create a dropCap and we haven't done so yet, do it now
+    // if we are to create a dropCap and we haven't done so yet, do it now
     if (createDropCap && score.dropCap === null) {
 
       // find the first notation with lyrics to use
