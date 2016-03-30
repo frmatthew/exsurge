@@ -67,9 +67,9 @@ export let GlyphCode = {
   Porrectus4: "Porrectus4",
 
   PunctumCavum: "PunctumCavum",
-  PunctumCuadratum: "PunctumCuadratum",
-  PunctumCuadratumAscLiquescent: "PunctumCuadratumAscLiquescent",
-  PunctumCuadratumDesLiquescent: "PunctumCuadratumDesLiquescent",
+  PunctumQuadratum: "PunctumQuadratum",
+  PunctumQuadratumAscLiquescent: "PunctumQuadratumAscLiquescent",
+  PunctumQuadratumDesLiquescent: "PunctumQuadratumDesLiquescent",
   PunctumInclinatum: "PunctumInclinatum",
   PunctumInclinatumLiquescent: "PunctumInclinatumLiquescent",
   Quilisma: "Quilisma",
@@ -243,8 +243,8 @@ export class ChantContext {
     this.annotationTextColor = this.lyricTextColor;
 
     // everything depends on the scale of the punctum
-    this.glyphPunctumWidth = Glyphs.PunctumCuadratum.bounds.width;
-    this.glyphPunctumHeight = Glyphs.PunctumCuadratum.bounds.height;
+    this.glyphPunctumWidth = Glyphs.PunctumQuadratum.bounds.width;
+    this.glyphPunctumHeight = Glyphs.PunctumQuadratum.bounds.height;
 
     // fixme: for now, we just set these using the glyph scales as noted above, presuming a
     // staff line size of 0.5 in. Really what we should do is scale the punctum size based
