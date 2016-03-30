@@ -53,8 +53,7 @@ export var Gabc = {
   loadChantScore: function (ctxt, gabcNotations, createDropCap) {
 
     var score = new ChantScore();
-
-    // fixme: no dropcap until the text engine is working again
+    
     this.parseChantNotations(ctxt, gabcNotations, score, createDropCap);
 
     return score;
@@ -810,7 +809,12 @@ export var Gabc = {
       },
       handle: function(currNote, prevNote) {
 
-        if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
+        if (prevNote.shape === NoteShape.Virga && currNote.shape === NoteShape.Inclinatum &&
+          currNote.staffPosition < prevNote.staffPosition) {
+          // if we get here, then it seems we have a podatus, now bing followed by a climacus
+          // rather than a scandicus. react accordingly
+          return createNeume(new Neumes.Podatus(), false, false);
+        } else if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
           return scandicusFlexusState;
         else
           return createNeume(new Neumes.Scandicus(), false);
