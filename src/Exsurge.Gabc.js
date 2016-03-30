@@ -217,7 +217,7 @@ export var Gabc = {
     for (var i = 0; i < notations.length; i++) {
       var notation = notations[i];
 
-      if (notation.constructor.name === Signs.Custod.name && notation.note === null) {
+      if (notation.constructor.name === Signs.Custos.name && notation.note === null) {
         custosToUpdate = notation;
         continue;
       }
@@ -513,7 +513,7 @@ export var Gabc = {
             addNotation(new ChantLineBreak(false));
             break;
           case "z0":
-            addNotation(new Signs.Custod());
+            addNotation(new Signs.Custos());
             break;
 
           // spacing indicators
@@ -541,7 +541,7 @@ export var Gabc = {
             // might be a custos, might be an accidental, or might be a note
             if (atom.length > 1 && atom[1] === '+') {
               // custos
-              var custos = new Signs.Custod();
+              var custos = new Signs.Custos();
 
               custos.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
 
