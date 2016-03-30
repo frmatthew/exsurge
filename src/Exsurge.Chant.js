@@ -913,13 +913,6 @@ export class ChantScore {
     this.bounds = new Rect();
   }
 
-  changeClef(ctxt, clef) {
-    if (this.startingClef === null)
-      this.startingClef = clef;
-
-    ctxt.activeClef = clef;
-  }
-
   performLayout(ctxt, finishedCallback) {
 
     // first order of business: let the clef perform layout

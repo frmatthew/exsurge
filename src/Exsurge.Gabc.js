@@ -38,6 +38,16 @@ import { ctxt } from 'Exsurge.Drawing'
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
 var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 
+// for the changeClefCallback function to be reusable, we will use a function that can generate this callback to work with a score.
+var makeChangeClefCallbackForScore = function(score) {
+  return function changeClefCallback(ctxt_, clef) {
+    if (score.startingClef === null)
+      score.startingClef = clef;
+
+    ctxt_.activeClef = clef;
+  }
+}
+
 export var Gabc = {
 
   loadChantScore: function (ctxt, gabcNotations, createDropCap) {
@@ -61,9 +71,10 @@ export var Gabc = {
 
   parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
 
+    var changeClefCallback = makeChangeClefCallbackForScore(score);
     var words = score.gabcSource = this.splitWords(gabcNotations);
     
-    score.notations = this.parseWords(ctxt, words, score);
+    score.notations = this.parseWords(ctxt, words, changeClefCallback);
 
     // fixme: if we are to create a dropCap and we haven't done so yet, do it now
     this.findAndCreateDropCap(ctxt, createDropCap, score);
@@ -72,6 +83,8 @@ export var Gabc = {
   },
 
   updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
+
+    var changeClefCallback = makeChangeClefCallbackForScore(score);
     var oldWords = score.gabcSource.map(function(word) { return word.word; });
     var newWords = this.splitWords(gabcNotations) || [];
   
@@ -137,7 +150,7 @@ export var Gabc = {
     var activeClef = clefs.length? clefs[clefs.length - 1] : score.startingClef;
     
     // Parse the words that were added:
-    var newNotations = this.parseWords(ctxt, wordsAdded, score);
+    var newNotations = this.parseWords(ctxt, wordsAdded, changeClefCallback);
 
     // Update the notation index on words that have just been added.
     if(notationIndex) {
@@ -168,7 +181,7 @@ export var Gabc = {
     score.compiled = false;
   },
 
-  parseWords: function(ctxt, words, score) {
+  parseWords: function(ctxt, words, changeClefCallback) {
     var allNotations = [];
     for (var i = 0; i < words.length; i++) {
       var word = words[i].trim();
@@ -181,7 +194,7 @@ export var Gabc = {
       if (word === '')
         continue;
 
-      var notations = this.parseWord(ctxt, word, score);
+      var notations = this.parseWord(ctxt, word, changeClefCallback);
       allNotations = allNotations.concat(notations);
       result.notationLength = notations.length;
     }
@@ -250,7 +263,7 @@ export var Gabc = {
   },
 
   // returns an array of notations made from the word
-  parseWord: function(ctxt, word, score) {
+  parseWord: function(ctxt, word, changeClefCallback) {
 
     var matches = [];
     var notations = [];
@@ -265,7 +278,7 @@ export var Gabc = {
       var lyricText = match[1].trim();
       var notationData = match[2];
 
-      var items = this.createNotations(ctxt, notationData, score);
+      var items = this.createNotations(ctxt, notationData, changeClefCallback);
 
       if (items.length === 0)
         continue;
@@ -395,7 +408,7 @@ export var Gabc = {
     return lyric;
   },
 
-  createNotations: function (ctxt, data, score) {
+  createNotations: function (ctxt, data, changeClefCallback) {
 
     var notations = [];
 
@@ -430,7 +443,7 @@ export var Gabc = {
       if (notation !== null) {
 
         if (notation.isClef) {
-          score.changeClef(ctxt, notation);
+          changeClefCallback(ctxt, notation);
           return;
         } else if (notation.isAccidental)
           ctxt.activeClef.activeAccidental = notation;
@@ -467,42 +480,42 @@ export var Gabc = {
           // other gregorio dividers are not supported
 
         case "c1":
-          score.changeClef(ctxt, new DoClef(-3, 2));
+          changeClefCallback(ctxt, new DoClef(-3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c2":
-          score.changeClef(ctxt, new DoClef(-1, 2));
+          changeClefCallback(ctxt, new DoClef(-1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c3":
-          score.changeClef(ctxt, new DoClef(1, 2));
+          changeClefCallback(ctxt, new DoClef(1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "c4":
-          score.changeClef(ctxt, new DoClef(3, 2));
+          changeClefCallback(ctxt, new DoClef(3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "f3":
-          score.changeClef(ctxt, new FaClef(1, 2));
+          changeClefCallback(ctxt, new FaClef(1, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "f4":
-          score.changeClef(ctxt, new FaClef(3, 2));
+          changeClefCallback(ctxt, new FaClef(3, 2));
           addNotation(ctxt.activeClef);
           break;
 
         case "cb3":
-          score.changeClef(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
+          changeClefCallback(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
           addNotation(ctxt.activeClef);
           break;
 
         case "cb4":
-          score.changeClef(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
+          changeClefCallback(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
           addNotation(ctxt.activeClef);
           break;
 
@@ -575,7 +588,7 @@ export var Gabc = {
 
               // to make our interpreter more robust, make sure we have a clef to work with
               if (ctxt.activeClef === null)
-                score.changeClef(ctxt, new DoClef(1, 2));
+                changeClefCallback(ctxt, new DoClef(1, 2));
 
               // looks like it's a note
               this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);
