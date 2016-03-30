@@ -207,7 +207,7 @@ export var Gabc = {
   },
 
   // after parsing all of the notations, we need to make one pass over
-  // the neumes/notes to update custods without ref neumes and automatic oriscus
+  // the neumes/notes to update custodes without ref neumes and automatic oriscus
   // directions (ascending or descending)
   //
   // fixme: should we also automatically resolve liquescent ascending/descending?
@@ -538,14 +538,14 @@ export var Gabc = {
 
 
           default:
-            // might be a custod, might be an accidental, or might be a note
+            // might be a custos, might be an accidental, or might be a note
             if (atom.length > 1 && atom[1] === '+') {
-              // custod
-              var custod = new Signs.Custod();
+              // custos
+              var custos = new Signs.Custod();
 
-              custod.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
+              custos.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
 
-              addNotation(custod);
+              addNotation(custos);
 
             } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
 
