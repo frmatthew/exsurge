@@ -75,7 +75,7 @@ export var Gabc = {
     
     score.notations = this.parseWords(ctxt, words, changeClefCallback);
 
-    // fixme: if we are to create a dropCap and we haven't done so yet, do it now
+    // if we are to create a dropCap and we haven't done so yet, do it now
     this.findAndCreateDropCap(ctxt, createDropCap, score);
     
     this.updateCustodesAndOriscusDirections(score.notations);
