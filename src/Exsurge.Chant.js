@@ -955,7 +955,10 @@ export class ChantScore {
     var timeout = new Date().getTime() + 50; // process for fifty milliseconds
     do {
       var notation = this.notations[index++];
-      notation.performLayout(ctxt);
+      if(!notation.compiled) {
+        notation.performLayout(ctxt);
+        notation.compiled = true;
+      }
     } while (index < this.notations.length && new Date().getTime() < timeout);
 
     // schedule the next block of processing

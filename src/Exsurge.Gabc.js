@@ -1,3 +1,4 @@
+
 //
 // Author(s):
 // Fr. Matthew Spencer, OSJ <mspencer@osjusa.org>
@@ -37,6 +38,16 @@ import { ctxt } from 'Exsurge.Drawing'
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
 var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 
+// for the changeClefCallback function to be reusable, we will use a function that can generate this callback to work with a score.
+var makeChangeClefCallbackForScore = function(score) {
+  return function changeClefCallback(ctxt_, clef) {
+    if (score.startingClef === null)
+      score.startingClef = clef;
+
+    ctxt_.activeClef = clef;
+  }
+}
+
 export var Gabc = {
 
   loadChantScore: function (ctxt, gabcNotations, createDropCap) {
@@ -48,42 +59,156 @@ export var Gabc = {
     return score;
   },
 
-  parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
-
-    score.notations = []; 
-
-    var changeClefCallback = function(ctxt_, clef) {
-      if (score.startingClef === null)
-        score.startingClef = clef;
-
-      ctxt_.activeClef = clef;
-    }
-
+  splitWords: function (gabcNotations) {
     // split the notations on whitespace boundaries, unless the space is inside
     // of parentheses. Prior to doing that, we replace all whitespace with
     // spaces, which prevents tabs and newlines from ending up in the notation
     // data.
-    gabcNotations = gabcNotations.replace(/\s/g, ' ');
-    var words = gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
+    return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+  },
 
+  parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
+
+    var changeClefCallback = makeChangeClefCallbackForScore(score);
+    var words = score.gabcSource = this.splitWords(gabcNotations);
+    
+    score.notations = this.parseWords(ctxt, words, changeClefCallback);
+
+    // if we are to create a dropCap and we haven't done so yet, do it now
+    this.findAndCreateDropCap(ctxt, createDropCap, score);
+    
+    this.updateCustodesAndOriscusDirections(score.notations);
+  },
+
+  updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
+
+    var changeClefCallback = makeChangeClefCallbackForScore(score);
+    var oldWords = score.gabcSource.map(function(word) { return word.word; });
+    var newWords = this.splitWords(gabcNotations) || [];
+  
+    // find the part of the words array that has changed:
+    var lenOld = oldWords.length,
+        lenNew = newWords.length,
+        minLen = Math.min(lenOld,lenNew),
+        i = 0;
+    // Count how many words are the same at the beginnings of the arrays:
+    while(i < minLen && oldWords[i] === newWords[i]) {
+      ++i;
+    }
+    var numSameWordsAtBeginning = i,
+        numSameWordsAtEnd = 0;
+    if(i < minLen) {
+      // Count how many words are the same at the ends of the arrays (but only if the shorter array wasn't completely a subset of the longer)
+      i = 1;
+      while(i <= minLen && oldWords[lenOld-i] === newWords[lenNew-i]) {
+        ++i;
+      }
+      numSameWordsAtEnd = i - 1;
+    }
+    if(lenOld === lenNew && i === lenOld) {
+      // the gabc source has not been altered.  No need to do anything.
+      return;
+    }
+    if(numSameWordsAtBeginning === 0) {
+      // if even the first word changed, we need to reset the clef:
+      score.startingClef = null;
+    }
+
+    // we may need to re-interpret the notation following, or the notation before, in case there is a custos, etc.
+    // so we will just act as though the two unchanged words surrounding the section that has changed had also changed:
+    numSameWordsAtEnd = Math.max(numSameWordsAtEnd - 1, 0);
+    numSameWordsAtBeginning = Math.max(numSameWordsAtBeginning - 1, 0);
+    
+    var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
+    var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
+    var wordsRemoved = score.gabcSource.slice(numSameWordsAtBeginning, numSameWordsAtBeginning + numWordsRemoved);
+
+    // calculate index to put the new notations in the notations array, based on where the last identical word's notations are
+    // also, calculate length of notations to remove based on where the last removed word's notations are.
+    var notationIndex = 0, numNotationsRemoved = 0;
+    if(numWordsRemoved) {
+      notationIndex = wordsRemoved[0].notationIndex;
+      var lastWordRemoved = wordsRemoved[wordsRemoved.length - 1];
+      numNotationsRemoved = lastWordRemoved.notationIndex + lastWordRemoved.notationLength - notationIndex;
+    } else {
+      var lastSameWord = score.gabcSource[numSameWordsAtBeginning - 1];
+      if(lastSameWord) notationIndex = lastSameWord.notationIndex + lastSameWord.notationLength;
+    }
+    
+    var dcIndex = score.dropCapIndex;
+    // if there is a drop cap, and it is not among the notations at the beginning that have remained the same,
+    if(typeof dcIndex === 'number' && dcIndex >= notationIndex) {
+      // we need to remove it from the score, so that it will make a new one...
+      score.dropCap = null;
+      score.dropCapIndex = null;
+    }
+
+    // Find the last active clef
+    var clefs = score.notations.slice(0,notationIndex).filter(function(notation) { return notation.isClef; });
+    var activeClef = clefs.length? clefs[clefs.length - 1] : score.startingClef;
+    
+    // Parse the words that were added:
+    var newNotations = this.parseWords(ctxt, wordsAdded, changeClefCallback);
+
+    // Update the notation index on words that have just been added.
+    if(notationIndex) {
+      wordsAdded.forEach(function(word) {
+        word.notationIndex += notationIndex;
+      });
+    }
+
+    // splice the added notations into the notations array
+    [].splice.apply(score.notations, [notationIndex, numNotationsRemoved].concat(newNotations));
+
+        // splice the added words into the gabcSource array
+    [].splice.apply(score.gabcSource, [numSameWordsAtBeginning, numWordsRemoved].concat(wordsAdded));
+
+    
+    this.findAndCreateDropCap(ctxt, createDropCap, score);
+
+    this.updateCustodesAndOriscusDirections(newNotations);
+    
+    // the words that have not changed are now associated with notations that may have shifted position in the notations array
+    var notationOffset = newNotations.length - numNotationsRemoved;
+    if(notationOffset) {
+      score.gabcSource.slice(numSameWordsAtBeginning + wordsAdded.length).forEach(function(word){
+        word.notationIndex += notationOffset
+      });
+    }
+
+    score.compiled = false;
+  },
+
+  parseWords: function(ctxt, words, changeClefCallback) {
+    var allNotations = [];
     for (var i = 0; i < words.length; i++) {
       var word = words[i].trim();
+      var result = words[i] = {
+        word: word,
+        notationIndex: allNotations.length,
+        notationLength: 0
+      };
 
       if (word === '')
         continue;
 
       var notations = this.parseWord(ctxt, word, changeClefCallback);
-      score.notations = score.notations.concat(notations);
+      allNotations = allNotations.concat(notations);
+      result.notationLength = notations.length;
     }
+    return allNotations;
+  },
 
-    // if we are to create a dropCap and we haven't done so yet, do it now
+  findAndCreateDropCap: function(ctxt, createDropCap, score) {
     if (createDropCap && score.dropCap === null) {
 
       // find the first notation with lyrics to use
       var notationWithLyrics = null;
-      for (i = 0; i < score.notations.length; i++) {
+      for (var i = 0; i < score.notations.length; i++) {
         if (score.notations[i].hasLyrics() && score.notations[i].lyrics[0] !== null) {
           notationWithLyrics = score.notations[i];
+          score.dropCapIndex = i;
           break;
         }
       }
@@ -91,16 +216,18 @@ export var Gabc = {
       if (notationWithLyrics)
         score.dropCap = notationWithLyrics.lyrics[0].generateDropCap(ctxt);
     }
+  },
 
-    // after parsing all of the notations, we need to make one pass over
-    // the neumes/notes to update custodes without ref neumes and automatic oriscus
-    // directions (ascending or descending)
-    //
-    // fixme: should we also automatically resolve liquescent ascending/descending?
+  // after parsing all of the notations, we need to make one pass over
+  // the neumes/notes to update custodes without ref neumes and automatic oriscus
+  // directions (ascending or descending)
+  //
+  // fixme: should we also automatically resolve liquescent ascending/descending?
+  updateCustodesAndOriscusDirections: function(notations) {
     var custosToUpdate = null;
     var oriscusToUpdate = null;
-    for (i = 0; i < score.notations.length; i++) {
-      var notation = score.notations[i];
+    for (var i = 0; i < notations.length; i++) {
+      var notation = notations[i];
 
       if (notation.constructor.name === Signs.Custos.name && notation.note === null) {
         custosToUpdate = notation;
@@ -460,7 +587,7 @@ export var Gabc = {
 
               // to make our interpreter more robust, make sure we have a clef to work with
               if (ctxt.activeClef === null)
-                changeClefCallback(new DoClef(1, 2));
+                changeClefCallback(ctxt, new DoClef(1, 2));
 
               // looks like it's a note
               this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);
