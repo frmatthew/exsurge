@@ -112,15 +112,15 @@ export var Gabc = {
       // the gabc source has not been altered.  No need to do anything.
       return;
     }
-    if(numSameWordsAtBeginning === 0) {
-      // if even the first word changed, we need to reset the clef:
-      score.startingClef = null;
-    }
-
     // we may need to re-interpret the notation following, or the notation before, in case there is a custos, etc.
     // so we will just act as though the two unchanged words surrounding the section that has changed had also changed:
     numSameWordsAtEnd = Math.max(numSameWordsAtEnd - 1, 0);
     numSameWordsAtBeginning = Math.max(numSameWordsAtBeginning - 1, 0);
+
+    if(numSameWordsAtBeginning === 0) {
+      // if even the first word changed, we need to reset the clef:
+      score.startingClef = null;
+    }
     
     var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
     var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
