@@ -41,20 +41,20 @@
     var gabcSource = document.getElementById('gabcSource');
     var chantContainer = document.getElementById('chant-container');
     var updateChant = function() {
-      if(score) {
-        exsurge.Gabc.updateChantScore(ctxt, gabcSource.value, score, true);
+      if (score) {
+        exsurge.Gabc.updateMappings(ctxt, score.mappings, gabcSource.value);
+        score.updateNotations(ctxt);
       } else {
-        score = exsurge.Gabc.loadChantScore(ctxt, gabcSource.value, true);
+        mappings = exsurge.Gabc.parseSource(ctxt, gabcSource.value);
+        score = new exsurge.ChantScore(ctxt, mappings, true);
       }
-    
-      // add an annotation
-      //score.annotation = new exsurge.Annotation(ctxt, "Ant. X");
 
       layoutChant();
     }
+
     var layoutChant = function() {
       // perform layout on the chant
-      score.performLayout(ctxt, function() {
+      score.performLayoutAsync(ctxt, function() {
         score.layoutChantLines(ctxt, chantContainer.clientWidth, function() {
           // render the score to svg code
           chantContainer.innerHTML = score.createDrawable(ctxt);

@@ -37,7 +37,12 @@ export class Neume extends ChantNotationElement {
   constructor() {
     super();
 
+    this.isNeume = true;  // poor man's reflection
+
     this.notes = [];
+
+    // neumes keep track of listeners so that we can notify them when we are changed
+    this.changeListeners = [];
   }
 
   performLayout(ctxt) {
@@ -46,7 +51,7 @@ export class Neume extends ChantNotationElement {
 
   finishLayout(ctxt) {
 
-    // allow subclasses an opportunity position their own markings...
+    // allow subclasses an opportunity to position their own markings...
     this.positionMarkings();
 
     // layout the markings of the notes
@@ -69,9 +74,7 @@ export class Neume extends ChantNotationElement {
 
   }
 
-  layoutNotesAsPodatus(ctxt, lowerNote, upperNote, startingX) {
-
-    startingX = startingX || 0;
+  layoutNotesAsPodatus(ctxt, lowerNote, upperNote, startingX = 0) {
 
     var overhangUpperNote = true;
 
@@ -121,6 +124,51 @@ export class Neume extends ChantNotationElement {
     // add the elements
     this.addVisualizer(lowerNote);
     this.addVisualizer(upperNote);
+  }
+
+  layoutNotesAsClivis(ctxt, upper, lower, startingX = 0) {
+
+    var line;
+
+    if (upper.shape === NoteShape.Oriscus) {
+      upper.setGlyph(ctxt, GlyphCode.OriscusDes);
+      upper.bounds.x = startingX;
+    } else {
+      upper.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+      upper.bounds.x = startingX;
+
+      // add an ascending line
+      line = new NeumeLineVisualizer(ctxt, lower, upper, true);
+      line.bounds.x = upper.bounds.x;
+      this.addVisualizer(line);
+    }
+
+    if (lower.liquescent & LiquescentType.Small) {
+      lower.setGlyph(ctxt, GlyphCode.TerminatingDesLiquescent);
+      lower.bounds.x -= lower.bounds.width; // right aligned
+    } else if (lower.liquescent === LiquescentType.Ascending)
+      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratumAscLiquescent);
+    else if (lower.liquescent === LiquescentType.Descending)
+      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratumDesLiquescent);
+    else
+      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+
+    var x = upper.bounds.right();
+
+    // do we need to draw a descending line?
+    if (upper.staffPosition - lower.staffPosition > 1) {
+      line = new NeumeLineVisualizer(ctxt, upper, lower, false);
+      line.bounds.x = x - line.bounds.width;
+      this.addVisualizer(line);
+
+      if (!(lower.liquescent & LiquescentType.Small))
+        x -= line.bounds.width;
+    }
+
+    lower.bounds.x += x;
+
+    this.addVisualizer(upper);
+    this.addVisualizer(lower);
   }
 
   // lays out a sequence of notes that are inclinati (e.g., climacus, pes subpunctis)
@@ -330,48 +378,10 @@ export class Clivis extends Neume {
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
-    var line;
-
     var upper = this.notes[0];
     var lower = this.notes[1];
 
-    if (upper.shape === NoteShape.Oriscus)
-      upper.setGlyph(ctxt, GlyphCode.OriscusDes);
-    else {
-      upper.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
-
-      // add an ascending line
-      line = new NeumeLineVisualizer(ctxt, lower, upper, true);
-      line.bounds.x = upper.bounds.x;
-      this.addVisualizer(line);
-    }
-
-    if (lower.liquescent & LiquescentType.Small) {
-      lower.setGlyph(ctxt, GlyphCode.TerminatingDesLiquescent);
-      lower.bounds.x -= lower.bounds.width; // right aligned
-    } else if (lower.liquescent === LiquescentType.Ascending)
-      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratumAscLiquescent);
-    else if (lower.liquescent === LiquescentType.Descending)
-      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratumDesLiquescent);
-    else
-      lower.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
-
-    var x = upper.bounds.right();
-
-    // do we need to draw a descending line?
-    if (upper.staffPosition - lower.staffPosition > 1) {
-      line = new NeumeLineVisualizer(ctxt, upper, lower, false);
-      line.bounds.x = x - line.bounds.width;
-      this.addVisualizer(line);
-
-      if (!(lower.liquescent & LiquescentType.Small))
-        x -= line.bounds.width;
-    }
-
-    lower.bounds.x += x;
-
-    this.addVisualizer(upper);
-    this.addVisualizer(lower);
+    this.layoutNotesAsClivis(ctxt, upper, lower);
 
     this.origin.x = upper.origin.x;
     this.origin.y = upper.origin.y;
@@ -426,8 +436,22 @@ export class Oriscus extends Neume {
     } else {
       if (note.shapeModifiers & NoteShapeModifiers.Ascending)
         note.setGlyph(ctxt, GlyphCode.OriscusAsc);
-      else
+      else if (note.shapeModifiers & NoteShapeModifiers.Descending)
         note.setGlyph(ctxt, GlyphCode.OriscusDes);
+      else {
+        // by default we take the descending form, unless we can figure out by a lookahead here
+        note.setGlyph(ctxt, GlyphCode.OriscusDes);
+
+        // try to find a neume following this one
+        var neume = ctxt.findNextNeume();
+
+        if (neume) {
+          var nextNoteStaffPosition = ctxt.activeClef.pitchToStaffPosition(neume.notes[0].pitch);
+
+          if (nextNoteStaffPosition > note.staffPosition)
+            note.setGlyph(ctxt, GlyphCode.OriscusAsc);
+        }
+      }
     }
 
     this.addVisualizer(note);
@@ -436,6 +460,18 @@ export class Oriscus extends Neume {
     this.origin.y = note.origin.y;
 
     this.finishLayout(ctxt);
+  }
+
+  resetDependencies() {
+    // a single oriscus tries to automatically use the right direction
+    // based on the following neumes. if we don't have a manually designated
+    // direction, then we reset our layout so that we can try to guess it
+    // at next layout phase.
+    if (this.notes[0].shapeModifiers & NoteShapeModifiers.Ascending ||
+      this.notes[0].shapeModifiers & NoteShapeModifiers.Descending)
+      return;
+
+    this.needsLayout = true;
   }
 }
 
@@ -463,6 +499,8 @@ export class PesQuassus extends Neume {
 
     if (upper.liquescent === LiquescentType.LargeDescending)
       upper.setGlyph(ctxt, GlyphCode.PunctumQuadratumDesLiquescent);
+    else if (upperStaffPos - lowerStaffPos === 1) // use a virga glyph in this case
+      upper.setGlyph(ctxt, Virga.getGlyphCode(upper.staffPosition));
     else
       upper.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
 
@@ -784,7 +822,7 @@ export class Punctum extends Neume {
 }
 
 /*
- * Scandicus
+ * Salicus
  */
 export class Salicus extends Neume {
 
@@ -862,7 +900,7 @@ export class Salicus extends Neume {
 }
 
 /*
- * Scandicus
+ * Salicus Flexus
  */
 export class SalicusFlexus extends Neume {
 
@@ -999,7 +1037,8 @@ export class Scandicus extends Neume {
  */
 export class ScandicusFlexus extends Neume {
 
-  // see notes in Scandicus about determining the first three notes.
+  // fixme: for now we just draw the scandicus flexus as a podatus with a clivis,
+  // but we need to review all the forms this neume can take and implement them.
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
@@ -1008,29 +1047,8 @@ export class ScandicusFlexus extends Neume {
     var third = this.notes[2];
     var fourth = this.notes[3];
 
-    if (third.shape === NoteShape.Virga) {
-      this.layoutNotesAsPodatus(ctxt, first, second);
-      third.setGlyph(ctxt, Virga.getGlyphCode(third.staffPosition));
-      third.bounds.x = second.bounds.right();
-      this.addVisualizer(third);
-    } else {
-      first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
-      this.addVisualizer(first);
-
-      this.layoutNotesAsPodatus(ctxt, second, third, first.bounds.width);
-    }
-
-    fourth.bounds.x = third.bounds.right();
-
-    // do we need to draw a descending line?
-    if (third.staffPosition - fourth.staffPosition > 1) {
-      var extraLine = new NeumeLineVisualizer(ctxt, third, fourth, false);
-      fourth.bounds.x -= extraLine.bounds.width;
-      extraLine.bounds.x -= extraLine.bounds.width;
-      this.addVisualizer(extraLine);
-    }
-
-    this.addVisualizer(fourth);
+    this.layoutNotesAsPodatus(ctxt, first, second);
+    this.layoutNotesAsClivis(ctxt, third, fourth, second.bounds.right() + ctxt.intraNeumeSpacing);
 
     this.origin.x = first.origin.x;
     this.origin.y = first.origin.y;
@@ -1043,6 +1061,12 @@ export class ScandicusFlexus extends Neume {
  * TextOnly
  */
 export class TextOnly extends Neume {
+
+  constructor() {
+    super();
+
+    this.isNeume = false;
+  }
 
   performLayout(ctxt) {
     super.performLayout(ctxt);

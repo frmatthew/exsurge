@@ -31,10 +31,12 @@ import { ctxt, GlyphCode, GlyphVisualizer, DividerLineVisualizer, ChantNotationE
  */
 export class Custos extends ChantNotationElement {
 
-  constructor() {
+  // if auto is true, then the custos will automatically try to determine it's height based on
+  // subsequent notations
+  constructor(auto = false) {
     super();
-    this.referringNeume = null;
-    this.note = null;
+    this.auto = auto;
+    this.staffPosition = 0; // default sane value
   }
 
   performLayout(ctxt) {
@@ -43,19 +45,31 @@ export class Custos extends ChantNotationElement {
     var staffPosition = 0; // a default value just to make sure we don't fail rebuilding
     var glyphCode;
 
-    if (this.referringNeume !== null) {
-      if (this.referringNeume.notes.length > 0)
-        staffPosition = ctxt.activeClef.pitchToStaffPosition(this.referringNeume.notes[0].pitch);
-    } else if (this.note !== null)
-      staffPosition = ctxt.activeClef.pitchToStaffPosition(this.note.pitch);
+    if (this.auto) {
 
-    glyphCode = Custos.getGlyphCode(staffPosition);
+      var neume = ctxt.findNextNeume();
 
-    var glyph = new GlyphVisualizer(ctxt, glyphCode);
+      if (neume)
+        staffPosition = ctxt.activeClef.pitchToStaffPosition(neume.notes[0].pitch);
+
+    } else {
+      // we depend on a manual staff position
+      staffPosition = this.staffPosition;
+    }
+
+    var glyph = new GlyphVisualizer(ctxt, Custos.getGlyphCode(staffPosition));
     glyph.setStaffPosition(ctxt, staffPosition);
     this.addVisualizer(glyph);
 
     this.finishLayout(ctxt);
+  }
+
+  // called when layout has changed and our dependencies are no longer good
+  resetDependencies() {
+
+    // we only need to resolve new dependencies if we're an automatic custos
+    if (this.auto)
+      this.needsLayout = true;
   }
 
   static getGlyphCode(staffPosition) {

@@ -283,6 +283,13 @@ export class ChantContext {
     this.drawGuides = false;
     this.drawDebuggingBounds = true;
 
+    // we keep track of where we are in processing notations, so that
+    // we can maintain the context for notations to know about.
+    //
+    // these are only gauranteed to be valid during the performLayout phase!
+    this.activeNotations = null;
+    this.currNotationIndex = -1;
+
     // chant notation elements are normally separated by a minimum fixed amount of space
     // on the staff line. It can happen, however, that two text elements are almost close
     // enough to merge, only to be separated much more by the required hyphen (or other
@@ -323,6 +330,23 @@ export class ChantContext {
 
       document.head.appendChild(styleElement);
     }
+  }
+
+  // finds the next neume starting at this.currNotationIndex
+  // returns an object with two properties, neume and clef
+  findNextNeume() {
+
+    if (typeof this.currNotationIndex === 'undefined')
+      throw "findNextNeume() called without a valid currNotationIndex set";
+
+    for (var i = this.currNotationIndex + 1; i < this.notations.length; i++) {
+      var notation = this.notations[i];
+
+      if (notation.isNeume)
+        return notation;
+    }
+
+    return null;
   }
 }
 
@@ -605,13 +629,12 @@ export class TextElement extends ChantLayoutElement {
 
   generateSpansFromText(ctxt, text) {
 
-    this.unsanitizedText = text;
     this.text = "";
     this.spans = [];
 
     // save ourselves a lot of grief for a very common text:
     if (text === "*" || text === "†") {
-      this.spans.push(new TextSpan(text, ""));
+      this.spans.push(new TextSpan(text));
       return;
     }
 
@@ -764,7 +787,9 @@ export class Lyric extends TextElement {
   constructor(ctxt, text, lyricType) {
     super(ctxt, text, ctxt.lyricTextFont, ctxt.lyricTextSize, 'start');
 
-    this.cssClasses += " Lyric";
+    // save the original text in case we need to later use the lyric
+    // in a dropcap...
+    this.originalText = text;
 
     if (typeof lyricType === 'undefined' || lyricType === null || lyricType === "")
       this.lyricType = LyricType.SingleSyllable;
@@ -878,17 +903,17 @@ export class Lyric extends TextElement {
 
   generateDropCap(ctxt) {
 
-     var dropCap = new DropCap(ctxt, this.text.substring(0, 1));
+     var dropCap = new DropCap(ctxt, this.originalText.substring(0, 1));
 
     // if the dropcap is a single character syllable (vowel) that is the
     // beginning of the word, then we use a hyphen in place of the lyric text
     // and treat it as a single syllable.
-    if (this.text.length === 1) {
+    if (this.originalText.length === 1) {
       this.generateSpansFromText(ctxt, ctxt.syllableConnector);
       this.centerStartIndex = -1;
       this.lyricType = LyricType.SingleSyllable;
     } else {
-      this.generateSpansFromText(ctxt, this.text.substring(1));
+      this.generateSpansFromText(ctxt, this.originalText.substring(1));
       this.centerStartIndex--; // lost a letter, so adjust centering accordingly
     }
 
@@ -969,6 +994,7 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.leadingSpace = 0.0;
     this.trailingSpace = -1; // if less than zero, this is automatically calculated at layout time
     this.keepWithNext = false;
+    this.needsLayout = true;
 
     this.lyrics = [];
 
@@ -1005,7 +1031,7 @@ export class ChantNotationElement extends ChantLayoutElement {
 
   // same as addVisualizer, except the element is unshifted to the front
   // of the visualizer array rather than the end. This way, some
-  // visualizers can be placed behind the others...ledge lines for example.
+  // visualizers can be placed behind the others...ledger lines for example.
   prependVisualizer(chantLayoutElement) {
     if (this.bounds.isEmpty())
       this.bounds = chantLayoutElement.bounds.clone();
@@ -1032,13 +1058,24 @@ export class ChantNotationElement extends ChantLayoutElement {
       this.lyrics[i].recalculateMetrics(ctxt);
   }
 
+  // some subclasses have internal dependencies on other notations (for example,
+  // a custos can depend on a later neume which it uses to set its height).
+  // subclasses can override this function so that when the notations are 
+  // altered, the subclass can correctly invalidate (and later restore) its own
+  // depedencies
+  resetDependencies() {
+
+  }
+
   // a helper function for subclasses to call after they are done performing layout...
   finishLayout(ctxt) {
-    //this.origin.x -= -this.bounds.x;
+
     this.bounds.x = 0;
 
     for (var i = 0; i < this.lyrics.length; i++)
       this.lyrics[i].bounds.x = this.origin.x - this.lyrics[i].origin.x;
+
+    this.needsLayout = false;
   }
 
   createDrawable(ctxt) {

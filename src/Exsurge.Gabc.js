@@ -25,244 +25,186 @@
 //
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
-import { LyricType, Lyric, DropCap } from 'Exsurge.Drawing'
-import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
+import { LyricType, Lyric } from 'Exsurge.Drawing'
+import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
-import { ctxt } from 'Exsurge.Drawing'
-
-
 
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
 var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
 
-// for the changeClefCallback function to be reusable, we will use a function that can generate this callback to work with a score.
-var makeChangeClefCallbackForScore = function(score) {
-  return function changeClefCallback(ctxt_, clef) {
-    if (score.startingClef === null)
-      score.startingClef = clef;
 
-    ctxt_.activeClef = clef;
+// before is an array of mappings
+// after is an array of strings
+
+
+
+export class Gabc {
+
+  // takes gabc source code (without the header info) and returns an array
+  // of ChantMappings describing the chant. A chant score can then be created
+  // fron the chant mappings and later updated via updateMappings() if need
+  // be...
+  static parseSource(ctxt, gabcSource) {
+
+    var words = this.splitWords(gabcSource);
+
+    // set the default clef
+    ctxt.activeClef = Clef.default();
+    
+    var mappings = this.parseWords(ctxt, words, (clef) => ctxt.activeClef = clef);
+
+    return mappings;
   }
-}
 
-export var Gabc = {
 
-  loadChantScore: function (ctxt, gabcNotations, createDropCap) {
+  // A simple general purpose diff algorithm adapted here for comparing
+  // an array of existing mappings with an updated list of gabc words.
+  // note before is an array of mappings, and after is an array of strings
+  // (gabc words).
+  //
+  // This is definitely not the most effecient diff algorithm, but for our
+  // limited needs and source size it seems to work just fine...
+  //
+  // code is adapted from: https://github.com/paulgb/simplediff
+  //
+  // Returns:
+  //   A list of pairs, with the first part of the pair being one of three
+  //   strings ('-', '+', '=') and the second part being a list of values from
+  //   the original before and/or after lists. The first part of the pair
+  //   corresponds to whether the list of values is a deletion, insertion, or
+  //   unchanged, respectively.
+  static diffDescriptorsAndNewWords(before, after) {
 
-    var score = new ChantScore();
-    
-    this.parseChantNotations(ctxt, gabcNotations, score, createDropCap);
-
-    return score;
-  },
-
-  splitWords: function (gabcNotations) {
-    // split the notations on whitespace boundaries, unless the space is inside
-    // of parentheses. Prior to doing that, we replace all whitespace with
-    // spaces, which prevents tabs and newlines from ending up in the notation
-    // data.
-    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
-    return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
-  },
-
-  parseChantNotations: function (ctxt, gabcNotations, score, createDropCap) {
-
-    var changeClefCallback = makeChangeClefCallbackForScore(score);
-    var words = score.gabcSource = this.splitWords(gabcNotations);
-    
-    score.notations = this.parseWords(ctxt, words, changeClefCallback);
-
-    // if we are to create a dropCap and we haven't done so yet, do it now
-    this.findAndCreateDropCap(ctxt, createDropCap, score);
-    
-    this.updateCustodesAndOriscusDirections(score.notations);
-  },
-
-  updateChantScore: function (ctxt, gabcNotations, score, createDropCap) {
-
-    var changeClefCallback = makeChangeClefCallbackForScore(score);
-    var oldWords = score.gabcSource.map(function(word) { return word.word; });
-    var newWords = this.splitWords(gabcNotations) || [];
-  
-    // find the part of the words array that has changed:
-    var lenOld = oldWords.length,
-        lenNew = newWords.length,
-        minLen = Math.min(lenOld,lenNew),
-        i = 0;
-    // Count how many words are the same at the beginnings of the arrays:
-    while(i < minLen && oldWords[i] === newWords[i]) {
-      ++i;
+    // Create a map from before values to their indices
+    var oldIndexMap = {}, i;
+    for (i = 0; i < before.length; i ++) {
+      oldIndexMap[before[i].source] = oldIndexMap[before[i].source] || [];
+      oldIndexMap[before[i].source].push(i);
     }
-    var numSameWordsAtBeginning = i,
-        numSameWordsAtEnd = 0;
-    if(i < minLen) {
-      // Count how many words are the same at the ends of the arrays (but only if the shorter array wasn't completely a subset of the longer)
-      i = 1;
-      while(i <= minLen && oldWords[lenOld-i] === newWords[lenNew-i]) {
-        ++i;
+
+    var overlap = [], startOld, startNew, subLength, inew;
+
+    startOld = startNew = subLength = 0;
+
+    for (inew = 0; inew < after.length; inew++) {
+      var _overlap                = [];
+      oldIndexMap[after[inew]]    = oldIndexMap[after[inew]] || [];
+      for (i = 0; i < oldIndexMap[after[inew]].length; i++) {
+        var iold        = oldIndexMap[after[inew]][i];
+        // now we are considering all values of val such that
+        // `before[iold] == after[inew]`
+        _overlap[iold]  = ((iold && overlap[iold-1]) || 0) + 1;
+        if (_overlap[iold] > subLength) {
+          // this is the largest substring seen so far, so store its indices
+          subLength   = _overlap[iold];
+          startOld    = iold - subLength + 1;
+          startNew    = inew - subLength + 1;
+        }
       }
-      numSameWordsAtEnd = i - 1;
-    }
-    if(lenOld === lenNew && i === lenOld) {
-      // the gabc source has not been altered.  No need to do anything.
-      return;
-    }
-    if(numSameWordsAtBeginning === 0) {
-      // if even the first word changed, we need to reset the clef:
-      score.startingClef = null;
+      overlap = _overlap;
     }
 
-    // we may need to re-interpret the notation following, or the notation before, in case there is a custos, etc.
-    // so we will just act as though the two unchanged words surrounding the section that has changed had also changed:
-    numSameWordsAtEnd = Math.max(numSameWordsAtEnd - 1, 0);
-    numSameWordsAtBeginning = Math.max(numSameWordsAtBeginning - 1, 0);
-    
-    var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
-    var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
-    var wordsRemoved = score.gabcSource.slice(numSameWordsAtBeginning, numSameWordsAtBeginning + numWordsRemoved);
+    if (subLength === 0) {
+      // If no common substring is found, we return an insert and delete...
+      var result = [];
 
-    // calculate index to put the new notations in the notations array, based on where the last identical word's notations are
-    // also, calculate length of notations to remove based on where the last removed word's notations are.
-    var notationIndex = 0, numNotationsRemoved = 0;
-    if(numWordsRemoved) {
-      notationIndex = wordsRemoved[0].notationIndex;
-      var lastWordRemoved = wordsRemoved[wordsRemoved.length - 1];
-      numNotationsRemoved = lastWordRemoved.notationIndex + lastWordRemoved.notationLength - notationIndex;
-    } else {
-      var lastSameWord = score.gabcSource[numSameWordsAtBeginning - 1];
-      if(lastSameWord) notationIndex = lastSameWord.notationIndex + lastSameWord.notationLength;
-    }
-    
-    var dcIndex = score.dropCapIndex;
-    // if there is a drop cap, and it is not among the notations at the beginning that have remained the same,
-    if(typeof dcIndex === 'number' && dcIndex >= notationIndex) {
-      // we need to remove it from the score, so that it will make a new one...
-      score.dropCap = null;
-      score.dropCapIndex = null;
+      if (before.length)
+        result.push(['-', before]);
+      
+      if (after.length)
+        result.push(['+', after]);
+
+      return result;
     }
 
-    // Find the last active clef
-    var clefs = score.notations.slice(0,notationIndex).filter(function(notation) { return notation.isClef; });
-    var activeClef = clefs.length? clefs[clefs.length - 1] : score.startingClef;
-    
-    // Parse the words that were added:
-    var newNotations = this.parseWords(ctxt, wordsAdded, changeClefCallback);
+    // ...otherwise, the common substring is unchanged and we recursively
+    // diff the text before and after that substring
+    return [].concat(
+      this.diffDescriptorsAndNewWords(before.slice(0, startOld), after.slice(0, startNew)),
+      [['=', after.slice(startNew, startNew + subLength)]],
+      this.diffDescriptorsAndNewWords(before.slice(startOld + subLength), after.slice(startNew + subLength))
+    );
+  }
 
-    // Update the notation index on words that have just been added.
-    if(notationIndex) {
-      wordsAdded.forEach(function(word) {
-        word.notationIndex += notationIndex;
-      });
+  // this function essentially performs and applies a rudimentary diff between a
+  // previously parsed set of mappings and between a new gabc source text.
+  // the mappings array passed in is changed in place to be updated from the
+  // new source
+  static updateMappings(ctxt, mappings, newGabcSource) {
+
+    var newWords = this.splitWords(newGabcSource);
+
+    var results = this.diffDescriptorsAndNewWords(mappings, newWords);
+
+    var index = 0, j, k;
+
+    ctxt.activeClef = Clef.default();
+
+    // apply the results to the mappings, marking notations that need to be processed
+    for (var i = 0; i < results.length; i++) {
+
+      var resultCode = results[i][0];
+      var resultValues = results[i][1];
+
+      if (resultCode === '=') {
+        // skip over ones that haven't changed, but updating the clef as we go
+        for (j = 0; j < resultValues.length; j++, index++) {
+          for (k = 0; k < mappings[index].notations.length; k++) {
+            // notify the notation that its dependencies are no longer valid
+            mappings[index].notations[k].resetDependencies();
+
+            if (mappings[index].notations[k].isClef)
+              ctxt.activeClef = mappings[index].notations[k];
+          }
+        }
+
+      } else if (resultCode === '-') {
+        // delete elements that no longer exist, but first notify all
+        // elements of the change
+        mappings.splice(index, resultValues.length);
+
+      } else if (resultCode === '+') {
+        // insert new ones
+        for (j = 0; j < resultValues.length; j++) {
+          var mapping = this.parseWord(ctxt, resultValues[j]);
+
+          for (k = 0; k < mapping.notations.length; k++)
+            if (mapping.notations[k].isClef)
+              ctxt.activeClef = mapping.notations[k];
+
+          mappings.splice(index++, 0, mapping);
+        }
+      }
     }
+  }
 
-    // splice the added notations into the notations array
-    [].splice.apply(score.notations, [notationIndex, numNotationsRemoved].concat(newNotations));
+  // takes an array of gabc words (like that returned by splitWords below)
+  // and returns an array of ChantMapping objects, one for each word.
+  static parseWords(ctxt, words) {
+    var mappings = [];
 
-        // splice the added words into the gabcSource array
-    [].splice.apply(score.gabcSource, [numSameWordsAtBeginning, numWordsRemoved].concat(wordsAdded));
-
-    
-    this.findAndCreateDropCap(ctxt, createDropCap, score);
-
-    this.updateCustodesAndOriscusDirections(newNotations);
-    
-    // the words that have not changed are now associated with notations that may have shifted position in the notations array
-    var notationOffset = newNotations.length - numNotationsRemoved;
-    if(notationOffset) {
-      score.gabcSource.slice(numSameWordsAtBeginning + wordsAdded.length).forEach(function(word){
-        word.notationIndex += notationOffset
-      });
-    }
-
-    score.compiled = false;
-  },
-
-  parseWords: function(ctxt, words, changeClefCallback) {
-    var allNotations = [];
     for (var i = 0; i < words.length; i++) {
       var word = words[i].trim();
-      var result = words[i] = {
-        word: word,
-        notationIndex: allNotations.length,
-        notationLength: 0
-      };
 
       if (word === '')
         continue;
 
-      var notations = this.parseWord(ctxt, word, changeClefCallback);
-      allNotations = allNotations.concat(notations);
-      result.notationLength = notations.length;
+      var mapping = this.parseWord(ctxt, word);
+
+      if (mapping)
+        mappings.push(mapping);
     }
-    return allNotations;
-  },
 
-  findAndCreateDropCap: function(ctxt, createDropCap, score) {
-    if (createDropCap && score.dropCap === null) {
+    return mappings;
+  }
 
-      // find the first notation with lyrics to use
-      var notationWithLyrics = null;
-      for (var i = 0; i < score.notations.length; i++) {
-        if (score.notations[i].hasLyrics() && score.notations[i].lyrics[0] !== null) {
-          notationWithLyrics = score.notations[i];
-          score.dropCapIndex = i;
-          break;
-        }
-      }
-
-      if (notationWithLyrics)
-        score.dropCap = notationWithLyrics.lyrics[0].generateDropCap(ctxt);
-    }
-  },
-
-  // after parsing all of the notations, we need to make one pass over
-  // the neumes/notes to update custodes without ref neumes and automatic oriscus
-  // directions (ascending or descending)
-  //
-  // fixme: should we also automatically resolve liquescent ascending/descending?
-  updateCustodesAndOriscusDirections: function(notations) {
-    var custosToUpdate = null;
-    var oriscusToUpdate = null;
-    for (var i = 0; i < notations.length; i++) {
-      var notation = notations[i];
-
-      if (notation.constructor.name === Signs.Custos.name && notation.note === null) {
-        custosToUpdate = notation;
-        continue;
-      }
-
-      // ignore notations that aren't neumes
-      if (typeof notation.notes === 'undefined')
-        continue;
-
-      if (custosToUpdate !== null) {
-        custosToUpdate.referringNeume = notation;
-        custosToUpdate = null;
-      }
-
-      for (var j = 0; j < notation.notes.length; j++) {
-        var note = notation.notes[j];
-
-        if (oriscusToUpdate !== null) {
-          if (oriscusToUpdate.pitch.isHigherThan(note.pitch))
-            oriscusToUpdate.shapeModifiers |= NoteShapeModifiers.Descending;
-          else if (oriscusToUpdate.pitch.isLowerThan(note.pitch))
-            oriscusToUpdate.shapeModifiers |= NoteShapeModifiers.Ascending;
-
-          oriscusToUpdate = null;
-        }
-
-        if (note.shape === NoteShape.Oriscus)
-          oriscusToUpdate = note;
-      }
-    }
-  },
-
-  // returns an array of notations made from the word
-  parseWord: function(ctxt, word, changeClefCallback) {
+  // takes a gabc word (like those returned by splitWords below) and returns
+  // a ChantMapping object that contains the gabc word source text as well
+  // as the generated notations.
+  static parseWord(ctxt, word) {
 
     var matches = [];
     var notations = [];
@@ -277,19 +219,22 @@ export var Gabc = {
       var lyricText = match[1].trim();
       var notationData = match[2];
 
-      var items = this.createNotations(ctxt, notationData, changeClefCallback);
+      var items = this.parseNotations(ctxt, notationData);
 
       if (items.length === 0)
         continue;
 
       notations = notations.concat(items);
 
+      if (lyricText === '')
+        continue;
+
       // add the lyrics to the first notation that makes sense...
       var notationWithLyrics = null;
       for (var i = 0; i < items.length; i++) {
         var cne = items[i];
 
-        if (cne.constructor.name === "Accidental")
+        if (cne.isAccidental)
           continue;
 
         notationWithLyrics = cne
@@ -302,7 +247,7 @@ export var Gabc = {
       var proposedLyricType;
       
       // if it's not a neume then make the lyrics a directive
-      if (typeof cne.notes === 'undefined')
+      if (!cne.isNeume)
         proposedLyricType = LyricType.Directive;
       // otherwise trye to guess the lyricType for the first lyric anyway
       else if (currSyllable === 0 && matches.length === 1)
@@ -319,7 +264,7 @@ export var Gabc = {
       // also, new words reset the accidentals, per the Solesmes style (see LU xviij)
       if (proposedLyricType === LyricType.BeginningSyllable ||
           proposedLyricType === LyricType.SingleSyllable)
-          ctxt.activeClef.resetAccidentals();
+        ctxt.activeClef.resetAccidentals();
 
       var lyrics = this.parseSyllableLyrics(ctxt, lyricText, proposedLyricType);
 
@@ -329,15 +274,15 @@ export var Gabc = {
       notationWithLyrics.lyrics = lyrics;
     }
 
-    return notations;
-  },
+    return new ChantMapping(word, notations);
+  }
 
   // returns an array of lyrics (an array because each syllable can have multiple lyrics)
-  parseSyllableLyrics: function (ctxt, text, proposedLyricType) {
+  static parseSyllableLyrics(ctxt, text, proposedLyricType) {
 
     var lyrics = [];
 
-    // an extension to gabc: multiple lyrics per syllable
+    // an extension to gabc: multiple lyrics per syllable can be separated by a |
     var lyricTexts = text.split('|');
 
     for (var i = 0; i < lyricTexts.length; i++) {
@@ -378,9 +323,9 @@ export var Gabc = {
     }
 
     return lyrics;
-  },
+  }
 
-  makeLyric: function (ctxt, text, lyricType) {
+  static makeLyric(ctxt, text, lyricType) {
 
     if (text.length > 1 && text[text.length - 1] === '-') {
       if (lyricType === LyricType.EndingSyllable)
@@ -405,34 +350,32 @@ export var Gabc = {
     lyric.elidesToNext = elides;
 
     return lyric;
-  },
+  }
 
-  createNotations: function (ctxt, data, changeClefCallback) {
-
-    var notations = [];
+  // takes a string of gabc notations and creates exsurge objects out of them.
+  // returns an array of notations.
+  static parseNotations(ctxt, data) {
 
     // if there is no data, then this must be a text only object
-    if (data === undefined || data === null || data === "") {
-      notations.push(new Neumes.TextOnly());
-      return notations;
-    }
+    if (!data)
+      return [new Neumes.TextOnly()];
 
+    var notations = [];
     var notes = [];
-    var out = { trailingSpace: -1 };
+    var trailingSpace = -1;
 
-    var that = this;
-    var addNotation = function(notation) {
+    var addNotation = (notation) => {
 
       // first, if we have any notes left over, we create a neume out of them
       if (notes.length > 0) {
-        // create neume(s)
 
-        var neumes = that.createNeumesFromNotes(ctxt, notes, out.trailingSpace);
+        // create neume(s)
+        var neumes = this.createNeumesFromNotes(ctxt, notes, trailingSpace);
         for (var i = 0; i < neumes.length; i++)
           notations.push(neumes[i]);
 
         // reset the trailing space
-        out.trailingSpace = -1;
+        trailingSpace = -1;
 
         notes = [];
       }
@@ -442,8 +385,7 @@ export var Gabc = {
       if (notation !== null) {
 
         if (notation.isClef) {
-          changeClefCallback(ctxt, notation);
-          return;
+          ctxt.activeClef = notation;
         } else if (notation.isAccidental)
           ctxt.activeClef.activeAccidental = notation;
         else if (notation.resetsAccidentals)
@@ -454,6 +396,9 @@ export var Gabc = {
     };
 
     var atoms = data.match(__notationsRegex);
+
+    if (atoms === null)
+      return notations;
 
     for (var i = 0; i < atoms.length; i++) {
 
@@ -476,123 +421,111 @@ export var Gabc = {
         case "::":
           addNotation(new Signs.DoubleBar());
           break;
-          // other gregorio dividers are not supported
+          // other gregorio dividers are not supported yet
 
         case "c1":
-          changeClefCallback(ctxt, new DoClef(-3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(-3, 2));
           break;
 
         case "c2":
-          changeClefCallback(ctxt, new DoClef(-1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(-1, 2));
           break;
 
         case "c3":
-          changeClefCallback(ctxt, new DoClef(1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(1, 2));
           break;
 
         case "c4":
-          changeClefCallback(ctxt, new DoClef(3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(3, 2));
           break;
 
         case "f3":
-          changeClefCallback(ctxt, new FaClef(1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new FaClef(1, 2));
           break;
 
         case "f4":
-          changeClefCallback(ctxt, new FaClef(3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new FaClef(3, 2));
           break;
 
         case "cb3":
-          changeClefCallback(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
           break;
 
         case "cb4":
-          changeClefCallback(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
-          addNotation(ctxt.activeClef);
+          addNotation(ctxt.activeClef = new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
           break;
 
-          case "z":
-            addNotation(new ChantLineBreak(true));
-            break;
-          case "Z":
-            addNotation(new ChantLineBreak(false));
-            break;
-          case "z0":
-            addNotation(new Signs.Custos());
-            break;
+        case "z":
+          addNotation(new ChantLineBreak(true));
+          break;
+        case "Z":
+          addNotation(new ChantLineBreak(false));
+          break;
+        case "z0":
+          addNotation(new Signs.Custos(true));
+          break;
 
-          // spacing indicators
-          case "!":
-            out.trailingSpace = 0;
-            addNotation(null);
-            break;
-          case "/":
-            out.trailingSpace = ctxt.intraNeumeSpacing;
-            addNotation(null);
-            break;
-          case "//":
-            out.trailingSpace = ctxt.intraNeumeSpacing * 2;
-            addNotation(null);
-            break;
-          case ' ':
-            // fixme: is this correct? logically what is the difference in gabc
-            // between putting a space between notes vs putting '//' between notes?
-            out.trailingSpace = ctxt.intraNeumeSpacing * 2;
-            addNotation(null);
-            break;
+        // spacing indicators
+        case "!":
+          trailingSpace = 0;
+          addNotation(null);
+          break;
+        case "/":
+          trailingSpace = ctxt.intraNeumeSpacing;
+          addNotation(null);
+          break;
+        case "//":
+          trailingSpace = ctxt.intraNeumeSpacing * 2;
+          addNotation(null);
+          break;
+        case ' ':
+          // fixme: is this correct? logically what is the difference in gabc
+          // between putting a space between notes vs putting '//' between notes?
+          trailingSpace = ctxt.intraNeumeSpacing * 2;
+          addNotation(null);
+          break;
 
 
-          default:
-            // might be a custos, might be an accidental, or might be a note
-            if (atom.length > 1 && atom[1] === '+') {
-              // custos
-              var custos = new Signs.Custos();
+        default:
+          // might be a custos, might be an accidental, or might be a note
+          if (atom.length > 1 && atom[1] === '+') {
+            // custos
+            var custos = new Signs.Custos();
 
-              custos.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
+            custos.staffPosition = this.gabcHeightToExsurgeHeight(data[0]);
 
-              addNotation(custos);
+            addNotation(custos);
 
-            } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
+          } else if (atom.length > 1 && (atom[1] === 'x' || atom[1] === 'y' || atom[1] === '#')) {
 
-              var accidentalType;
+            var accidentalType;
 
-              switch (atom[1]) {
-                case 'y':
-                  accidentalType = Signs.AccidentalType.Natural;
-                  break;
-                case '#':
-                  accidentalType = Signs.AccidentalType.Sharp;
-                  break;
-                default:
-                  accidentalType = Signs.AccidentalType.Flat;
-                  break;
-              }
-
-              var noteArray = [];
-              this.createNoteFromData(ctxt, ctxt.activeClef, atom, noteArray);
-              var accidental = new Signs.Accidental(noteArray[0].staffPosition, accidentalType);
-              accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
-
-              ctxt.activeClef.activeAccidental = accidental;
-              
-              addNotation(accidental);
-            } else {
-
-              // to make our interpreter more robust, make sure we have a clef to work with
-              if (ctxt.activeClef === null)
-                changeClefCallback(ctxt, new DoClef(1, 2));
-
-              // looks like it's a note
-              this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);
+            switch (atom[1]) {
+              case 'y':
+                accidentalType = Signs.AccidentalType.Natural;
+                break;
+              case '#':
+                accidentalType = Signs.AccidentalType.Sharp;
+                break;
+              default:
+                accidentalType = Signs.AccidentalType.Flat;
+                break;
             }
-            break;
+
+            var noteArray = [];
+            this.createNoteFromData(ctxt, ctxt.activeClef, atom, noteArray);
+            var accidental = new Signs.Accidental(noteArray[0].staffPosition, accidentalType);
+            accidental.trailingSpace = ctxt.intraNeumeSpacing * 2;
+
+            ctxt.activeClef.activeAccidental = accidental;
+            
+            addNotation(accidental);
+          } else {
+
+            // looks like it's a note
+            this.createNoteFromData(ctxt, ctxt.activeClef, atom, notes);
+          }
+          break;
       }
     }
 
@@ -600,9 +533,9 @@ export var Gabc = {
     addNotation(null);
 
     return notations;
-  },
+  }
 
-  createNeumesFromNotes: function (ctxt, notes, finalTrailingSpace) {
+  static createNeumesFromNotes(ctxt, notes, finalTrailingSpace) {
     
     var neumes = [];
     var intraNeumeSpacing = ctxt.intraNeumeSpacing;
@@ -949,10 +882,10 @@ export var Gabc = {
     }
 
     return neumes;
-  },
+  }
 
   // appends any notes created to the notes array argument
-  createNoteFromData: function (ctxt, clef, data, notes) {
+  static createNoteFromData(ctxt, clef, data, notes) {
 
     var note = new Note();
 
@@ -968,12 +901,12 @@ export var Gabc = {
       throw 'Invalid note data: ' + data;
 
     // the next char is always the pitch
-    var pitch = this.convertGabcStaffPositionToScribamPitch(clef, data[0]);
+    var pitch = this.gabcHeightToExsurgePitch(clef, data[0]);
 
     if (data[0] === data[0].toUpperCase())
       note.shape = NoteShape.Inclinatum;
 
-    note.staffPosition = this.convertGabcStaffPositionToScribamStaffPosition(data[0]);
+    note.staffPosition = this.gabcHeightToExsurgeHeight(data[0]);
     note.pitch = pitch;
 
     var mark;
@@ -1075,8 +1008,7 @@ export var Gabc = {
           } else if (haveLookahead && lookahead === '>') {
             note.shapeModifiers |= NoteShapeModifiers.Descending;
             i++;
-          } else
-            note.shapeModifiers |= NoteShapeModifiers.Ascending;
+          }
           break;
 
         case 'O':
@@ -1088,7 +1020,7 @@ export var Gabc = {
             note.shapeModifiers |= NoteShapeModifiers.Descending | NoteShapeModifiers.Stemmed;
             i++;
           } else
-            note.shapeModifiers |= NoteShapeModifiers.Ascending | NoteShapeModifiers.Stemmed;
+            note.shapeModifiers |= NoteShapeModifiers.Stemmed;
           break;
 
         // liquescents
@@ -1134,22 +1066,34 @@ export var Gabc = {
     }
 
     notes.push(note);
-  },
+  }
+
+  // takes raw gabc text source and parses it into words. For example, passing
+  // in a string of "me(f.) (,) ma(fff)num(d!ewf) tu(fgF'E)am,(f.)" would return
+  // an array of four strings: ["me(f.)", "(,)", "ma(fff)num(d!ewf)", "tu(fgF'E)am,(f.)"]
+  static splitWords(gabcNotations) {
+    // split the notations on whitespace boundaries, unless the space is inside
+    // of parentheses. Prior to doing that, we replace all whitespace with
+    // spaces, which prevents tabs and newlines from ending up in the notation
+    // data.
+    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
+    return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+  }
 
   // returns pitch
-  convertGabcStaffPositionToScribamStaffPosition: function (gabcStaffPos) {
-    return gabcStaffPos.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0) - 6;
-  },
+  static gabcHeightToExsurgeHeight(gabcHeight) {
+    return gabcHeight.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0) - 6;
+  }
 
   // returns pitch
-  convertGabcStaffPositionToScribamPitch: function (clef, gabcStaffPos) {
-    var scribamStaffPosition = this.convertGabcStaffPositionToScribamStaffPosition(gabcStaffPos)
+  static gabcHeightToExsurgePitch(clef, gabcHeight) {
+    var exsurgeHeight = this.gabcHeightToExsurgeHeight(gabcHeight)
 
-    var pitch = clef.staffPositionToPitch(scribamStaffPosition);
+    var pitch = clef.staffPositionToPitch(exsurgeHeight);
 
     if (clef.activeAccidental !== null)
       clef.activeAccidental.applyToPitch(pitch);
 
     return pitch;
   }
-};
+}

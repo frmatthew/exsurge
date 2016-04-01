@@ -161,6 +161,7 @@ export class Clef extends ChantNotationElement {
   }
 
   performLayout(ctxt) {
+
     ctxt.activeClef = this;
 
     if (this.defaultAccidental)
@@ -179,6 +180,10 @@ export class Clef extends ChantNotationElement {
     }
 
     super.finishLayout(ctxt);
+  }
+
+  static default() {
+    return __defaultDoClef;
   }
 }
 
@@ -223,6 +228,7 @@ export class DoClef extends Clef {
   }
 }
 
+var __defaultDoClef = new DoClef(1, 2);
 
 export class FaClef extends Clef {
 
@@ -289,6 +295,20 @@ export class ChantLineBreak extends ChantNotationElement {
   }
 }
 
+// a chant mapping is a lightweight format independent way of
+// tracking how a chant language (e.g., gabc) has been
+// mapped to exsurge notations.
+export class ChantMapping {
+
+  // source can be any object type. in the case of gabc, source is a text
+  // string that maps to a gabc word (e.g.: "no(g)bis(fg)").
+  // notations is an array of ChantNotationElements
+  constructor(source, notations) {
+    this.source = source;
+    this.notations = notations;
+  }
+}
+
 
 // a chant line represents one staff line on the page. ChantLines are created by the score
 // and laid out by the page
@@ -299,21 +319,19 @@ export class ChantLine extends ChantLayoutElement {
 
     this.score = score;
 
-    this.scoreNotationStart = 0;
-    this.scoreNotationCount = 0;
-    this.notations = [];
+    this.notationsStartIndex = 0;
+    this.numNotationsOnLine = 0;
     this.notationBounds = null; // Rect
 
     this.staffLeft = 0;
     this.staffRight = 0;
 
+    this.startingClef = null; // necessary for the layout process
     this.custos = null;
 
     this.justify = true;
 
     this.ledgerLines = [];
-
-    this.startingClef = null; // necessary for the layout process
 
     this.nextLine = null;
     this.previousLine = null; // for layout assistance
@@ -321,10 +339,6 @@ export class ChantLine extends ChantLayoutElement {
     // fixme: make these configurable values from the score
     this.spaceAfterNotations = 30; // the space between the notation bounds and the first text track
     this.spaceBetweenTextTracks = 20; // spacing between each text track
-  }
-
-  setStartingClef(clef) {
-    this.startingClef = clef.clone();
   }
 
   performLayout(ctxt) {
@@ -337,18 +351,25 @@ export class ChantLine extends ChantLayoutElement {
     // run through all the elements of the line and calculate the bounds of the notations,
     // as well as the bounds of each text track we will use
     var i;
+    var notations = this.score.notations;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
     var notation = null;
 
-    for (i = 0; i < this.notations.length; i++)
-      this.notationBounds.union(this.notations[i].bounds);
+    this.notationBounds.union(this.startingClef.bounds);
+
+    for (i = this.notationsStartIndex; i < lastIndex; i++)
+      this.notationBounds.union(notations[i].bounds);
+
+    if (this.custos)
+      this.notationBounds.union(this.custos.bounds);
 
     var baseLyricVerticalOffset = this.notationBounds.y + this.notationBounds.height + ctxt.lyricTextSize;
 
     var numLyricLines = 0;
 
     // finalize the lyrics placement
-    for (i = 0; i < this.notations.length; i++) {
-      notation = this.notations[i];
+    for (i = this.notationsStartIndex; i < lastIndex; i++) {
+      notation = notations[i];
 
       numLyricLines = Math.max(numLyricLines, notation.lyrics.length);
 
@@ -357,7 +378,7 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // dropCap and the annotations
-    if (this.scoreNotationStart === 0) {
+    if (this.notationsStartIndex === 0) {
 
       if (this.score.dropCap !== null) {
 
@@ -379,7 +400,7 @@ export class ChantLine extends ChantLayoutElement {
     this.bounds.x = 0;
     this.bounds.y = this.notationBounds.y;
     this.bounds.width = this.notationBounds.right();
-    this.bounds.height = this.notationBounds.height + ctxt.lyricTextSize * numLyricLines;
+    this.bounds.height = this.notationBounds.height + ctxt.lyricTextSize * (numLyricLines - 1);
 
     // the origin of the chant line's coordinate space is at the center line of the left extremity of the staff
     this.origin = new Point(this.staffLeft, -this.notationBounds.y);
@@ -423,7 +444,7 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // dropCap and the annotations
-    if (this.scoreNotationStart === 0) {
+    if (this.notationsStartIndex === 0) {
 
       if (this.score.dropCap !== null)
         inner += this.score.dropCap.createDrawable(ctxt);
@@ -432,9 +453,17 @@ export class ChantLine extends ChantLayoutElement {
           inner += this.score.annotation.createDrawable(ctxt);
     }
 
+    inner += this.startingClef.createDrawable(ctxt);
+
+    var notations = this.score.notations;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
+
     // add all of the notations
-    for (i = 0; i < this.notations.length; i++)
-      inner += this.notations[i].createDrawable(ctxt);
+    for (i = this.notationsStartIndex; i < lastIndex; i++)
+      inner += notations[i].createDrawable(ctxt);
+
+    if (this.custos)
+      inner += this.custos.createDrawable(ctxt);
 
     return QuickSvg.createFragment('g', {
       'class': 'chantLine',
@@ -446,9 +475,9 @@ export class ChantLine extends ChantLayoutElement {
   buildFromChantNotationIndex(ctxt, newElementStart, width) {
 
     // todo: reset / clear the children we have in case they have data
-    this.scoreNotationStart = newElementStart;
-    this.scoreNotationCount = 0;
-    this.notations = [];
+    var notations = this.score.notations;
+    this.notationsStartIndex = newElementStart;
+    this.numNotationsOnLine = 0;
 
     this.staffLeft = 0;
 
@@ -459,7 +488,7 @@ export class ChantLine extends ChantLayoutElement {
 
     // If this is the first chant line, then we have to make room for a
     // drop cap and/or annotation, if present
-    if (this.scoreNotationStart === 0) {
+    if (this.notationsStartIndex === 0) {
 
       var padding = 0;
 
@@ -473,27 +502,26 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // set up the clef...
-    // Also, add the clef as a child (which will also set the clef in the context)
-    this.setStartingClef(ctxt.activeClef);
+    // make a copy for this line to use at the beginning
+    this.startingClef = ctxt.activeClef.clone();
     this.startingClef.performLayout(ctxt);
     this.startingClef.bounds.x = this.staffLeft;
-    this.notations.push(this.startingClef);
 
     var curr = this.startingClef, prev = null, prevWithLyrics = null;
 
-    // todo: estimate how much space we have available to us
+    // estimate how much space we have available to us
     var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custos on the line
 
-    // todo: iterate through the notations, fittng what we can on this line
-    var i, scoreNotations = this.score.notations;
+    // iterate through the notations, fittng what we can on this line
+    var i;
 
-    for (i = newElementStart; i < scoreNotations.length; i++) {
+    for (i = newElementStart; i < notations.length; i++) {
 
       if (curr.hasLyrics())
         prevWithLyrics = curr;
 
       prev = curr;
-      curr = scoreNotations[i];
+      curr = notations[i];
 
       // try to fit the curr element on this line.
       // if it doesn't fit, we finish up here.
@@ -501,13 +529,12 @@ export class ChantLine extends ChantLayoutElement {
       if (fitsOnLine === false) {
 
         // check if the prev elements want to be kept with this one
-        for (var k = i - 1; k > this.scoreNotationStart; k--) {
-          var cne = this.score.notations[k];
+        for (var k = i - 1; k > this.notationsStartIndex; k--) {
+          var cne = notations[k];
 
-          if (cne.keepWithNext === true) {
-            this.notations.pop(); // remove it from our notations
-            this.scoreNotationCount--;
-          } else
+          if (cne.keepWithNext === true)
+            this.numNotationsOnLine--;
+          else
             break;
         }
 
@@ -516,8 +543,7 @@ export class ChantLine extends ChantLayoutElement {
       }
 
       curr.chantLine = this;
-      this.notations.push(curr);
-      this.scoreNotationCount++;
+      this.numNotationsOnLine++;
 
       // line breaks are a special case indicating to stop processing here
       if (curr.constructor.name === ChantLineBreak.name && width > 0) {
@@ -527,9 +553,10 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     var last, extraSpace = 0;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
-    if (this.notations.length > 0) {
-      last = this.notations[this.notations.length - 1];
+    if (this.numNotationsOnLine > 0) {
+      last = notations[lastIndex - 1];
 
       if (last.hasLyrics() && last.getLyricRight(0) > (last.bounds.right() + last.trailingSpace))
         extraSpace = this.staffRight - last.getLyricRight(0);
@@ -537,41 +564,34 @@ export class ChantLine extends ChantLayoutElement {
         extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
     }
 
-    // create the custos at the end of the line (if we need it!)
-    // if we find an element following this one that is a neume, we create a custos for it
-    for (i = this.scoreNotationStart + this.scoreNotationCount; i < this.score.notations.length; i++) {
-      var notation = this.score.notations[i];
+    // create the automatic custos at the end of the line if there are neumes left in the notations
+    for (i = this.notationsStartIndex + this.numNotationsOnLine; i < notations.length; i++) {
+      var notation = notations[i];
 
-      if ('notes' in notation && notation.notes.length > 0) {
+      if (typeof notation.notes !== 'undefined' && notation.notes.length > 0) {
 
-        var custos = new Custos();
-        custos.referringNeume = notation;
+        this.custos = new Custos(true);
+        ctxt.currNotationIndex = i; // make sure the context knows where the custos is 
+        this.custos.performLayout(ctxt);
 
-        custos.performLayout(ctxt);
+        if (last)
+          this.custos.bounds.x = last.bounds.x + last.bounds.width;
 
-        if (this.notations.length > 0) {
-          last = this.notations[this.notations.length - 1];
-          custos.bounds.x = last.bounds.x + last.bounds.width;
-        }
-
-        this.custos = custos;
-        this.notations.push(custos);
-
-        extraSpace -= custos.bounds.width + custos.leadingSpace;
+        extraSpace -= this.custos.bounds.width + this.custos.leadingSpace;
 
         // nothing more to see here...
         break;
       }
     }
 
-    if (width <= 0 && this.notations.length > 0) {
+    if (width <= 0 && last) {
       // set the staff width based on the notations.
-      this.staffRight = this.notations[this.notations.length - 1].bounds.right();
+      this.staffRight = last.bounds.right();
     }
 
     // Justify the line if we are not the last one
     if (this.justify === true && width > 0 &&
-        this.scoreNotationStart + this.scoreNotationCount < this.score.notations.length &&
+        lastIndex < notations.length &&
         extraSpace > 0)
       this.justifyElements(extraSpace);
 
@@ -580,7 +600,9 @@ export class ChantLine extends ChantLayoutElement {
 
   justifyElements(extraSpace) {
 
-    var indices = [];
+    var toJustify = [];
+    var notations = this.score.notations;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
     var i, prev = null, curr = null, prevWithLyrics = null;
 
@@ -590,13 +612,13 @@ export class ChantLine extends ChantLayoutElement {
 
     // first pass: determine the neumes we can space apart
     // start at 1 to skip the clef
-    for (i = 1; i < this.notations.length - 1; i++) {
+    for (i = this.notationsStartIndex; i < lastIndex; i++) {
 
       if (curr !== null && curr.hasLyrics())
         prevWithLyrics = curr;
 
       prev = curr;
-      curr = this.notations[i];
+      curr = notations[i];
 
       if (prev !== null && prev.keepWithNext === true)
         continue;
@@ -608,27 +630,26 @@ export class ChantLine extends ChantLayoutElement {
         continue;
 
       // otherwise, we can add space before this element
-      indices.push(i);
+      toJustify.push(curr);
     }
 
-    if (indices.length === 0)
+    if (toJustify.length === 0)
       return;
 
     var offset = 0;
-    var increment = extraSpace / indices.length;
-    var lastIndex = (this.notations[this.notations.length - 1].constructor.name === 'Custos') ? this.notations.length - 1 : this.notations.length;
-    for (i = 1; i < lastIndex; i++) {
+    var increment = extraSpace / toJustify.length;
+    var toJustifyIndex = 0;
+    for (i = this.notationsStartIndex; i < lastIndex; i++) {
 
-      curr = this.notations[i];
+      curr = notations[i];
 
-      if (indices.indexOf(i) >= 0) {
-        curr.bounds.x += offset + increment;
+      if (toJustifyIndex < toJustify.length && toJustify[toJustifyIndex] === curr) {
         offset += increment;
-      } else
-        curr.bounds.x += offset;
-    }
+        toJustifyIndex++;
+      }
 
-    offset = offset;
+      curr.bounds.x += offset;
+    }
   }
 
   finishLayout(ctxt) {
@@ -636,16 +657,18 @@ export class ChantLine extends ChantLayoutElement {
     this.ledgerLines = []; // clear any existing ledger lines
 
     var epismata = []; // keep track of epismata in case we can connect some
+    var notations = this.score.notations;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
     // make a final pass over all of the notes to add any necessary
     // ledger lines and to smooth out epismata
-    for (var i = 0; i < this.notations.length; i++) {
+    for (var i = this.notationsStartIndex; i < lastIndex; i++) {
 
       // if it's not a neume, then skip over it, right?
-      if (typeof this.notations[i].notes === 'undefined')
+      if (!notations[i].isNeume)
         continue;
 
-      var neume = this.notations[i];
+      var neume = notations[i];
 
       for (var j = 0; j < neume.notes.length; j++) {
         var note = neume.notes[j];
@@ -832,7 +855,7 @@ export class ChantLine extends ChantLayoutElement {
       if (curr.bounds.right() < rightBoundary)
         return true;
       else {
-        curr.bounds.x = 0 ; //StartingClef.Right;
+        curr.bounds.x = 0 ;
         return false;
       }
     }
@@ -894,29 +917,100 @@ export class ChantLine extends ChantLayoutElement {
  */
 export class ChantScore {
 
-  constructor() {
+  // mappings is an array of ChantMappings.
+  constructor(ctxt, mappings = [], useDropCap) {
 
-    this.startingClef = null; // Clef
+    this.mappings = mappings;
 
-    this.notations = [];
     this.lines = [];
     this.notes = [];
 
+    this.startingClef = null;
+
+    this.useDropCap = useDropCap;
     this.dropCap = null;
+
     this.annotation = null;
 
     this.compiled = false;
 
     this.autoColoring = true;
+    this.needsLayout = true;
 
     // valid after chant lines are created...
     this.bounds = new Rect();
+
+    this.updateNotations(ctxt);
   }
 
-  performLayout(ctxt, finishedCallback) {
+  updateNotations(ctxt) {
 
-    // first order of business: let the clef perform layout
-    this.startingClef.performLayout(ctxt);
+    var i;
+
+    // flatten all mappings into one array for N(0) access to notations
+    this.notations = [];
+    for(i = 0; i < this.mappings.length; i++)
+      this.notations = this.notations.concat(this.mappings[i].notations);
+
+    // find the starting clef...
+    // start with a default clef in case the notations don't provide one.
+    this.startingClef = null;
+    var defaultClef = new DoClef(1, 2);
+
+    for (i = 0; i < this.notations.length; i++) {
+
+      // if there are neumes before the clef, then we just keep the default clef above
+      if (this.notations[i].isNeume) {
+        this.startingClef = defaultClef;
+        break;        
+      }
+
+      // otherwise, if we find a clef, before neumes then we use that as our default
+      if (this.notations[i].isClef) {
+        this.startingClef = this.notations[i];
+
+        // the clef is taken out of the notations...
+        this.notations.splice(i, 1); // remove a single notation
+
+        break;
+      }
+    }
+
+    // if we've reached this far and we *still* don't have a clef, then there aren't even
+    // any neumes in the score. still, set the default clef just for good measure
+    if (!this.startingClef)
+      this.startingClef = defaultClef;
+
+    // update drop cap
+    if (this.useDropCap)
+      this.recreateDropCap(ctxt);
+
+    this.needsLayout = true;
+  }
+
+  recreateDropCap(ctxt) {
+
+    // find the first notation with lyrics to use
+    for (var i = 0; i < this.notations.length; i++) {
+      if (this.notations[i].hasLyrics() && this.notations[i].lyrics[0] !== null) {
+        this.dropCap = this.notations[i].lyrics[0].generateDropCap(ctxt);
+        return;
+      }
+    } 
+  }
+
+  // this is the the synchronous version of performLayout that
+  // process everything without yielding to any other workers/threads.
+  // good for server side processing or very small chant pieces.
+  performLayout(ctxt) {
+
+    if (this.needsLayout === false)
+      return; // nothing to do here!
+
+    // setup the context
+    ctxt.activeClef = this.startingClef;
+    ctxt.notations = this.notations;
+    ctxt.currNotationIndex = 0;
 
     if (this.dropCap)
       this.dropCap.recalculateMetrics(ctxt);
@@ -924,47 +1018,68 @@ export class ChantScore {
     if (this.annotation)
       this.annotation.recalculateMetrics(ctxt);
 
-    if (this.compiled) {
-      setTimeout(() => {
-        if (finishedCallback)
-          finishedCallback();
-      }, 0);
-    } else {
-      // boot the compilation process
-      setTimeout(() => {
-        this.compileElement(ctxt, 0, finishedCallback);
-      }, 0);
+    for (var i = 0; i < this.notations.length; i++) {
+      this.notations[i].performLayout(ctxt);
+      ctxt.currNotationIndex++;
     }
+
+    this.needsLayout = false;
   }
 
-  compileElement(ctxt, index, finishedCallback) {
+  // for web applications, probably performLayoutAsync would be more
+  // apppropriate that the above performLayout, since it will process
+  // the notations without locking up the UI thread.
+  performLayoutAsync(ctxt, finishedCallback) {
+
+    if (this.needsLayout === false) {
+      if (finishedCallback)
+        setTimeout(() => finishedCallback(), 0);
+
+      return; // nothing to do here!
+    }
+
+    // setup the context
+    ctxt.activeClef = this.startingClef;
+    ctxt.notations = this.notations;
+    ctxt.currNotationIndex = 0;
+
+    if (this.dropCap)
+      this.dropCap.recalculateMetrics(ctxt);
+
+    if (this.annotation)
+      this.annotation.recalculateMetrics(ctxt);
+
+    setTimeout(() => this.layoutElementsAsync(ctxt, 0, finishedCallback), 0);
+  }
+
+  layoutElementsAsync(ctxt, index, finishedCallback) {
 
     if (index >= this.notations.length) {
+      this.needsLayout = false;
 
-      if (!this.compiled) {
-        this.compiled = true;
-        setTimeout(() => {
-          if (finishedCallback)
-            finishedCallback();
-        }, 0);
-      }
+      if (finishedCallback)
+        setTimeout(() => finishedCallback(), 0);
 
       return;
     }
 
+    if (index === 0)
+      ctxt.activeClef = this.startingClef;
+
     var timeout = new Date().getTime() + 50; // process for fifty milliseconds
     do {
-      var notation = this.notations[index++];
-      if(!notation.compiled) {
+      var notation = this.notations[index];
+      if (notation.needsLayout) {
+        ctxt.currNotationIndex = index;
         notation.performLayout(ctxt);
-        notation.compiled = true;
       }
+
+      index++;
+
     } while (index < this.notations.length && new Date().getTime() < timeout);
 
     // schedule the next block of processing
-    setTimeout(() => {
-      this.compileElement(ctxt, index, finishedCallback);
-    }, 0);
+    setTimeout(() => this.layoutElementsAsync(ctxt, index, finishedCallback), 0);
   }
 
   layoutChantLines(ctxt, width, finishedCallback) {
@@ -981,7 +1096,7 @@ export class ChantScore {
       var line = new ChantLine(this);
 
       line.buildFromChantNotationIndex(ctxt, currIndex, width);
-      currIndex += line.scoreNotationCount;
+      currIndex += line.numNotationsOnLine;
       line.performLayout(ctxt);
       this.lines.push(line);
 
