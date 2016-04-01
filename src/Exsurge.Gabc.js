@@ -40,11 +40,13 @@ var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!
 
 // for the changeClefCallback function to be reusable, we will use a function that can generate this callback to work with a score.
 var makeChangeClefCallbackForScore = function(score) {
+  // returns true if this clef was the first in the score.
   return function changeClefCallback(ctxt_, clef) {
     if (score.startingClef === null)
       score.startingClef = clef;
 
     ctxt_.activeClef = clef;
+    return clef === score.startingClef;
   }
 }
 
@@ -110,15 +112,15 @@ export var Gabc = {
       // the gabc source has not been altered.  No need to do anything.
       return;
     }
-    if(numSameWordsAtBeginning === 0) {
-      // if even the first word changed, we need to reset the clef:
-      score.startingClef = null;
-    }
-
     // we may need to re-interpret the notation following, or the notation before, in case there is a custos, etc.
     // so we will just act as though the two unchanged words surrounding the section that has changed had also changed:
     numSameWordsAtEnd = Math.max(numSameWordsAtEnd - 1, 0);
     numSameWordsAtBeginning = Math.max(numSameWordsAtBeginning - 1, 0);
+
+    if(numSameWordsAtBeginning === 0) {
+      // if even the first word changed, we need to reset the clef:
+      score.startingClef = null;
+    }
     
     var numWordsRemoved = lenOld - numSameWordsAtEnd - numSameWordsAtBeginning;
     var wordsAdded = newWords.slice(numSameWordsAtBeginning, lenNew - numSameWordsAtEnd);
@@ -442,8 +444,8 @@ export var Gabc = {
       if (notation !== null) {
 
         if (notation.isClef) {
-          changeClefCallback(ctxt, notation);
-          return;
+          if(changeClefCallback(ctxt, notation))
+            return;
         } else if (notation.isAccidental)
           ctxt.activeClef.activeAccidental = notation;
         else if (notation.resetsAccidentals)
@@ -479,43 +481,35 @@ export var Gabc = {
           // other gregorio dividers are not supported
 
         case "c1":
-          changeClefCallback(ctxt, new DoClef(-3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(-3, 2));
           break;
 
         case "c2":
-          changeClefCallback(ctxt, new DoClef(-1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(-1, 2));
           break;
 
         case "c3":
-          changeClefCallback(ctxt, new DoClef(1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(1, 2));
           break;
 
         case "c4":
-          changeClefCallback(ctxt, new DoClef(3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(3, 2));
           break;
 
         case "f3":
-          changeClefCallback(ctxt, new FaClef(1, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new FaClef(1, 2));
           break;
 
         case "f4":
-          changeClefCallback(ctxt, new FaClef(3, 2));
-          addNotation(ctxt.activeClef);
+          addNotation(new FaClef(3, 2));
           break;
 
         case "cb3":
-          changeClefCallback(ctxt, new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(1, 2, new Signs.Accidental(0, Signs.AccidentalType.Flat)));
           break;
 
         case "cb4":
-          changeClefCallback(ctxt, new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
-          addNotation(ctxt.activeClef);
+          addNotation(new DoClef(3, 2, new Signs.Accidental(2, Signs.AccidentalType.Flat)));
           break;
 
           case "z":
