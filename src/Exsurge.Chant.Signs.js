@@ -42,7 +42,6 @@ export class Custos extends ChantNotationElement {
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
-    var staffPosition = 0; // a default value just to make sure we don't fail rebuilding
     var glyphCode;
 
     if (this.auto) {
@@ -50,15 +49,11 @@ export class Custos extends ChantNotationElement {
       var neume = ctxt.findNextNeume();
 
       if (neume)
-        staffPosition = ctxt.activeClef.pitchToStaffPosition(neume.notes[0].pitch);
-
-    } else {
-      // we depend on a manual staff position
-      staffPosition = this.staffPosition;
+        this.staffPosition = ctxt.activeClef.pitchToStaffPosition(neume.notes[0].pitch);
     }
 
-    var glyph = new GlyphVisualizer(ctxt, Custos.getGlyphCode(staffPosition));
-    glyph.setStaffPosition(ctxt, staffPosition);
+    var glyph = new GlyphVisualizer(ctxt, Custos.getGlyphCode(this.staffPosition));
+    glyph.setStaffPosition(ctxt, this.staffPosition);
     this.addVisualizer(glyph);
 
     this.finishLayout(ctxt);

@@ -28,6 +28,7 @@ import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from 'Exsurge.Drawing'
 import { Glyphs } from 'Exsurge.Glyphs'
 import { Custos, AccidentalType } from 'Exsurge.Chant.Signs'
+import { HorizontalEpisema } from 'Exsurge.Chant.Markings'
 import { Gabc } from 'Exsurge.Gabc'
 
 
@@ -571,7 +572,7 @@ export class ChantLine extends ChantLayoutElement {
       if (typeof notation.notes !== 'undefined' && notation.notes.length > 0) {
 
         this.custos = new Custos(true);
-        ctxt.currNotationIndex = i; // make sure the context knows where the custos is 
+        ctxt.currNotationIndex = i - 1; // make sure the context knows where the custos is 
         this.custos.performLayout(ctxt);
 
         if (last)
@@ -660,11 +661,61 @@ export class ChantLine extends ChantLayoutElement {
     var notations = this.score.notations;
     var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
+    // an element needs to have a staffPosition property, as well as the standard
+    // bounds property. so it could be a note, or it could be a custos
+    // offsetX and offsetY can be used to add to the position info for the element,
+    // useful in the case of notes.
+    var processElementForLedgerLine = (element, offsetX = 0, offsetY = 0) => {
+
+      // do we need a ledger line for this note?
+      var staffPosition = element.staffPosition;
+
+      if (staffPosition >= 5 || staffPosition <= -5) {
+
+        var x1 = offsetX + element.bounds.x - ctxt.intraNeumeSpacing;
+        var x2 = offsetX + element.bounds.x + element.bounds.width + ctxt.intraNeumeSpacing;
+
+        // round the staffPosition to the nearest line
+        if (staffPosition > 0)
+          staffPosition = staffPosition - (staffPosition - 1) % 2;
+        else
+          staffPosition = staffPosition - (staffPosition + 1) % 2;
+
+        // if we have a ledger line close by, then average out the distance between the two
+        var minLedgerSeperation = ctxt.staffInterval * 5;
+
+        if (this.ledgerLines.length > 0 &&
+            this.ledgerLines[this.ledgerLines.length - 1].x2 + minLedgerSeperation >= x1) {
+
+          // average out the distance
+          var half = (x1 - this.ledgerLines[this.ledgerLines.length - 1].x2) / 2;
+          this.ledgerLines[this.ledgerLines.length - 1].x2 += half;
+          x1 -= half;
+        }
+
+        // never let a ledger line extend past the staff width
+        if (x2 > this.staffRight)
+          x2 = this.staffRight;
+
+        // finally, add the ledger line
+        this.ledgerLines.push({
+          x1: x1,
+          x2: x2,
+          staffPosition: staffPosition
+        });
+      }
+    };
+
     // make a final pass over all of the notes to add any necessary
     // ledger lines and to smooth out epismata
     for (var i = this.notationsStartIndex; i < lastIndex; i++) {
 
-      // if it's not a neume, then skip over it, right?
+      if (notations[i].constructor.name === Custos.name) {
+        processElementForLedgerLine(notations[i]);
+        continue;
+      }
+
+      // if it's not a neume then just skip here
       if (!notations[i].isNeume)
         continue;
 
@@ -673,46 +724,14 @@ export class ChantLine extends ChantLayoutElement {
       for (var j = 0; j < neume.notes.length; j++) {
         var note = neume.notes[j];
 
-        // do we need a ledger line for this note?
-        var staffPosition = note.staffPosition;
-
-        if (staffPosition >= 5 || staffPosition <= -5) {
-
-          var x1 = neume.bounds.x + note.bounds.x - ctxt.staffInterval;
-          var x2 = neume.bounds.x + note.bounds.x + note.bounds.width + ctxt.staffInterval;
-
-          // round the staffPosition to the nearest line
-          if (staffPosition > 0)
-            staffPosition = staffPosition - (staffPosition - 1) % 2;
-          else
-            staffPosition = staffPosition - (staffPosition + 1) % 2;
-
-          // if we have a ledger line close by, then average out the distance between the two
-          var minLedgerSeperation = ctxt.staffInterval * 5;
-
-          if (this.ledgerLines.length > 0 &&
-              this.ledgerLines[this.ledgerLines.length - 1].x2 + minLedgerSeperation >= x1) {
-
-            // average out the distance
-            var half = (x1 - this.ledgerLines[this.ledgerLines.length - 1].x2) / 2;
-            this.ledgerLines[this.ledgerLines.length - 1].x2 += half;
-            x1 -= half;
-          }
-
-          // finally, add the ledger line
-          this.ledgerLines.push({
-            x1: x1,
-            x2: x2,
-            staffPosition: staffPosition
-          });
-        }
+        processElementForLedgerLine(note, neume.bounds.x, neume.bounds.y);
 
         var noteHasEpisema = false;
 
         // blend epismata as we're able
         for (var k = 0; k < note.markings.length; k++) {
 
-          if (note.markings[k].constructor.name !== "HorizontalEpisema")
+          if (note.markings[k].constructor.name !== HorizontalEpisema.name)
             continue;
 
           noteHasEpisema = true;
@@ -761,6 +780,10 @@ export class ChantLine extends ChantLayoutElement {
           epismata = [];
       }
     }
+
+    // don't forget to also include the final custos, which may need a ledger line too
+    if (this.custos)
+      processElementForLedgerLine(this.custos);
   }
 
 

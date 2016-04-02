@@ -332,8 +332,8 @@ export class ChantContext {
     }
   }
 
-  // finds the next neume starting at this.currNotationIndex
-  // returns an object with two properties, neume and clef
+  // returns the next neume starting at this.currNotationIndex, or null
+  // if there isn't a neume after this one...
   findNextNeume() {
 
     if (typeof this.currNotationIndex === 'undefined')
