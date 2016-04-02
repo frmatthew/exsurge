@@ -910,12 +910,14 @@ export class Gabc {
     note.pitch = pitch;
 
     var mark;
+    var markArray = [];
 
     // process the modifiers
     for (var i = 1; i < data.length; i++) {
 
       var c = data[i];
       var lookahead = '\0';
+      var j;
 
       var haveLookahead = i + 1 < data.length;
       if (haveLookahead)
@@ -926,6 +928,14 @@ export class Gabc {
         // rhythmic markings
         case '.':
           mark = new Markings.Mora(note, ctxt.staffInterval / 4.0);
+          for(j = notes.length - 1; j >= 0 && data[++i] === '.'; --j) {
+            var earlierNote = notes[j];
+            var earlierMark = new Markings.Mora(earlierNote, ctxt.staffInterval / 4.0);
+            earlierNote.markings.push(earlierMark);
+            haveLookahead = i + 1 < data.length;
+            if (haveLookahead)
+              lookahead = data[i + 1];
+          }
           if (haveLookahead && lookahead === '1')
             mark.positionHint = MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
@@ -936,16 +946,28 @@ export class Gabc {
 
         case '_':
           mark = new Markings.HorizontalEpisema(note);
+          markArray.push(mark);
+          for(j = notes.length - 1; j >= 0 && data[++i] === '_'; --j) {
+            var earlierNote = notes[j];
+            var earlierMark = new Markings.HorizontalEpisema(earlierNote);
+            earlierNote.markings.push(earlierMark);
+            markArray.push(earlierMark);
+            haveLookahead = i + 1 < data.length;
+            if (haveLookahead)
+              lookahead = data[i + 1];
+          }
           if (haveLookahead) {
-            if (lookahead === '0')
-              mark.positionHint = MarkingPositionHint.Below;
-            else if (lookahead === '1')
-              mark.positionHint = MarkingPositionHint.Above;
+            if (lookahead === '0') {
+              for(j = markArray.length - 1; j >= 0; --j) { markArray[j].positionHint = MarkingPositionHint.Below; }
+            }
+            else if (lookahead === '1') {
+              for(j = markArray.length - 1; j >= 0; --j) { markArray[j].positionHint = MarkingPositionHint.Above; }
+            }
             else if (lookahead === '2')
               mark.terminating = true;
 
             // check for another lookahead...
-            if (++i + 1 < data.length && data[i + 1] === '2') {
+            if (i + 1 < data.length && data[i + 1] === '2') {
               mark.terminating = true;
               i++;
             }
