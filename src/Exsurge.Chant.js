@@ -274,6 +274,28 @@ export class FaClef extends Clef {
   }
 }
 
+/*
+ * TextOnly
+ */
+export class TextOnly extends ChantNotationElement {
+
+  constructor() {
+    super();
+  }
+
+  performLayout(ctxt) {
+    super.performLayout(ctxt);
+
+    // add an empty glyph as a placeholder
+    this.addVisualizer(new GlyphVisualizer(ctxt, GlyphCode.None));
+
+    this.origin.x = 0;
+    this.origin.y = 0;
+
+    this.finishLayout(ctxt);
+  }
+}
+
 export class ChantLineBreak extends ChantNotationElement {
 
   constructor(justify) {

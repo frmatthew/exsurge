@@ -1058,30 +1058,6 @@ export class ScandicusFlexus extends Neume {
 }
 
 /*
- * TextOnly
- */
-export class TextOnly extends Neume {
-
-  constructor() {
-    super();
-
-    this.isNeume = false;
-  }
-
-  performLayout(ctxt) {
-    super.performLayout(ctxt);
-
-    // add an empty glyph as a placeholder
-    this.addVisualizer(new GlyphVisualizer(ctxt, GlyphCode.None));
-
-    this.origin.x = 0;
-    this.origin.y = 0;
-
-    this.finishLayout(ctxt);
-  }
-}
-
-/*
  * Torculus
  */
 export class Torculus extends Neume {

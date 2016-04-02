@@ -26,7 +26,7 @@
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
 import { LyricType, Lyric } from 'Exsurge.Drawing'
-import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, ChantLineBreak } from 'Exsurge.Chant'
+import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
@@ -246,8 +246,8 @@ export class Gabc {
     
       var proposedLyricType;
       
-      // if it's not a neume then make the lyrics a directive
-      if (!cne.isNeume)
+      // if it's not a neume or a TextOnly notation, then make the lyrics a directive
+      if (!cne.isNeume && cne.constructor.name !== TextOnly.name)
         proposedLyricType = LyricType.Directive;
       // otherwise trye to guess the lyricType for the first lyric anyway
       else if (currSyllable === 0 && matches.length === 1)
@@ -358,7 +358,7 @@ export class Gabc {
 
     // if there is no data, then this must be a text only object
     if (!data)
-      return [new Neumes.TextOnly()];
+      return [new TextOnly()];
 
     var notations = [];
     var notes = [];
@@ -744,7 +744,7 @@ export class Gabc {
 
         if (prevNote.shape === NoteShape.Virga && currNote.shape === NoteShape.Inclinatum &&
           currNote.staffPosition < prevNote.staffPosition) {
-          // if we get here, then it seems we have a podatus, now bing followed by a climacus
+          // if we get here, then it seems we have a podatus, now being followed by a climacus
           // rather than a scandicus. react accordingly
           return createNeume(new Neumes.Podatus(), false, false);
         } else if (currNote.shape === NoteShape.Default && currNote.staffPosition < prevNote.staffPosition)
