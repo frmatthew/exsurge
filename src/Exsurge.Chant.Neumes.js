@@ -1047,8 +1047,19 @@ export class ScandicusFlexus extends Neume {
     var third = this.notes[2];
     var fourth = this.notes[3];
 
-    this.layoutNotesAsPodatus(ctxt, first, second);
-    this.layoutNotesAsClivis(ctxt, third, fourth, second.bounds.right() + ctxt.intraNeumeSpacing);
+    if (third.shape === NoteShape.Virga) {
+      this.layoutNotesAsPodatus(ctxt, first, second);
+      this.layoutNotesAsClivis(ctxt, third, fourth, second.bounds.right() + ctxt.intraNeumeSpacing);
+    } else {
+      first.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+      this.addVisualizer(first);
+
+      this.layoutNotesAsPodatus(ctxt, second, third, first.bounds.width);
+
+      fourth.setGlyph(ctxt, GlyphCode.PunctumQuadratum);
+      fourth.bounds.x += third.bounds.right() + ctxt.intraNeumeSpacing;
+      this.addVisualizer(fourth);
+    }
 
     this.origin.x = first.origin.x;
     this.origin.y = first.origin.y;
