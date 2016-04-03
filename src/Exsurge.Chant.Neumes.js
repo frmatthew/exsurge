@@ -27,6 +27,7 @@ import * as Exsurge from 'Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, HorizontalEpisemaLineVisualizer } from 'Exsurge.Drawing'
 import { Note, LiquescentType, NoteShape, NoteShapeModifiers } from 'Exsurge.Chant'
+import { MarkingPositionHint, HorizontalEpisema, Mora } from 'Exsurge.Chant.Markings'
 import { Glyphs } from 'Exsurge.Glyphs'
 
 /*
@@ -34,12 +35,13 @@ import { Glyphs } from 'Exsurge.Glyphs'
  */
 export class Neume extends ChantNotationElement {
 
-  constructor() {
+  constructor(notes = []) {
+
     super();
 
     this.isNeume = true;  // poor man's reflection
 
-    this.notes = [];
+    this.notes = notes;
 
     // neumes keep track of listeners so that we can notify them when we are changed
     this.changeListeners = [];
@@ -57,12 +59,21 @@ export class Neume extends ChantNotationElement {
     // layout the markings of the notes
     for (var i = 0; i < this.notes.length; i++) {
       var note = this.notes[i];
+      var j;
 
-      for (var j = 0; j < note.markings.length; j++) {
-        var marking = note.markings[j];
+      for (j = 0; j < note.epismata.length; j++) {
+        note.epismata[j].performLayout(ctxt);
+        this.addVisualizer(note.epismata[j].visualizer);
+      }
 
-        marking.performLayout(ctxt);
-        this.addVisualizer(marking.visualizer);
+      for (j = 0; j < note.morae.length; j++) {
+        note.morae[j].performLayout(ctxt);
+        this.addVisualizer(note.morae[j].visualizer);
+      }
+
+      for (j = 0; j < note.extraMarkings.length; j++) {
+        note.extraMarkings[j].performLayout(ctxt);
+        this.addVisualizer(note.extraMarkings[j].visualizer);
       }
     }
 
@@ -347,32 +358,27 @@ export class Clivis extends Neume {
   positionMarkings() {
 
     var hasLowerMora = false;
-    var marking, i;
+    var mora, i;
 
     // 1. morae need to be lined up if both notes have morae
     // 2. like the podatus, mora on lower note needs to below
     //    under certain circumstances
-    for (i = 0; i < this.notes[1].markings.length; i++) {
-      marking = this.notes[1].markings[i];
+    for (i = 0; i < this.notes[1].morae.length; i++) {
+      mora = this.notes[1].morae[i];
 
-      if (marking.constructor.name === 'Mora') {
-
-        hasLowerMora = true;
-
-        if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
-            Math.abs(this.notes[1].staffPosition % 2) === 1)
-          marking.positionHint = Exsurge.MarkingPositionHint.Below;
-      }
+      if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
+          Math.abs(this.notes[1].staffPosition % 2) === 1)
+        mora.positionHint = MarkingPositionHint.Below;
     }
 
-    for (i = 0; i < this.notes[0].markings.length; i++) {
-      marking = this.notes[0].markings[i];
+    for (i = 0; i < this.notes[0].morae.length; i++) {
 
-      if (marking.constructor.name === 'Mora' && hasLowerMora) {
-        marking.positionHint = Exsurge.MarkingPositionHint.Above;
-        marking.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+      if (hasLowerMora) {
+        mora = this.notes[0].morae[i];
+        mora.positionHint = MarkingPositionHint.Above;
+        mora.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
       }
-    }    
+    }
   }
 
   performLayout(ctxt) {
@@ -574,23 +580,23 @@ export class Podatus extends Neume {
     // 2. morae: 
     //   a. if podatus difference is 1 and lower note is on a line,
     //      the lower mora should be below
-    for (i = 0; i < this.notes[0].markings.length; i++) {
-      marking = this.notes[0].markings[i];
+    for (i = 0; i < this.notes[0].epismata.length; i++)
+      this.notes[0].epismata[i].positionHint = MarkingPositionHint.Below;
 
-      if (marking.constructor.name === 'HorizontalEpisema')
-        marking.positionHint = Exsurge.MarkingPositionHint.Below;
-      else if (marking.constructor.name === 'Mora' &&
-          (this.notes[1].staffPosition - this.notes[0].staffPosition) === 1 &&
-          Math.abs(this.notes[0].staffPosition % 2) === 1)
-        marking.positionHint = Exsurge.MarkingPositionHint.Below;
+    // if this note has two or more (!?) morae then we just leave them be
+    // since they have already been assigned position hints.
+    if (this.notes[0].morae.length < 2) {
+      for (i = 0; i < this.notes[0].morae.length; i++) {
+        marking = this.notes[0].morae[i];
+
+        if ((this.notes[1].staffPosition - this.notes[0].staffPosition) === 1 &&
+            Math.abs(this.notes[0].staffPosition % 2) === 1)
+          marking.positionHint = MarkingPositionHint.Below;
+      }
     }
 
-    for (i = 0; i < this.notes[1].markings.length; i++) {
-      marking = this.notes[1].markings[i];
-
-      if (marking.constructor.name === 'HorizontalEpisema')
-        marking.positionHint = Exsurge.MarkingPositionHint.Above;
-    }    
+    for (i = 0; i < this.notes[1].epismata.length; i++)
+      this.notes[1].epismata[i].positionHint = MarkingPositionHint.Above;
   }
 
   performLayout(ctxt) {
@@ -1072,6 +1078,38 @@ export class ScandicusFlexus extends Neume {
  * Torculus
  */
 export class Torculus extends Neume {
+
+  positionMarkings() {
+    var marking, i;
+    var hasMiddleEpisema = false;
+
+    // first do the middle note to see if we should try to move
+    // epismata on the other two lower notes
+    for (i = 0; i < this.notes[1].epismata.length; i++) {
+      marking = this.notes[1].epismata[i];
+
+      if (marking.positionHint === MarkingPositionHint.Default) {
+        marking.positionHint = MarkingPositionHint.Above;
+        hasMiddleEpisema = true;
+      }
+    }
+
+    // 1. episema on lower notes should be below, upper note above
+    // 2. morae: fixme: implement
+    for (i = 0; i < this.notes[0].epismata.length; i++) {
+      marking = this.notes[0].epismata[i];
+
+      if (marking.positionHint === MarkingPositionHint.Default)
+        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
+    }
+
+    for (i = 0; i < this.notes[2].epismata.length; i++) {
+      marking = this.notes[2].epismata[i];
+
+      if (marking.positionHint === MarkingPositionHint.Default)
+        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
+    } 
+  }
 
   performLayout(ctxt) {
     super.performLayout(ctxt);

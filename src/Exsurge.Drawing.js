@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 //
 
-import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
+import { Units, Pitch, Point, Rect, Margins, Size, Step } from 'Exsurge.Core'
 import { Glyphs } from 'Exsurge.Glyphs'
 import { Latin } from 'Exsurge.Text'
 

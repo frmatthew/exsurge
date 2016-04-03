@@ -314,13 +314,6 @@ export class Pitch {
   }
 }
 
-// for positioning markings on notes
-export var MarkingPositionHint = {
-  Default: 0,
-  Above: 1,
-  Below: 2
-};
-
 export function generateRandomGuid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)

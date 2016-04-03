@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 //
 
-import { Units, Pitch, Point, Rect, Margins, Size, Step, MarkingPositionHint } from 'Exsurge.Core'
+import { Units, Pitch, Point, Rect, Margins, Size, Step } from 'Exsurge.Core'
 import { LyricType, Lyric } from 'Exsurge.Drawing'
 import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
@@ -34,12 +34,6 @@ import * as Neumes from 'Exsurge.Chant.Neumes'
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
 var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
-
-
-// before is an array of mappings
-// after is an array of strings
-
-
 
 export class Gabc {
 
@@ -910,6 +904,9 @@ export class Gabc {
     note.pitch = pitch;
 
     var mark;
+    var j;
+
+    var episemaNoteIndex = notes.length;
 
     // process the modifiers
     for (var i = 1; i < data.length; i++) {
@@ -925,48 +922,93 @@ export class Gabc {
 
         // rhythmic markings
         case '.':
+
+          mark = null;
+
+          // gabc supports putting up to two morae on each note, by repeating the
+          // period. here, we check to see if we've already created a mora for the
+          // note, and if so, we simply force the second one to have an Above
+          // position hint. if a user decides to try to put position indicators
+          // on the double morae (such as 1 or 2), then really the behavior is
+          // not defined by gabc, so it's on the user to figure it out.
+          if (note.morae.length > 0) {
+            // if we already have one mora, then create another but force a
+            // an alternative positionHint
+            haveLookahead = true;
+            if (Math.abs(note.staffPosition) % 2 === 0)
+              lookahead = '1';
+            else
+              lookahead = '0';
+          }
+
           mark = new Markings.Mora(note, ctxt.staffInterval / 4.0);
           if (haveLookahead && lookahead === '1')
-            mark.positionHint = MarkingPositionHint.Above;
+            mark.positionHint = Markings.MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
-            mark.positionHint = MarkingPositionHint.Below;
+            mark.positionHint = Markings.MarkingPositionHint.Below;
           
-          note.markings.push(mark);
+          note.morae.push(mark);
           break;
 
         case '_':
-          mark = new Markings.HorizontalEpisema(note);
-          if (haveLookahead) {
-            if (lookahead === '0')
-              mark.positionHint = MarkingPositionHint.Below;
-            else if (lookahead === '1')
-              mark.positionHint = MarkingPositionHint.Above;
-            else if (lookahead === '2')
-              mark.terminating = true;
 
-            // check for another lookahead...
-            if (++i + 1 < data.length && data[i + 1] === '2') {
-              mark.terminating = true;
-              i++;
-            }
+          var episemaNote = null;
+
+          // since gabc allows consecutive underscores which is a shortcut to
+          // apply the epismata to previous notes, we keep track of that here
+          // in order to add the new episema to the correct note.
+          if (episemaNoteIndex === notes.length) {
+            // first episema, just add it to this note
+            episemaNote  = note;
+          } else if (episemaNoteIndex >= 0)
+            episemaNote = notes[episemaNoteIndex];
+
+          episemaNoteIndex--;
+
+          mark = new Markings.HorizontalEpisema(episemaNote);
+          while (haveLookahead) {
+
+            if (lookahead === '0')
+              mark.positionHint = Markings.MarkingPositionHint.Below;
+            else if (lookahead === '1')
+              mark.positionHint = Markings.MarkingPositionHint.Above;
+            else if (lookahead === '2')
+              mark.terminating = true; // episema terminates
+            else if (lookahead === '3')
+              mark.alignment = Markings.HorizontalEpisemaAlignment.Left;
+            else if (lookahead === '4')
+              mark.alignment = Markings.HorizontalEpisemaAlignment.Center;
+            else if (lookahead === '5')
+              mark.alignment = Markings.HorizontalEpisemaAlignment.Right;
+            else
+              break;
+
+            i++;
+            haveLookahead = i + 1 < data.length;
+      
+            if (haveLookahead)
+              lookahead = data[i + 1];
           }
-          note.markings.push(mark);
+
+          if (episemaNote)
+            episemaNote.epismata.push(mark);
+
           break;
 
         case '\'':
           mark = new Markings.Ictus(note);
           if (haveLookahead && lookahead === '1')
-            mark.positionHint = MarkingPositionHint.Above;
+            mark.positionHint = Markings.MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
-            mark.positionHint = MarkingPositionHint.Below;
+            mark.positionHint = Markings.MarkingPositionHint.Below;
 
-          note.markings.push(mark);
+          note.extraMarkings.push(mark);
           break;
 
         //note shapes
         case 'r':
           if (haveLookahead && lookahead === '1') {
-            note.markings.push(new Markings.AcuteAccent(note));
+            note.extraMarkings.push(new Markings.AcuteAccent(note));
             i++;
           } else
             note.shapeModifiers |= NoteShapeModifiers.Cavum;

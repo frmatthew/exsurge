@@ -28,7 +28,7 @@ import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from 'Exsurge.Drawing'
 import { Glyphs } from 'Exsurge.Glyphs'
 import { Custos, AccidentalType } from 'Exsurge.Chant.Signs'
-import { HorizontalEpisema } from 'Exsurge.Chant.Markings'
+import { MarkingPositionHint, HorizontalEpisemaAlignment, HorizontalEpisema } from 'Exsurge.Chant.Markings'
 import { Gabc } from 'Exsurge.Gabc'
 
 
@@ -96,7 +96,12 @@ export class Note extends ChantLayoutElement {
     this.liquescent = LiquescentType.None;
     this.shape = NoteShape.Default;
     this.shapeModifiers = NoteShapeModifiers.None;
-    this.markings = [];
+
+    // various markings that can exist on a note, organized by type
+    // for faster access and simpler code logic
+    this.epismata = [];
+    this.morae = []; // silly to have an array of these, but gabc allows multiple morae per note!
+    this.extraMarkings = []; // ictus, acute accent, ties, brackets, etc.
   }
 
   setGlyph(ctxt, glyphCode) {
@@ -679,7 +684,6 @@ export class ChantLine extends ChantLayoutElement {
 
     this.ledgerLines = []; // clear any existing ledger lines
 
-    var epismata = []; // keep track of epismata in case we can connect some
     var notations = this.score.notations;
     var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
@@ -728,6 +732,8 @@ export class ChantLine extends ChantLayoutElement {
       }
     };
 
+    var epismata = []; // keep track of epismata in case we can connect some
+
     // make a final pass over all of the notes to add any necessary
     // ledger lines and to smooth out epismata
     for (var i = this.notationsStartIndex; i < lastIndex; i++) {
@@ -748,21 +754,25 @@ export class ChantLine extends ChantLayoutElement {
 
         processElementForLedgerLine(note, neume.bounds.x, neume.bounds.y);
 
-        var noteHasEpisema = false;
-
         // blend epismata as we're able
-        for (var k = 0; k < note.markings.length; k++) {
+        for (var k = 0; k < note.epismata.length; k++) {
 
-          if (note.markings[k].constructor.name !== HorizontalEpisema.name)
-            continue;
+          var episema = note.epismata[k];
 
-          noteHasEpisema = true;
-          var episema = note.markings[k];
+          var spaceBetweenEpismata = 0;
+
+          // calculate the distance between the last epismata and this one...
+          // lots of code for a simple: currEpismata.left - prevEpismata.right
+          if (epismata.length > 0)
+            spaceBetweenEpismata = neume.bounds.x + episema.bounds.x - (epismata[epismata.length - 1].neume.bounds.x + epismata[epismata.length - 1].episema.bounds.right());
 
           // we try to blend the episema if we're able.
           if (epismata.length === 0 ||
-              epismata[0].episema.positionHint !== episema.positionHint ||
-              epismata[0].episema.terminating === true) {
+              epismata[epismata.length - 1].episema.positionHint !== episema.positionHint ||
+              epismata[epismata.length - 1].episema.terminating === true ||
+              epismata[epismata.length - 1].episema.alignment === HorizontalEpisemaAlignment.Left ||
+              episema.alignment === HorizontalEpisemaAlignment.Right ||
+              spaceBetweenEpismata > ctxt.intraNeumeSpacing) {
 
             // start a new set of epismata to potentially blend
             epismata = [];
@@ -774,10 +784,10 @@ export class ChantLine extends ChantLayoutElement {
             // blend all previous with this one
             var newY;
 
-            if (episema.positionHint === Exsurge.MarkingPositionHint.Below)
-              newY = Math.max(episema.bounds.y, epismata[0].episema.bounds.y);
+            if (episema.positionHint === MarkingPositionHint.Below)
+              newY = Math.max(episema.bounds.y, epismata[epismata.length - 1].episema.bounds.y);
             else
-              newY = Math.min(episema.bounds.y, epismata[0].episema.bounds.y);
+              newY = Math.min(episema.bounds.y, epismata[epismata.length - 1].episema.bounds.y);
 
             if (episema.bounds.y !== newY)
               episema.updateY(newY);
@@ -796,10 +806,6 @@ export class ChantLine extends ChantLayoutElement {
             });
           }
         }
-
-        // if the note doesn't have any episema, then make sure and stop blending epismata
-        if (noteHasEpisema === false)
-          epismata = [];
       }
     }
 

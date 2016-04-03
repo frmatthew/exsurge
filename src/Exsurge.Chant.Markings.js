@@ -27,6 +27,14 @@ import * as Exsurge from './Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, GlyphCode, GlyphVisualizer, HorizontalEpisemaVisualizer } from './Exsurge.Drawing'
 import { Note, NoteShape } from './Exsurge.Chant'
 
+
+// for positioning markings on notes
+export var MarkingPositionHint = {
+  Default:      0,
+  Above:        1,
+  Below:        2
+};
+
 export class Marking extends ChantLayoutElement {
 
   constructor(note) {
@@ -35,7 +43,7 @@ export class Marking extends ChantLayoutElement {
     this.note = note;
     this.horizontalOffset = 0;
     this.verticalOffset = 0;
-    this.positionHint = Exsurge.MarkingPositionHint.Default;
+    this.positionHint = MarkingPositionHint.Default;
 
     // each marking has its own visualizer
     this.visualizer = null;
@@ -51,7 +59,7 @@ export class AcuteAccent extends Marking {
   constructor(note) {
     super(note);
 
-    this.positionHint = Exsurge.MarkingPositionHint.Above;
+    this.positionHint = MarkingPositionHint.Above;
   }
 
   performLayout(ctxt) {
@@ -60,10 +68,10 @@ export class AcuteAccent extends Marking {
 
     // fixme: acute markings might need to be positioned vertically over
     // the notation bounds of the chantline after everything has already
-    // been laid out on the line...for now we just place them a
+    // been laid out on the line...for now we just place them at
     // reasonable height above the staff line.
-    this.verticalOffset = -ctxt.staffInterval * 5;
-    this.horizontalOffset = -this.visualizer.bounds.x; // center on the note itself
+    this.verticalOffset = -ctxt.staffInterval * 4;
+    this.horizontalOffset = this.visualizer.bounds.width / 2; // center on the note itself
 
     this.bounds = this.visualizer.bounds.clone();
     this.bounds.x += this.horizontalOffset;
@@ -77,6 +85,14 @@ export class AcuteAccent extends Marking {
   }
 }
 
+// for positioning markings on notes
+export var HorizontalEpisemaAlignment = {
+  Default:      0,
+  Left:         1,
+  Center:       2,
+  Right:        3
+};
+
 /*
  * HorizontalEpisema
  */
@@ -84,12 +100,14 @@ export class HorizontalEpisema extends Marking {
 
   constructor(note) {
     super(note);
+    
+    this.terminating = false; // indicates if this episema should terminate itself or not
+    this.alignment = HorizontalEpisemaAlignment.Default;
   }
 
   updateY(y) {
     this.bounds.y = y;
     this.visualizer.bounds.y = y;
-    this.terminating = false; // indicates if this episema should terminate itself or not
   }
 
   updateWidth(width) {
@@ -109,7 +127,7 @@ export class HorizontalEpisema extends Marking {
     var y = 0, step;
     var minDistanceAway = ctxt.staffInterval * 0.4; // min distance from neume
 
-    if (this.positionHint === Exsurge.MarkingPositionHint.Below) {
+    if (this.positionHint === MarkingPositionHint.Below) {
       y = this.note.bounds.bottom() + minDistanceAway; // the highest the line could be at
       step = Math.round(y / ctxt.staffInterval);
 
@@ -140,7 +158,20 @@ export class HorizontalEpisema extends Marking {
     else
       width = this.note.bounds.width;
 
-    this.bounds.x = this.note.bounds.x;
+    var x = this.note.bounds.x;
+
+    // also, the position hint can affect the x/width of the episema
+    if (this.alignment === HorizontalEpisemaAlignment.Left) {
+      width *= .85;
+    } else if (this.alignment === HorizontalEpisemaAlignment.Center) {
+      x += width * .15;
+      width *= .70;
+    } else if (this.alignment === HorizontalEpisemaAlignment.Right) {
+      x += width * .15;
+      width *= .85;
+    }
+
+    this.bounds.x = x;
     this.bounds.y = y;
     this.bounds.width = width;
     this.bounds.height = ctxt.episemaLineWeight;
@@ -148,7 +179,7 @@ export class HorizontalEpisema extends Marking {
     this.origin.x = 0;
     this.origin.y = 0;
 
-    this.visualizer = new HorizontalEpisemaVisualizer(ctxt, this.note.bounds.x, y, width);
+    this.visualizer = new HorizontalEpisemaVisualizer(ctxt, x, y, width);
   }
 }
 
@@ -167,7 +198,7 @@ export class Ictus extends Marking {
 
     // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
 
-    if (this.positionHint === Exsurge.MarkingPositionHint.Above) {
+    if (this.positionHint === MarkingPositionHint.Above) {
       glyphCode = GlyphCode.VerticalEpisemaAbove;
     } else {
       glyphCode = GlyphCode.VerticalEpisemaBelow;
@@ -228,22 +259,19 @@ export class Mora extends Marking {
     this.visualizer.setStaffPosition(ctxt, staffPosition);
 
     this.verticalOffset = 0;
-    switch (this.positionHint) {
-      case Exsurge.MarkingPositionHint.Below:
-        if (staffPosition % 2 === 0)
-          this.verticalOffset += ctxt.staffInterval / 3.0;
-        else
-          this.verticalOffset += (ctxt.staffInterval * 2) / 3.0;
-        break;
-
-      case Exsurge.MarkingPositionHint.Default:
-      case Exsurge.MarkingPositionHint.Above:
-      default:
-        if (staffPosition % 2 === 0)
-          this.verticalOffset -= ctxt.staffInterval / 3.0;
-        else
-          this.verticalOffset -= (ctxt.staffInterval * 2) / 3.0;
-        break;
+    if (this.positionHint === MarkingPositionHint.Above) {
+      if (staffPosition % 2 === 0)
+        this.verticalOffset -= ctxt.staffInterval + ctxt.staffInterval * .75;
+      else
+        this.verticalOffset -= ctxt.staffInterval * .75;
+    } else if (this.positionHint === MarkingPositionHint.Below) {
+      if (staffPosition % 2 === 0)
+        this.verticalOffset += ctxt.staffInterval + ctxt.staffInterval * .75;
+      else
+        this.verticalOffset += ctxt.staffInterval * .75;
+    } else {
+      if (Math.abs(staffPosition) % 2 === 1)
+        this.verticalOffset -= ctxt.staffInterval * .75;
     }
 
     this.bounds = this.visualizer.bounds.clone();
