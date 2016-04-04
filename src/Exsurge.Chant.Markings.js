@@ -119,30 +119,29 @@ export class HorizontalEpisema extends Marking {
     super.performLayout(ctxt);
 
     // following logic helps to keep the episemae away from staff lines if they get too close
-    // The idea is this: since the staff lines are odd numbered multiples of ctxt.staffInterval,
-    // Math.round(y / ctxt.staffInterval) % 2 tells us if we're closer to a space or a line.
-    // If it's an odd number then we shift away from line by adding .5 to the step, which puts
-    // us the closest we want to be to a line.
+    // the placement is based on a review of the Vatican and solesmes editions, which
+    // seem to always place the epismata centered between staff lines. Probably helps
+    // for visual layout, rather than letting epismata be at various heights.
 
     var y = 0, step;
     var minDistanceAway = ctxt.staffInterval * 0.4; // min distance from neume
 
     if (this.positionHint === MarkingPositionHint.Below) {
       y = this.note.bounds.bottom() + minDistanceAway; // the highest the line could be at
-      step = Math.round(y / ctxt.staffInterval);
+      step = Math.floor(y / ctxt.staffInterval);
 
-      // if it's an odd step, that means we're near a line, and therefore
-      // need to shift down
+      // if it's an odd step, that means we're on a staff line,
+      // so we shift to between the staff line
       if (Math.abs(step % 2) === 1)
-        y = (step + 0.5) * ctxt.staffInterval;
+        y = (step + 1) * ctxt.staffInterval;
     } else {
       y = this.note.bounds.y - minDistanceAway; // the lowest the line could be at
-      step = Math.round(y / ctxt.staffInterval);
+      step = Math.ceil(y / ctxt.staffInterval);
 
-      // if it's an odd step, that means we're near a line, and therefore
-      // need to shift up
+      // if it's an odd step, that means we're on a staff line,
+      // so we shift to between the staff line
       if (Math.abs(step % 2) === 1)
-        y = (step - 0.5) * ctxt.staffInterval;
+        y = (step - 1) * ctxt.staffInterval;
     }
 
     var glyphCode = this.note.glyphVisualizer.glyphCode;
