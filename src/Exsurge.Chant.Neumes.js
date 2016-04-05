@@ -392,7 +392,7 @@ export class Apostropha extends Neume {
   performLayout(ctxt) {
     super.performLayout(ctxt);
 
-    this.build(ctxt).noteAt(this.notes[0], Apostropha.determineNoteGlyphCode(this.notes[0]));
+    this.build(ctxt).noteAt(this.notes[0], Apostropha.getNoteGlyphCode(this.notes[0]));
 
     this.finishLayout(ctxt);
   }
@@ -613,9 +613,9 @@ export class Distropha extends Neume {
     super.performLayout(ctxt);
 
     this.build(ctxt)
-      .noteAt(this.notes[0], Apostropha.determineNoteGlyphCode(this.notes[0]))
+      .noteAt(this.notes[0], Apostropha.getNoteGlyphCode(this.notes[0]))
       .advanceBy(ctxt.intraNeumeSpacing)
-      .noteAt(this.notes[1], Apostropha.determineNoteGlyphCode(this.notes[1]));
+      .noteAt(this.notes[1], Apostropha.getNoteGlyphCode(this.notes[1]));
 
     this.finishLayout(ctxt);
   }
@@ -1385,11 +1385,11 @@ export class Tristropha extends Neume {
     super.performLayout(ctxt);
 
     this.build(ctxt)
-      .noteAt(this.notes[0], Apostropha.determineNoteGlyphCode(this.notes[0]))
+      .noteAt(this.notes[0], Apostropha.getNoteGlyphCode(this.notes[0]))
       .advanceBy(ctxt.intraNeumeSpacing)
-      .noteAt(this.notes[1], Apostropha.determineNoteGlyphCode(this.notes[1]))
+      .noteAt(this.notes[1], Apostropha.getNoteGlyphCode(this.notes[1]))
       .advanceBy(ctxt.intraNeumeSpacing)
-      .noteAt(this.notes[2], Apostropha.determineNoteGlyphCode(this.notes[2]));
+      .noteAt(this.notes[2], Apostropha.getNoteGlyphCode(this.notes[2]));
 
     this.finishLayout(ctxt);
   }
