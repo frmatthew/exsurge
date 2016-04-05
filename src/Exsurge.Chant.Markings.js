@@ -23,9 +23,9 @@
 // THE SOFTWARE.
 //
 
-import * as Exsurge from './Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, GlyphCode, GlyphVisualizer, HorizontalEpisemaVisualizer } from './Exsurge.Drawing'
-import { Note, NoteShape } from './Exsurge.Chant'
+import * as Exsurge from 'Exsurge.Core'
+import { ctxt, QuickSvg, ChantLayoutElement, GlyphCode, GlyphVisualizer, HorizontalEpisemaVisualizer } from 'Exsurge.Drawing'
+import { Note, NoteShape } from 'Exsurge.Chant'
 
 
 // for positioning markings on notes
@@ -133,7 +133,7 @@ export class HorizontalEpisema extends Marking {
       // if it's an odd step, that means we're on a staff line,
       // so we shift to between the staff line
       if (Math.abs(step % 2) === 1)
-        y = (step + 1) * ctxt.staffInterval;
+        step = step + 1;
     } else {
       y = this.note.bounds.y - minDistanceAway; // the lowest the line could be at
       step = Math.ceil(y / ctxt.staffInterval);
@@ -141,8 +141,10 @@ export class HorizontalEpisema extends Marking {
       // if it's an odd step, that means we're on a staff line,
       // so we shift to between the staff line
       if (Math.abs(step % 2) === 1)
-        y = (step - 1) * ctxt.staffInterval;
+        step = step - 1;
     }
+
+    y = step * ctxt.staffInterval;
 
     var glyphCode = this.note.glyphVisualizer.glyphCode;
     var width;
@@ -161,13 +163,13 @@ export class HorizontalEpisema extends Marking {
 
     // also, the position hint can affect the x/width of the episema
     if (this.alignment === HorizontalEpisemaAlignment.Left) {
-      width *= .85;
+      width *= .80;
     } else if (this.alignment === HorizontalEpisemaAlignment.Center) {
-      x += width * .15;
-      width *= .70;
+      x += width * .20;
+      width *= .60;
     } else if (this.alignment === HorizontalEpisemaAlignment.Right) {
-      x += width * .15;
-      width *= .85;
+      x += width * .20;
+      width *= .80;
     }
 
     this.bounds.x = x;

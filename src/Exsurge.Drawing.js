@@ -468,6 +468,43 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
   }
 }
 
+export class VirgaLineVisualizer extends ChantLayoutElement {
+
+  constructor(ctxt, note) {
+    super();
+
+    var staffPosition = note.staffPosition;
+
+    var y0 = ctxt.calculateHeightFromStaffPosition(staffPosition);
+    var y1;
+
+    if (Math.abs(staffPosition % 2) === 0)
+      y1 = y0 + ctxt.staffInterval * 1.8;
+    else
+      y1 = y0 + ctxt.staffInterval * 2.7;
+
+    this.bounds.x = 0;
+    this.bounds.y = y0;
+    this.bounds.width = ctxt.neumeLineWeight;
+    this.bounds.height = y1 - y0;
+
+    this.origin.x = 0;
+    this.origin.y = 0;
+  }
+
+  createDrawable(ctxt) {
+
+    return QuickSvg.createFragment('rect', {
+      'x': this.bounds.x,
+      'y': this.bounds.y,
+      'width': ctxt.neumeLineWeight,
+      'height': this.bounds.height,
+      'fill': ctxt.neumeLineColor,
+      'class': 'neumeLine'
+    });
+  }
+}
+
 export class HorizontalEpisemaVisualizer extends ChantLayoutElement {
 
   constructor(ctxt, x, y, width) {
@@ -530,6 +567,7 @@ export class GlyphVisualizer extends ChantLayoutElement {
       }, glyphSrc);
     }
 
+    this.align = this.glyph.align;
 
     this.origin.x = this.glyph.origin.x * ctxt.glyphScaling;
     this.origin.y = this.glyph.origin.y * ctxt.glyphScaling;

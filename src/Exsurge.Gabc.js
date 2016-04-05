@@ -907,6 +907,7 @@ export class Gabc {
     var j;
 
     var episemaNoteIndex = notes.length;
+    var episemaNote = note;
 
     // process the modifiers
     for (var i = 1; i < data.length; i++) {
@@ -951,19 +952,8 @@ export class Gabc {
           break;
 
         case '_':
-
-          var episemaNote = null;
-
-          // since gabc allows consecutive underscores which is a shortcut to
-          // apply the epismata to previous notes, we keep track of that here
-          // in order to add the new episema to the correct note.
-          if (episemaNoteIndex === notes.length) {
-            // first episema, just add it to this note
-            episemaNote  = note;
-          } else if (episemaNoteIndex >= 0)
-            episemaNote = notes[episemaNoteIndex];
-
-          episemaNoteIndex--;
+    
+          var episemaHadModifier = false;
 
           mark = new Markings.HorizontalEpisema(episemaNote);
           while (haveLookahead) {
@@ -983,6 +973,17 @@ export class Gabc {
             else
               break;
 
+            // the gabc definition for epismata is so convoluted...
+            // - double underscores create epismata over multiple notes.
+            // - unless the _ has a 0, 1, 3, 4, or 5 modifier, which means
+            //   another underscore puts a second epismata on the same note
+            // - (when there's a 2 lookahead, then this is treated as an
+            //   unmodified underscore, so another underscore would be
+            //   added to previous notes
+            if (mark.alignment !== Markings.HorizontalEpisemaAlignment.Default &&
+              mark.positionHint !== Markings.MarkingPositionHint.Below)
+              episemaHadModifier = true;
+
             i++;
             haveLookahead = i + 1 < data.length;
       
@@ -990,8 +991,17 @@ export class Gabc {
               lookahead = data[i + 1];
           }
 
+          // since gabc allows consecutive underscores which is a shortcut to
+          // apply the epismata to previous notes, we keep track of that here
+          // in order to add the new episema to the correct note.
+
           if (episemaNote)
             episemaNote.epismata.push(mark);
+
+          if (episemaNote === note && episemaHadModifier)
+            episemaNote = note;
+          else if (episemaNoteIndex >= 0 && notes.length > 0)
+            episemaNote = notes[--episemaNoteIndex];
 
           break;
 
@@ -1021,6 +1031,7 @@ export class Gabc {
             // quick stropha feature (e.g., gsss). create a new note
             notes.push(note);
             note = new Note();
+            episemaNoteIndex++; // since a new note was added, increase the index here
           }
           
           note.shape = NoteShape.Stropha;
@@ -1033,6 +1044,7 @@ export class Gabc {
             // quick virga feature (e.g., gvvv). create a new note
             notes.push(note);
             note = new Note();
+            episemaNoteIndex++; // since a new note was added, increase the index here
           }
 
           note.shape = NoteShape.Virga;

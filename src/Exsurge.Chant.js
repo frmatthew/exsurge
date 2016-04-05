@@ -772,7 +772,7 @@ export class ChantLine extends ChantLayoutElement {
               epismata[epismata.length - 1].episema.terminating === true ||
               epismata[epismata.length - 1].episema.alignment === HorizontalEpisemaAlignment.Left ||
               episema.alignment === HorizontalEpisemaAlignment.Right ||
-              spaceBetweenEpismata > ctxt.intraNeumeSpacing) {
+              spaceBetweenEpismata > ctxt.intraNeumeSpacing * 2) {
 
             // start a new set of epismata to potentially blend
             epismata = [];
