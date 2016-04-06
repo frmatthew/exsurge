@@ -80,10 +80,10 @@ class NeumeBuilder {
     // subtraction will right align it visually
     if (noteAlignsRight && this.lastNote)
       note.bounds.x = this.x - note.bounds.width;
-    else
+    else {
       note.bounds.x = this.x;
-    
-    this.x += note.bounds.width;
+      this.x += note.bounds.width;
+    }
 
     this.neume.addVisualizer(note);
 
@@ -174,6 +174,9 @@ class NeumeBuilder {
 
     this.noteAt(lowerNote, lowerGlyph).noteAt(upperNote, upperGlyph);
 
+    // make sure we don't have lines connected to the podatus
+    this.lastNote = null;
+
     return this;
   }
 
@@ -199,6 +202,9 @@ class NeumeBuilder {
       lowerGlyph = GlyphCode.PunctumQuadratum;
 
     this.noteAt(lower, lowerGlyph);
+
+    // make sure we don't have lines connected to the clivis
+    this.lastNote = null;
 
     return this;
   }
