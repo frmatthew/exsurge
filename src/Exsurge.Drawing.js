@@ -754,10 +754,11 @@ export class TextElement extends ChantLayoutElement {
 
     var xml = '<svg xmlns="http://www.w3.org/2000/svg">' + this.createDrawable(ctxt) + '</svg>';
     var doc = new DOMParser().parseFromString(xml, 'application/xml');
-    while(ctxt.svgTextMeasurer.firstChild) {
+    
+    while(ctxt.svgTextMeasurer.firstChild)
       ctxt.svgTextMeasurer.firstChild.remove();
-    }
-    ctxt.svgTextMeasurer.appendChild( ctxt.svgTextMeasurer.ownerDocument.importNode(doc.documentElement, true).firstChild );
+
+    ctxt.svgTextMeasurer.appendChild(ctxt.svgTextMeasurer.ownerDocument.importNode(doc.documentElement, true).firstChild);
 
     var bbox = ctxt.svgTextMeasurer.firstChild.getBBox();
 
@@ -766,7 +767,7 @@ export class TextElement extends ChantLayoutElement {
     this.bounds.width = bbox.width;
     this.bounds.height = bbox.height;
     this.origin.x = 0;
-    this.origin.y = 0; // baseline?
+    this.origin.y = -bbox.y; // offset to baseline from top
   }
 
   getCssClasses() {

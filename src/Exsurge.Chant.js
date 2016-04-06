@@ -364,9 +364,12 @@ export class ChantLine extends ChantLayoutElement {
     this.nextLine = null;
     this.previousLine = null; // for layout assistance
 
+    this.lyricLineHeights = []; // height of each text line
+    this.lyricLineBaselines = []; // offsets from the top of the text line to the baseline
+
     // fixme: make these configurable values from the score
-    this.spaceAfterNotations = 30; // the space between the notation bounds and the first text track
-    this.spaceBetweenTextTracks = 20; // spacing between each text track
+    this.spaceAfterNotations = 0; // the space between the notation bounds and the first text track
+    this.spaceBetweenTextTracks = 0; // spacing between each text track
   }
 
   performLayout(ctxt) {
@@ -385,25 +388,47 @@ export class ChantLine extends ChantLayoutElement {
 
     this.notationBounds.union(this.startingClef.bounds);
 
-    for (i = this.notationsStartIndex; i < lastIndex; i++)
-      this.notationBounds.union(notations[i].bounds);
+    // reset the lyric line offsets before we [re]calculate them now
+    this.lyricLineHeights = [];
+    this.lyricLineBaselines = [];
+
+    for (i = this.notationsStartIndex; i < lastIndex; i++) {
+      notation = notations[i];
+
+      this.notationBounds.union(notation.bounds);
+
+      // keep track of lyric line offsets
+      for (j = 0; j < notation.lyrics.length; j++) {
+        if (this.lyricLineHeights.length < j + 1) {
+          this.lyricLineHeights.push(0);
+          this.lyricLineBaselines.push(0);
+        }
+
+        this.lyricLineHeights[j] = Math.max(this.lyricLineHeights[j], notation.lyrics[j].bounds.height);
+        this.lyricLineBaselines[j] = Math.max(this.lyricLineBaselines[j], notation.lyrics[j].origin.y);
+      }
+    }
 
     if (this.custos)
       this.notationBounds.union(this.custos.bounds);
-
-    var baseLyricVerticalOffset = this.notationBounds.y + this.notationBounds.height + ctxt.lyricTextSize;
-
-    var numLyricLines = 0;
 
     // finalize the lyrics placement
     for (i = this.notationsStartIndex; i < lastIndex; i++) {
       notation = notations[i];
 
-      numLyricLines = Math.max(numLyricLines, notation.lyrics.length);
+      var offset = this.notationBounds.y + this.notationBounds.height;
 
-      for (var j = 0; j < notation.lyrics.length; j++)
-        notation.lyrics[j].bounds.y = baseLyricVerticalOffset + ctxt.lyricTextSize * j;
+      for (var j = 0; j < notation.lyrics.length; j++) {
+        notation.lyrics[j].bounds.y = offset + this.lyricLineBaselines[j] * .80;
+        offset += this.lyricLineHeights[j];
+      }
     }
+
+    var totalHeight = this.notationBounds.height;
+
+    // add up the lyric line heights to get the total height of the chant line
+    for (i = 0; i < this.lyricLineHeights.length; i++)
+      totalHeight += this.lyricLineHeights[i];
 
     // dropCap and the annotations
     if (this.notationsStartIndex === 0) {
@@ -413,7 +438,7 @@ export class ChantLine extends ChantLayoutElement {
         // drop caps and annotations are drawn from their center, so aligning them
         // horizontally is as easy as this.staffLeft / 2
         this.score.dropCap.bounds.x = this.staffLeft / 2;
-        this.score.dropCap.bounds.y = baseLyricVerticalOffset;
+        this.score.dropCap.bounds.y = (this.lyricLineHeights.length > 0) ? this.lyricLineHeights[0] : totalHeight + ctxt.lyricTextSize;
       }
 
       if (this.score.annotation !== null) {
@@ -428,7 +453,7 @@ export class ChantLine extends ChantLayoutElement {
     this.bounds.x = 0;
     this.bounds.y = this.notationBounds.y;
     this.bounds.width = this.notationBounds.right();
-    this.bounds.height = this.notationBounds.height + ctxt.lyricTextSize * (numLyricLines - 1);
+    this.bounds.height = totalHeight;
 
     // the origin of the chant line's coordinate space is at the center line of the left extremity of the staff
     this.origin = new Point(this.staffLeft, -this.notationBounds.y);
@@ -541,7 +566,7 @@ export class ChantLine extends ChantLayoutElement {
     var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custos on the line
 
     // iterate through the notations, fittng what we can on this line
-    var i;
+    var i, j;
 
     for (i = newElementStart; i < notations.length; i++) {
 
@@ -557,8 +582,8 @@ export class ChantLine extends ChantLayoutElement {
       if (fitsOnLine === false) {
 
         // check if the prev elements want to be kept with this one
-        for (var k = i - 1; k > this.notationsStartIndex; k--) {
-          var cne = notations[k];
+        for (j = i - 1; j > this.notationsStartIndex; j--) {
+          var cne = notations[j];
 
           if (cne.keepWithNext === true)
             this.numNotationsOnLine--;
@@ -599,7 +624,7 @@ export class ChantLine extends ChantLayoutElement {
     for (i = this.notationsStartIndex + this.numNotationsOnLine; i < notations.length; i++) {
       var notation = notations[i];
 
-      if (typeof notation.notes !== 'undefined' && notation.notes.length > 0) {
+      if (notation.isNeume) {
 
         this.custos = new Custos(true);
         ctxt.currNotationIndex = i - 1; // make sure the context knows where the custos is 
@@ -1155,7 +1180,7 @@ export class ChantScore {
       this.lines.push(line);
 
       line.bounds.y = -line.bounds.y + y;
-      y += line.bounds.height + ctxt.staffInterval * 3;
+      y += line.bounds.height + ctxt.staffInterval * 1.5;
 
     } while (currIndex < this.notations.length);
 
