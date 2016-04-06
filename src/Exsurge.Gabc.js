@@ -228,7 +228,7 @@ export class Gabc {
       for (var i = 0; i < items.length; i++) {
         var cne = items[i];
 
-        if (cne.isAccidental)
+        if (cne.isAccidental || cne.constructor.name === Signs.Custos.name)
           continue;
 
         notationWithLyrics = cne
