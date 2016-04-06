@@ -573,6 +573,9 @@ export class ChantLine extends ChantLayoutElement {
       curr.chantLine = this;
       this.numNotationsOnLine++;
 
+      if (curr.isClef)
+        ctxt.activeClef = curr;
+
       // line breaks are a special case indicating to stop processing here
       if (curr.constructor.name === ChantLineBreak.name && width > 0) {
         this.justify = curr.justify;
