@@ -435,10 +435,16 @@ export class ChantLine extends ChantLayoutElement {
 
       if (this.score.dropCap !== null) {
 
+        var dropCapY;
+        if (this.lyricLineHeights.length > 0) {
+          dropCapY = this.notationBounds.y + this.notationBounds.height + this.lyricLineBaselines[0] * .80;
+        } else
+          dropCapY = this.notationBounds.y + this.notationBounds.height;
+
         // drop caps and annotations are drawn from their center, so aligning them
         // horizontally is as easy as this.staffLeft / 2
         this.score.dropCap.bounds.x = this.staffLeft / 2;
-        this.score.dropCap.bounds.y = (this.lyricLineHeights.length > 0) ? this.lyricLineHeights[0] : totalHeight + ctxt.lyricTextSize;
+        this.score.dropCap.bounds.y = dropCapY;
       }
 
       if (this.score.annotation !== null) {
