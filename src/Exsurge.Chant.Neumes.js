@@ -1113,10 +1113,18 @@ export class ScandicusFlexus extends Neume {
         .advanceBy(ctxt.intraNeumeSpacing)
         .withClivis(third, fourth);
     } else {
+      var fourthGlyph = GlyphCode.PunctumQuadratum
+      
+      if (fourth.liquescent & LiquescentType.Ascending)
+        fourthGlyph = GlyphCode.PunctumQuadratumAscLiquescent;
+      else if (fourth.liquescent & LiquescentType.Descending)
+        fourthGlyph = GlyphCode.PunctumQuadratumDesLiquescent;
+
       this.build(ctxt)
         .noteAt(first, GlyphCode.PunctumQuadratum)
         .withPodatus(second, third)
-        .noteAt(fourth, GlyphCode.PunctumQuadratum);
+        .advanceBy(ctxt.intraNeumeSpacing)
+        .noteAt(fourth, fourthGlyph);
     }
 
     this.finishLayout(ctxt);
