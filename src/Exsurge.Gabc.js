@@ -244,11 +244,11 @@ export class Gabc {
       if (!cne.isNeume && cne.constructor.name !== TextOnly.name)
         proposedLyricType = LyricType.Directive;
       // otherwise trye to guess the lyricType for the first lyric anyway
-      else if (currSyllable === 0 && matches.length === 1)
+      else if (currSyllable === 0 && j === (matches.length - 1))
         proposedLyricType = LyricType.SingleSyllable;
-      else if (currSyllable === 0 && matches.length > 1)
+      else if (currSyllable === 0 && j < (matches.length - 1))
         proposedLyricType = LyricType.BeginningSyllable;
-      else if (currSyllable === matches.length - 1)
+      else if (j === matches.length - 1)
         proposedLyricType = LyricType.EndingSyllable;
       else
         proposedLyricType = LyricType.MiddleSyllable;
