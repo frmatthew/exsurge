@@ -41,14 +41,14 @@ export class Gabc {
   // of ChantMappings describing the chant. A chant score can then be created
   // fron the chant mappings and later updated via updateMappings() if need
   // be...
-  static parseSource(ctxt, gabcSource) {
+  static createMappingsFromSource(ctxt, gabcSource) {
 
     var words = this.splitWords(gabcSource);
 
     // set the default clef
     ctxt.activeClef = Clef.default();
     
-    var mappings = this.parseWords(ctxt, words, (clef) => ctxt.activeClef = clef);
+    var mappings = this.createMappingsFromWords(ctxt, words, (clef) => ctxt.activeClef = clef);
 
     return mappings;
   }
@@ -127,7 +127,7 @@ export class Gabc {
   // previously parsed set of mappings and between a new gabc source text.
   // the mappings array passed in is changed in place to be updated from the
   // new source
-  static updateMappings(ctxt, mappings, newGabcSource) {
+  static updateMappingsFromSource(ctxt, mappings, newGabcSource) {
 
     var newWords = this.splitWords(newGabcSource);
 
@@ -163,7 +163,7 @@ export class Gabc {
       } else if (resultCode === '+') {
         // insert new ones
         for (j = 0; j < resultValues.length; j++) {
-          var mapping = this.parseWord(ctxt, resultValues[j]);
+          var mapping = this.createMappingFromWord(ctxt, resultValues[j]);
 
           for (k = 0; k < mapping.notations.length; k++)
             if (mapping.notations[k].isClef)
@@ -177,7 +177,7 @@ export class Gabc {
 
   // takes an array of gabc words (like that returned by splitWords below)
   // and returns an array of ChantMapping objects, one for each word.
-  static parseWords(ctxt, words) {
+  static createMappingsFromWords(ctxt, words) {
     var mappings = [];
 
     for (var i = 0; i < words.length; i++) {
@@ -186,7 +186,7 @@ export class Gabc {
       if (word === '')
         continue;
 
-      var mapping = this.parseWord(ctxt, word);
+      var mapping = this.createMappingFromWord(ctxt, word);
 
       if (mapping)
         mappings.push(mapping);
@@ -198,7 +198,7 @@ export class Gabc {
   // takes a gabc word (like those returned by splitWords below) and returns
   // a ChantMapping object that contains the gabc word source text as well
   // as the generated notations.
-  static parseWord(ctxt, word) {
+  static createMappingFromWord(ctxt, word) {
 
     var matches = [];
     var notations = [];
@@ -260,7 +260,7 @@ export class Gabc {
           proposedLyricType === LyricType.SingleSyllable)
         ctxt.activeClef.resetAccidentals();
 
-      var lyrics = this.parseSyllableLyrics(ctxt, lyricText, proposedLyricType);
+      var lyrics = this.createSyllableLyrics(ctxt, lyricText, proposedLyricType);
 
       if (lyrics === null || lyrics.length === 0)
         continue;
@@ -272,7 +272,7 @@ export class Gabc {
   }
 
   // returns an array of lyrics (an array because each syllable can have multiple lyrics)
-  static parseSyllableLyrics(ctxt, text, proposedLyricType) {
+  static createSyllableLyrics(ctxt, text, proposedLyricType) {
 
     var lyrics = [];
 
@@ -567,7 +567,7 @@ export class Gabc {
         currNoteIndex--;
 
         if (includePrevNote === false)
-        currNoteIndex--;
+          currNoteIndex--;
 
         neume.keepWithNext = true;
         neume.trailingSpace = intraNeumeSpacing;
@@ -1132,6 +1132,46 @@ export class Gabc {
     // data.
     gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
     return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+  }
+
+  static parseSource(gabcSource) {
+    return this.parseWords(this.splitWords(gabcSource));
+  }
+
+  // gabcWords is an array of strings, e.g., the result of splitWords above
+  static parseWords(gabcWords) {
+    var words = [];
+
+    for (var i = 0; i < gabcWords.length; i++)
+      words.push(this.parseWord(gabcWords[i]));
+
+    return words;
+  }
+
+  // returns an array of objects, each of which has the following properties
+  //  - notations (string)
+  //  - lyrics (array of strings)
+  static parseWord(gabcWord) {
+
+    var syllables = [];
+    var matches = [];
+    
+    while ((match = __syllablesRegex.exec(gabcWord)))
+      matches.push(match);
+
+    for (var j = 0; j < matches.length; j++) {
+      var match = matches[j];
+
+      var lyrics = match[1].trim().split('|');
+      var notations = match[2];
+
+      syllables.push({
+        notations: notations,
+        lyrics: lyrics
+      });
+    }
+
+    return syllables;
   }
 
   // returns pitch
