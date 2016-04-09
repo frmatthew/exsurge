@@ -532,7 +532,6 @@ export class Gabc {
   static createNeumesFromNotes(ctxt, notes, finalTrailingSpace) {
     
     var neumes = [];
-    var intraNeumeSpacing = ctxt.intraNeumeSpacing;
     var firstNoteIndex = 0;
     var currNoteIndex = 0;
 
@@ -570,7 +569,7 @@ export class Gabc {
           currNoteIndex--;
 
         neume.keepWithNext = true;
-        neume.trailingSpace = intraNeumeSpacing;
+        neume.trailingSpace = ctxt.intraNeumeSpacing;
       }
 
       return unknownState;
@@ -870,8 +869,12 @@ export class Gabc {
 
     if (neumes.length > 0) {
       if (finalTrailingSpace >= 0) {
-        neumes[neumes.length - 1].keepWithNext = true;
         neumes[neumes.length - 1].trailingSpace = finalTrailingSpace;
+
+        if (finalTrailingSpace > ctxt.intraNeumeSpacing)
+          neumes[neumes.length - 1].keepWithNext = false;
+        else
+          neumes[neumes.length - 1].keepWithNext = true;
       }
     }
 

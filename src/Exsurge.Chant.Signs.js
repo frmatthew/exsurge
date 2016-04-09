@@ -88,13 +88,14 @@ export class Custos extends ChantNotationElement {
 }
 
 /*
- * DividingLine
+ * Divider
  */
-export class DividingLine extends ChantNotationElement {
+export class Divider extends ChantNotationElement {
 
   constructor() {
     super();
 
+    this.isDivider = true;
     this.resetsAccidentals = true;
   }
 }
@@ -102,7 +103,7 @@ export class DividingLine extends ChantNotationElement {
 /*
  * QuarterBar
  */
-export class QuarterBar extends DividingLine {
+export class QuarterBar extends Divider {
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
@@ -117,7 +118,7 @@ export class QuarterBar extends DividingLine {
 /*
  * HalfBar
  */
-export class HalfBar extends DividingLine {
+export class HalfBar extends Divider {
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
@@ -133,7 +134,7 @@ export class HalfBar extends DividingLine {
 /*
  * FullBar
  */
-export class FullBar extends DividingLine {
+export class FullBar extends Divider {
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
@@ -149,7 +150,7 @@ export class FullBar extends DividingLine {
 /*
  * DoubleBar
  */
-export class DoubleBar extends DividingLine {
+export class DoubleBar extends Divider {
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
@@ -257,12 +258,15 @@ export class Accidental extends ChantNotationElement {
 /*
  * Virgula
  */
-export class Virgula extends ChantNotationElement {
+export class Virgula extends Divider {
 
   constructor() {
     super();
 
-    // fixme: the staff position of the virgula is customizable, so that it
+    // unlike other dividers a virgula does not reset accidentals
+    this.resetsAccidentals = false;
+
+    // the staff position of the virgula is customizable, so that it
     // can be placed on different lines (top or bottom) depending on the
     // notation tradition of what is being notated (e.g., Benedictine has it
     //  on top line, Norbertine at the bottom)

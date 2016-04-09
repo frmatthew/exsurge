@@ -419,7 +419,7 @@ export class ChantLine extends ChantLayoutElement {
       var offset = this.notationBounds.y + this.notationBounds.height;
 
       for (var j = 0; j < notation.lyrics.length; j++) {
-        notation.lyrics[j].bounds.y = offset + this.lyricLineBaselines[j] * .80;
+        notation.lyrics[j].bounds.y = offset + this.lyricLineBaselines[j];
         offset += this.lyricLineHeights[j];
       }
     }
@@ -437,7 +437,7 @@ export class ChantLine extends ChantLayoutElement {
 
         var dropCapY;
         if (this.lyricLineHeights.length > 0) {
-          dropCapY = this.notationBounds.y + this.notationBounds.height + this.lyricLineBaselines[0] * .80;
+          dropCapY = this.notationBounds.y + this.notationBounds.height + this.lyricLineBaselines[0];
         } else
           dropCapY = this.notationBounds.y + this.notationBounds.height;
 
@@ -591,7 +591,7 @@ export class ChantLine extends ChantLayoutElement {
         for (j = i - 1; j > this.notationsStartIndex; j--) {
           var cne = notations[j];
 
-          if (cne.keepWithNext === true)
+          if (cne.keepWithNext === true || (j === i - 1 && curr.isDivider))
             this.numNotationsOnLine--;
           else
             break;
