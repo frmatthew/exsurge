@@ -42,11 +42,12 @@
     var chantContainer = document.getElementById('chant-container');
     var updateChant = function() {
       if (score) {
-        exsurge.Gabc.updateMappings(ctxt, score.mappings, gabcSource.value);
+        exsurge.Gabc.updateMappingsFromSource(ctxt, score.mappings, gabcSource.value);
         score.updateNotations(ctxt);
       } else {
-        mappings = exsurge.Gabc.parseSource(ctxt, gabcSource.value);
+        mappings = exsurge.Gabc.createMappingsFromSource(ctxt, gabcSource.value);
         score = new exsurge.ChantScore(ctxt, mappings, true);
+        score.annotation = new exsurge.Annotation(ctxt, "%V%");
       }
 
       layoutChant();
