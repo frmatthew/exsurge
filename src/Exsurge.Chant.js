@@ -569,7 +569,7 @@ export class ChantLine extends ChantLayoutElement {
     var curr = this.startingClef, prev = null, prevWithLyrics = null;
 
     // estimate how much space we have available to us
-    var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width - ctxt.intraNeumeSpacing * 4; // possible custos on the line
+    var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width * ctxt.glyphScaling - ctxt.intraNeumeSpacing * 4; // possible custos on the line
 
     // iterate through the notations, fittng what we can on this line
     var i, j;
