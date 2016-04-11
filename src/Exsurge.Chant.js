@@ -541,7 +541,7 @@ export class ChantLine extends ChantLayoutElement {
     this.staffLeft = 0;
 
     if (width > 0)
-      this.staffRight = this.staffLeft + width;
+      this.staffRight = width;
     else
       this.staffRight = 99999999; // no limit to staff size
 
@@ -572,9 +572,9 @@ export class ChantLine extends ChantLayoutElement {
     var rightBoundary = this.staffRight - Glyphs.CustosLong.bounds.width * ctxt.glyphScaling - ctxt.intraNeumeSpacing * 4; // possible custos on the line
 
     // iterate through the notations, fittng what we can on this line
-    var i, j;
+    var i, j, lastNotationIndex = notations.length - 1;
 
-    for (i = newElementStart; i < notations.length; i++) {
+    for (i = newElementStart; i <= lastNotationIndex; i++) {
 
       if (curr.hasLyrics())
         prevWithLyrics = curr;
@@ -582,9 +582,13 @@ export class ChantLine extends ChantLayoutElement {
       prev = curr;
       curr = notations[i];
 
+      // on the last notation of the score, we don't need a custod, so we just use staffRight as the
+      // right boundary. Otherwise, we use rightBoundary, which leaves room for a custos...
+      var actualRightBoundary = i === lastNotationIndex ? this.staffRight : rightBoundary;
+
       // try to fit the curr element on this line.
       // if it doesn't fit, we finish up here.
-      var fitsOnLine = this.positionNotationElement(ctxt, prevWithLyrics, prev, curr, rightBoundary);
+      var fitsOnLine = this.positionNotationElement(ctxt, prevWithLyrics, prev, curr, actualRightBoundary);
       if (fitsOnLine === false) {
 
         // check if the prev elements want to be kept with this one
