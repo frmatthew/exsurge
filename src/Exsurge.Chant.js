@@ -561,6 +561,14 @@ export class ChantLine extends ChantLayoutElement {
     }
 
     // set up the clef...
+    // if the first notation on the line is a starting clef, then we treat it a little differently...
+    // the clef becomes this line's starting clef and we skip over the clef in the notations array
+    if (notations[newElementStart].isClef) {
+      ctxt.activeClef = notations[newElementStart].clone();
+      newElementStart++;
+      this.notationsStartIndex++;
+    }
+
     // make a copy for this line to use at the beginning
     this.startingClef = ctxt.activeClef.clone();
     this.startingClef.performLayout(ctxt);
@@ -573,6 +581,7 @@ export class ChantLine extends ChantLayoutElement {
 
     // iterate through the notations, fittng what we can on this line
     var i, j, lastNotationIndex = notations.length - 1;
+
 
     for (i = newElementStart; i <= lastNotationIndex; i++) {
 
@@ -1185,7 +1194,7 @@ export class ChantScore {
       var line = new ChantLine(this);
 
       line.buildFromChantNotationIndex(ctxt, currIndex, width);
-      currIndex += line.numNotationsOnLine;
+      currIndex = line.notationsStartIndex + line.numNotationsOnLine;
       line.performLayout(ctxt);
       this.lines.push(line);
 
