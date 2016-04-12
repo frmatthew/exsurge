@@ -664,9 +664,14 @@ export class ChantLine extends ChantLayoutElement {
       this.staffRight = last.bounds.right();
     }
 
+    // If the last line ends with a divider and is very near to taking up the whole width, still justify it:
+    if(lastIndex > lastNotationIndex) {
+      this.justify = last.isDivider && (this.staffRight - curr.bounds.right() < ctxt.intraNeumeSpacing * 4);
+      extraSpace += last.trailingSpace;
+    }
+
     // Justify the line if we are not the last one
     if (this.justify === true && width > 0 &&
-        lastIndex < notations.length &&
         extraSpace > 0)
       this.justifyElements(extraSpace);
 
