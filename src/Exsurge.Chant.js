@@ -593,7 +593,7 @@ export class ChantLine extends ChantLayoutElement {
 
       // on the last notation of the score, we don't need a custod, so we just use staffRight as the
       // right boundary. Otherwise, we use rightBoundary, which leaves room for a custos...
-      var actualRightBoundary = i === lastNotationIndex ? this.staffRight : rightBoundary;
+      var actualRightBoundary = (i >= lastNotationIndex - 1) ? (this.staffRight + curr.trailingSpace) : rightBoundary;
 
       // try to fit the curr element on this line.
       // if it doesn't fit, we finish up here.
