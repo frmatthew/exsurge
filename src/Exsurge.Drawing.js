@@ -80,7 +80,9 @@ export let GlyphCode = {
   VerticalEpisemaBelow: "VerticalEpisemaBelow",
   VirgaLong: "VirgaLong",
   VirgaShort: "VirgaShort",
-  Virgula: "Virgula"
+  Virgula: "Virgula",
+
+  UpperBrace: "UpperBrace"
 }; // GlyphCode
 
 export var QuickSvg = {
@@ -289,6 +291,13 @@ export class ChantContext {
     // these are only gauranteed to be valid during the performLayout phase!
     this.activeNotations = null;
     this.currNotationIndex = -1;
+
+    // the context keeps track of some markings as the chant is laid out. this facilitates
+    // in formatting markings that span individual neumes/notes. these arrays need to be reset
+    // at the beginning of laying out a new chant line by calling startChantLine()
+    this.ledgerLines = [];
+    this.epismata = [];
+    this.braces = [];
 
     // chant notation elements are normally separated by a minimum fixed amount of space
     // on the staff line. It can happen, however, that two text elements are almost close

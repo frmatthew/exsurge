@@ -321,11 +321,15 @@ export class Neume extends ChantNotationElement {
     super();
 
     this.isNeume = true;  // poor man's reflection
-
     this.notes = notes;
 
-    // neumes keep track of listeners so that we can notify them when we are changed
-    this.changeListeners = [];
+    for (var i = 0; i < notes.length; i++)
+      notes[i].neume = this;
+  }
+
+  addNote(note) {
+    note.neume = this;
+    this.notes.push(note);
   }
 
   performLayout(ctxt) {
@@ -354,7 +358,9 @@ export class Neume extends ChantNotationElement {
 
       for (j = 0; j < note.extraMarkings.length; j++) {
         note.extraMarkings[j].performLayout(ctxt);
-        this.addVisualizer(note.extraMarkings[j].visualizer);
+
+        if (note.extraMarkings[j].visualizer)
+          this.addVisualizer(note.extraMarkings[j].visualizer);
       }
     }
 

@@ -33,7 +33,16 @@ import * as Neumes from 'Exsurge.Chant.Neumes'
 
 // reusable reg exps
 var __syllablesRegex = /(?=.)((?:[^(])*)(?:\(?([^)]*)\)?)?/g;
-var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*/g;
+var __notationsRegex = /z0|z|Z|::|:|;|,|`|c1|c2|c3|c4|f3|f4|cb3|cb4|\/\/|\/| |\!|-?[a-mA-M][oOwWvVrRsxy#~\+><_\.'012345]*(?:\[[^\]]*\]?)*/g;
+
+// for the brace string inside of [ and ] in notation data
+// the capturing groups are:
+//  1. o or u, to indicate over or under
+//  2. b, cb, or cba, to indicate the brace type
+//  3. 0 or 1 to indicate the attachment point
+//  4. {}( or ) to indicate opening/closing (this group will be null if the metric version is used)
+//  5. a float indicating the millimeter length of the brace (not supported yet)
+var __braceSpecRegex = /([ou])(b|cb|cba):([01])(?:([{}])|;(\d*(?:\.\d+)?)mm)/;
 
 export class Gabc {
 
@@ -558,7 +567,7 @@ export class Gabc {
         return;
 
       while (firstNoteIndex <= lastNoteIndex)
-        neume.notes.push(notes[firstNoteIndex++]);
+        neume.addNote(notes[firstNoteIndex++]);
 
       neumes.push(neume);
 
@@ -1119,10 +1128,58 @@ export class Gabc {
           else if (note.pitch.step === Step.Fa)
             note.pitch.step = Step.Fu;
           break;
+
+        // gabc special item groups
+        case '[':
+          // read in the whole group and parse it
+          var startIndex = ++i;
+          while (i < data.length && data[i] !== ']')
+            i++;
+
+          this.processInstructionForNote(ctxt, note, data.substring(startIndex, i));
+          break;
       }
     }
 
     notes.push(note);
+  }
+
+  // an instruction in this context is referring to a special gabc coding found after
+  // notes between ['s and ]'s. choral signs (unsupported) and braces fall into this
+  // category.
+  static processInstructionForNote(ctxt, note, instruction) {
+
+    var results = gabcGroupString.match(__braceSpecRegex);
+
+    if (results === null)
+      return;
+
+    // see the comments at the definition of __braceSpecRegex for the
+    // capturing groups
+    var under = results[1] === 'u';
+    var shape = Markings.BraceShape.CurlyBrace; // default
+
+    switch(results[2]) {
+      case 'b':
+        shape = Markings.BraceShape.RoundBrace;
+        break;
+      case 'cb':
+        shape = Markings.BraceShape.CurlyBrace;
+        break;
+      case 'cba':
+        shape = Markings.BraceShape.AccentedCurlyBrace;
+        break;
+    }
+
+    var attachmentPoint = results[3] === '0' ? Markings.BraceAttachmentPoint.Left : Markings.BraceAttachmentPoint.Right;
+    var brace = null;
+
+    if (results[4] === '{')
+      brace = new Markings.BraceStart(note, shape, attachmentPoint);
+    else
+      brace = new Markings.BraceEnd(note);
+
+    note.extraMarkings.push(brace);
   }
 
   // takes raw gabc text source and parses it into words. For example, passing

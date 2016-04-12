@@ -285,3 +285,44 @@ export class Mora extends Marking {
     super.performLayout(ctxt);
   }
 }
+
+
+export var BraceShape = {
+  RoundBrace: 0,
+  CurlyBrace: 1,
+  AccentedCurlyBrace: 2
+};
+
+export var BraceAttachmentPoint = {
+  Left: 0,
+  Right: 1
+};
+
+
+export class BraceStart extends Marking {
+
+  constructor(note, shape, attachmentPoint) {
+    super(note);
+
+    this.shape = shape;
+    this.attachmentPoint = attachmentPoint;
+  }
+
+  performLayout(ctxt) {
+    super.performLayout(ctxt);
+  }
+}
+
+export class BraceEnd extends Marking {
+
+  // right now a BraceEnd marking doesn't keep any info about what type
+  // of brace it ends. that means there can only be a single brace active at
+  // any given time...
+  constructor(note) {
+    super(note);
+  }
+
+  performLayout(ctxt) {
+    super.performLayout(ctxt);
+  }
+}

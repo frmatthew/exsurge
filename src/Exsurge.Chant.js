@@ -97,6 +97,10 @@ export class Note extends ChantLayoutElement {
     this.shape = NoteShape.Default;
     this.shapeModifiers = NoteShapeModifiers.None;
 
+    // notes keep track of the neume they belong to in order to facilitate layout
+    // this.neume gets set when a note is added to a neume via Neume.addNote()
+    this.neume = null;
+
     // various markings that can exist on a note, organized by type
     // for faster access and simpler code logic
     this.epismata = [];
@@ -811,46 +815,40 @@ export class ChantLine extends ChantLayoutElement {
           // calculate the distance between the last epismata and this one...
           // lots of code for a simple: currEpismata.left - prevEpismata.right
           if (epismata.length > 0)
-            spaceBetweenEpismata = neume.bounds.x + episema.bounds.x - (epismata[epismata.length - 1].neume.bounds.x + epismata[epismata.length - 1].episema.bounds.right());
+            spaceBetweenEpismata = neume.bounds.x + episema.bounds.x - (epismata[epismata.length - 1].note.neume.bounds.x + epismata[epismata.length - 1].bounds.right());
 
           // we try to blend the episema if we're able.
           if (epismata.length === 0 ||
-              epismata[epismata.length - 1].episema.positionHint !== episema.positionHint ||
-              epismata[epismata.length - 1].episema.terminating === true ||
-              epismata[epismata.length - 1].episema.alignment === HorizontalEpisemaAlignment.Left ||
+              epismata[epismata.length - 1].positionHint !== episema.positionHint ||
+              epismata[epismata.length - 1].terminating === true ||
+              epismata[epismata.length - 1].alignment === HorizontalEpisemaAlignment.Left ||
               episema.alignment === HorizontalEpisemaAlignment.Right ||
               spaceBetweenEpismata > ctxt.intraNeumeSpacing * 2) {
 
             // start a new set of epismata to potentially blend
             epismata = [];
-            epismata.push({
-              episema: episema,
-              neume: neume
-            });
+            epismata.push(episema);
           } else {
             // blend all previous with this one
             var newY;
 
             if (episema.positionHint === MarkingPositionHint.Below)
-              newY = Math.max(episema.bounds.y, epismata[epismata.length - 1].episema.bounds.y);
+              newY = Math.max(episema.bounds.y, epismata[epismata.length - 1].bounds.y);
             else
-              newY = Math.min(episema.bounds.y, epismata[epismata.length - 1].episema.bounds.y);
+              newY = Math.min(episema.bounds.y, epismata[epismata.length - 1].bounds.y);
 
             if (episema.bounds.y !== newY)
               episema.updateY(newY);
             else {
               for (var l = 0; l < epismata.length; l++)
-                epismata[l].episema.updateY(newY);
+                epismata[l].updateY(newY);
             }
 
             // extend the last episema to meet the new one
-            var newWidth = (neume.bounds.x + episema.bounds.x) - (epismata[epismata.length - 1].neume.bounds.x + epismata[epismata.length - 1].episema.bounds.x);
-            epismata[epismata.length - 1].episema.updateWidth(newWidth);
+            var newWidth = (neume.bounds.x + episema.bounds.x) - (epismata[epismata.length - 1].note.neume.bounds.x + epismata[epismata.length - 1].bounds.x);
+            epismata[epismata.length - 1].updateWidth(newWidth);
 
-            epismata.push({
-              episema: episema,
-              neume: neume
-            });
+            epismata.push(episema);
           }
         }
       }
