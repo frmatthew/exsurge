@@ -587,6 +587,8 @@ export class Gabc {
           return apostrophaState;
         else if (currNote.shape === NoteShape.Oriscus)
           return oriscusState;
+        else if (currNote.shape === NoteShape.Inclinatum)
+          return punctaInclinataState;
         else if (currNote.shapeModifiers & NoteShapeModifiers.Cavum)
           return createNeume(new Neumes.Punctum(), true);
         else
@@ -611,6 +613,18 @@ export class Gabc {
           return distrophaState;
       }
     };
+
+    var punctaInclinataState = {
+      neume: function() {
+        return new Neumes.PunctaInclinata();
+      },
+      handle: function() {
+        if (currNote.shape !== NoteShape.Inclinatum)
+          return createNeume(new Neumes.PunctaInclinata(), false);
+        else
+          return punctaInclinataState;
+      }
+    }
 
     var oriscusState = {
       neume: function() {
