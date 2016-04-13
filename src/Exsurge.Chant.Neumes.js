@@ -239,7 +239,7 @@ class NeumeBuilder {
       var multiple;
       switch (Math.abs(prevStaffPosition - staffPosition)) {
         case 0:
-          multiple = 0;
+          multiple = 1.1;
           break;
         case 1:
           multiple = 0.8;
@@ -249,7 +249,9 @@ class NeumeBuilder {
           break;
       }
 
-      this.x += advanceWidth * multiple;
+      if (i > 0)
+        this.x += advanceWidth * multiple;
+      
       note.bounds.x = this.x;
 
       this.neume.addVisualizer(note);
@@ -861,6 +863,19 @@ export class PorrectusFlexus extends Neume {
       .withPorrectusSwash(first, second)
       .noteAt(third, thirdGlyph)
       .noteAt(fourth, fourthGlyph);
+
+    this.finishLayout(ctxt);
+  }
+}
+
+// this is some type of pseudo nume right? there is no such thing as a neume
+// of puncta inclinata, but this will be part of other composite neumes.
+export class PunctaInclinata extends Neume {
+
+  performLayout(ctxt) {
+    super.performLayout(ctxt);
+
+    this.build(ctxt).withInclinati(this.notes);
 
     this.finishLayout(ctxt);
   }
