@@ -28,9 +28,65 @@ import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
 import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, Lyric, Annotation, DropCap } from 'Exsurge.Drawing'
 import { Glyphs } from 'Exsurge.Glyphs'
 import { Custos, AccidentalType } from 'Exsurge.Chant.Signs'
-import { MarkingPositionHint, HorizontalEpisemaAlignment, HorizontalEpisema } from 'Exsurge.Chant.Markings'
+import { MarkingPositionHint, HorizontalEpisemaAlignment, HorizontalEpisema, BraceStart, BraceEnd } from 'Exsurge.Chant.Markings'
 import { Gabc } from 'Exsurge.Gabc'
 
+
+/*
+ * Ictus
+ */
+export class Ictus extends ChantLayoutElement {
+
+  constructor(note) {
+    super();
+    this.note = note;
+  }
+
+  performLayout(ctxt) {
+
+    var glyphCode;
+
+    // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
+
+    if (this.positionHint === MarkingPositionHint.Above) {
+      glyphCode = GlyphCode.VerticalEpisemaAbove;
+    } else {
+      glyphCode = GlyphCode.VerticalEpisemaBelow;
+    }
+
+    var staffPosition = this.note.staffPosition;
+    
+    this.horizontalOffset = this.note.bounds.width / 2;
+    this.verticalOffset = 0;
+
+    switch (glyphCode) {
+      case GlyphCode.VerticalEpisemaAbove:
+        if (staffPosition % 2 === 0)
+          this.verticalOffset -= ctxt.staffInterval * 1.5;
+        else
+          this.verticalOffset -= ctxt.staffInterval * .9;
+        break;
+
+      case GlyphCode.VerticalEpisemaBelow:
+      default:
+        if (staffPosition % 2 === 0)
+          this.verticalOffset += ctxt.staffInterval * 1.5;
+        else
+          this.verticalOffset += ctxt.staffInterval * .8;
+        break;
+    }
+
+    this.visualizer = new GlyphVisualizer(ctxt, glyphCode);
+    this.visualizer.setStaffPosition(ctxt, staffPosition);
+
+    this.bounds = this.visualizer.bounds.clone();
+    this.bounds.x = this.note.bounds.x + this.horizontalOffset - this.visualizer.origin.x;
+    this.bounds.y += this.verticalOffset;
+
+    this.visualizer.bounds.x = this.bounds.x;
+    this.visualizer.bounds.y = this.bounds.y;
+  }
+}
 
 export var LiquescentType = {
   None: 0,
@@ -106,6 +162,10 @@ export class Note extends ChantLayoutElement {
     this.epismata = [];
     this.morae = []; // silly to have an array of these, but gabc allows multiple morae per note!
     this.extraMarkings = []; // ictus, acute accent, ties, brackets, etc.
+
+    // these are set on the note when they are needed, otherwise, they're undefined
+    // this.ictus = null;
+    // this.accuteAccent = null;
   }
 
   setGlyph(ctxt, glyphCode) {
@@ -363,7 +423,9 @@ export class ChantLine extends ChantLayoutElement {
 
     this.justify = true;
 
+    // these are markings that exist at the chant line level rather than at the neume level.
     this.ledgerLines = [];
+    this.braces = [];
 
     this.nextLine = null;
     this.previousLine = null; // for layout assistance
@@ -505,6 +567,11 @@ export class ChantLine extends ChantLayoutElement {
         'class': 'ledgerLine'
       });
     }
+
+    // create any braces
+    // for (i = 0; i < this.braces.length; i++) {
+
+    // }
 
     // dropCap and the annotations
     if (this.notationsStartIndex === 0) {
@@ -784,6 +851,7 @@ export class ChantLine extends ChantLayoutElement {
     };
 
     var epismata = []; // keep track of epismata in case we can connect some
+    var brace = null;
 
     // make a final pass over all of the notes to add any necessary
     // ledger lines and to smooth out epismata
@@ -851,7 +919,45 @@ export class ChantLine extends ChantLayoutElement {
             epismata.push(episema);
           }
         }
+
+        // check for any brace indicators on this note
+        for (k = 0; k < note.extraMarkings.length; k++) {
+
+          var mark = note.extraMarkings[k];
+
+          if (mark.constructor.name === BraceStart.name) {
+            brace = mark;
+
+            // baceY starts out at the min/max based on the staff lines
+            if (brace.isUpper)
+              brace.bounds.y = ctxt.calculateHeightFromStaffPosition(4);
+            else
+              brace.bounds.y = ctxt.calculateHeightFromStaffPosition(-4);
+
+          } else if (mark.constructor.name === BraceEnd.name) {
+            if (brace === null) {
+              // the start must have happened on the previous chant line
+              brace = brace;
+            } else {
+              this.braces.push(brace);
+              brace = null;
+            }
+          }
+        }
+
+        // update the active brace y position if there is one
+        if (brace !== null) {
+          if (brace.isUpper)
+            brace.bounds.y = Math.min(brace.bounds.y, note.bounds.y);
+          else
+            brace.bounds.y = Math.max(brace.bounds.y, note.bounds.bottom());
+        }
       }
+    }
+
+    // if we still have an active brace, that means it spands two chant lines!
+    if (brace !== null) {
+      brace = brace;
     }
 
     // don't forget to also include the final custos, which may need a ledger line too

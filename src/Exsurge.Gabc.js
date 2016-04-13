@@ -26,7 +26,7 @@
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step } from 'Exsurge.Core'
 import { LyricType, Lyric } from 'Exsurge.Drawing'
-import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
+import { Ictus, Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
@@ -1032,13 +1032,13 @@ export class Gabc {
           break;
 
         case '\'':
-          mark = new Markings.Ictus(note);
+          mark = new Ictus(note);
           if (haveLookahead && lookahead === '1')
             mark.positionHint = Markings.MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
             mark.positionHint = Markings.MarkingPositionHint.Below;
 
-          note.extraMarkings.push(mark);
+          note.ictus = mark;
           break;
 
         //note shapes

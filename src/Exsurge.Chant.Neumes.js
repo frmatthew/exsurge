@@ -25,7 +25,7 @@
 
 import * as Exsurge from 'Exsurge.Core'
 import { Step, Pitch, Rect, Point, Margins } from 'Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, VirgaLineVisualizer, HorizontalEpisemaLineVisualizer } from 'Exsurge.Drawing'
+import { ctxt, QuickSvg, ChantLayoutElement, ChantNotationElement, GlyphCode, GlyphVisualizer, NeumeLineVisualizer, VirgaLineVisualizer, HorizontalEpisemaLineVisualizer, CurlyBraceVisualizer } from 'Exsurge.Drawing'
 import { Note, LiquescentType, NoteShape, NoteShapeModifiers } from 'Exsurge.Chant'
 import { MarkingPositionHint, HorizontalEpisema, Mora } from 'Exsurge.Chant.Markings'
 import { Glyphs } from 'Exsurge.Glyphs'
@@ -358,11 +358,10 @@ export class Neume extends ChantNotationElement {
         this.addVisualizer(note.morae[j].visualizer);
       }
 
-      for (j = 0; j < note.extraMarkings.length; j++) {
-        note.extraMarkings[j].performLayout(ctxt);
-
-        if (note.extraMarkings[j].visualizer)
-          this.addVisualizer(note.extraMarkings[j].visualizer);
+      // if the note has an ictus, then add it here
+      if (note.ictus) {
+        note.ictus.performLayout(ctxt);
+        this.addVisualizer(note.ictus.visualizer);
       }
     }
 
@@ -405,6 +404,11 @@ export class Apostropha extends Neume {
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
+
+    var y = ctxt.calculateHeightFromStaffPosition(4);
+
+    var brace = new CurlyBraceVisualizer(ctxt, 0, 35, y);
+    this.addVisualizer(brace);
 
     this.build(ctxt).noteAt(this.notes[0], Apostropha.getNoteGlyphCode(this.notes[0]));
 

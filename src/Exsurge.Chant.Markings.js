@@ -185,63 +185,6 @@ export class HorizontalEpisema extends Marking {
 }
 
 /*
- * Ictus
- */
-export class Ictus extends Marking {
-
-  constructor(note) {
-    super(note);
-  }
-
-  performLayout(ctxt) {
-
-    var glyphCode;
-
-    // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
-
-    if (this.positionHint === MarkingPositionHint.Above) {
-      glyphCode = GlyphCode.VerticalEpisemaAbove;
-    } else {
-      glyphCode = GlyphCode.VerticalEpisemaBelow;
-    }
-
-    var staffPosition = this.note.staffPosition;
-    
-    this.horizontalOffset = this.note.bounds.width / 2;
-    this.verticalOffset = 0;
-
-    switch (glyphCode) {
-      case GlyphCode.VerticalEpisemaAbove:
-        if (staffPosition % 2 === 0)
-          this.verticalOffset -= ctxt.staffInterval * 1.5;
-        else
-          this.verticalOffset -= ctxt.staffInterval * .9;
-        break;
-
-      case GlyphCode.VerticalEpisemaBelow:
-      default:
-        if (staffPosition % 2 === 0)
-          this.verticalOffset += ctxt.staffInterval * 1.5;
-        else
-          this.verticalOffset += ctxt.staffInterval * .8;
-        break;
-    }
-
-    this.visualizer = new GlyphVisualizer(ctxt, glyphCode);
-    this.visualizer.setStaffPosition(ctxt, staffPosition);
-
-    this.bounds = this.visualizer.bounds.clone();
-    this.bounds.x = this.note.bounds.x + this.horizontalOffset - this.visualizer.origin.x;
-    this.bounds.y += this.verticalOffset;
-
-    this.visualizer.bounds.x = this.bounds.x;
-    this.visualizer.bounds.y = this.bounds.y;
-
-    super.performLayout(ctxt);
-  }
-}
-
-/*
  * Mora
  */
 export class Mora extends Marking {

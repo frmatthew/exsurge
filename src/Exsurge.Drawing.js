@@ -262,6 +262,7 @@ export class ChantContext {
     // for keeping track of the clef
     this.activeClef = null;
 
+    this.neumeLineColor = "#000";
     this.staffLineColor = "#000";
     this.dividerLineColor = "#000";
 
@@ -291,13 +292,6 @@ export class ChantContext {
     // these are only gauranteed to be valid during the performLayout phase!
     this.activeNotations = null;
     this.currNotationIndex = -1;
-
-    // the context keeps track of some markings as the chant is laid out. this facilitates
-    // in formatting markings that span individual neumes/notes. these arrays need to be reset
-    // at the beginning of laying out a new chant line by calling startChantLine()
-    this.ledgerLines = [];
-    this.epismata = [];
-    this.braces = [];
 
     // chant notation elements are normally separated by a minimum fixed amount of space
     // on the staff line. It can happen, however, that two text elements are almost close
@@ -598,6 +592,81 @@ export class GlyphVisualizer extends ChantLayoutElement {
       x: this.bounds.x + this.origin.x,
       y: this.bounds.y + this.origin.y
     });
+  }
+}
+
+export class CurlyBraceVisualizer extends ChantLayoutElement {
+
+  constructor(ctxt, x1, x2, y, upper = true, addAcuteAccent = false) {
+    super();
+
+    if (x1 > x2) {
+      // swap the xs
+      var temp = x1;
+      x1 = x2;
+      x2 = temp;
+    }
+
+    this.x1 = x1;
+    this.x2 = x2;
+    this.y = y;
+    this.upper = upper;
+    this.addAcuteAccent = addAcuteAccent;
+
+    this.origin.x = 0;
+    this.origin.y = 0;
+
+    this.bounds.x = this.x1;
+    this.bounds.y = y;
+    this.bounds.width = this.x2 - this.x1;
+    this.bounds.height = 10;
+  }
+
+  createDrawable(ctxt) {
+    var path;
+
+    if (this.upper)
+      path = this.generatePathString(-ctxt.staffInterval / 2, .6);
+    else
+      path = this.generatePathString(ctxt.staffInterval / 2, .6);
+
+    return QuickSvg.createFragment('path', {
+      'd': path,
+      'stroke': ctxt.neumeLineColor,
+      'stroke-width': ctxt.neumeLineWeight + 'px',
+      'fill': 'none'
+    });
+  }
+
+  // code below based on code by: https://gist.github.com/alexhornbake
+  //
+  // optimized for braces that are only drawn horizontally.
+  // returns svg path string
+  // w is the height of the bracket. use negative number for down facing
+  // bracket, positive number for upper facing backet
+  // and q factor, .5 is normal, higher q = more expressive bracket 
+  generatePathString(h, q) {
+
+    var dx = -1;
+    var len = this.x2 - this.x1;
+
+    //Calculate Control Points of path,
+    var qx1 = this.x1;
+    var qy1 = this.y  + q*h;
+    var qx2 = this.x1 + .25*len;
+    var qy2 = this.y  + (1-q)*h;
+    var tx1 = this.x1 + .5*len;
+    var ty1 = this.y  + h;
+    var qx3 = this.x2;
+    var qy3 = this.y  + q*h;
+    var qx4 = this.x1 + .75*len;
+    var qy4 = this.y  + (1-q)*h;
+    return ( "M " +  this.x1 + " " +  this.y +
+            " Q " + qx1 + " " + qy1 + " " + qx2 + " " + qy2 + 
+            " T " + tx1 + " " + ty1 +
+            " M " +  this.x2 + " " +  this.y +
+            " Q " + qx3 + " " + qy3 + " " + qx4 + " " + qy4 + 
+            " T " + tx1 + " " + ty1);
   }
 }
 
