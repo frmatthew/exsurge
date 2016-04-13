@@ -660,9 +660,9 @@ export class ChantLine extends ChantLayoutElement {
         ctxt.currNotationIndex = i - 1; // make sure the context knows where the custos is 
         this.custos.performLayout(ctxt);
 
-        if (last)
-          this.custos.bounds.x = last.bounds.x + last.bounds.width;
-
+        // Put the custos at the very end of the line
+        this.custos.bounds.x = this.staffRight - this.custos.bounds.width - this.custos.leadingSpace;
+        
         extraSpace -= this.custos.bounds.width + this.custos.leadingSpace;
 
         // nothing more to see here...
