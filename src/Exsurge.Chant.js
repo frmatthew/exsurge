@@ -591,9 +591,20 @@ export class ChantLine extends ChantLayoutElement {
       prev = curr;
       curr = notations[i];
 
-      // on the last notation of the score, we don't need a custod, so we just use staffRight as the
-      // right boundary. Otherwise, we use rightBoundary, which leaves room for a custos...
-      var actualRightBoundary = i === lastNotationIndex ? this.staffRight : rightBoundary;
+      
+      var actualRightBoundary;
+      if(i === lastNotationIndex) {
+        // on the last notation of the score, we don't need a custos or trailing space, so we use staffRight + trailingSpace as the
+        // right boundary.
+        actualRightBoundary = this.staffRight + curr.trailingSpace;
+      } else if(i === lastNotationIndex - 1) {
+        // on the penultimate notation, make sure there is at least enough room for whichever takes up less space,
+        // between the final notation and a custos:
+        actualRightBoundary = Math.max(rightBoundary, this.staffRight - notations[lastNotationIndex].bounds.width);
+      } else {
+        // Otherwise, we use rightBoundary, which leaves room for a custos...
+        actualRightBoundary = rightBoundary;
+      }
 
       // try to fit the curr element on this line.
       // if it doesn't fit, we finish up here.
@@ -649,9 +660,9 @@ export class ChantLine extends ChantLayoutElement {
         ctxt.currNotationIndex = i - 1; // make sure the context knows where the custos is 
         this.custos.performLayout(ctxt);
 
-        if (last)
-          this.custos.bounds.x = last.bounds.x + last.bounds.width;
-
+        // Put the custos at the very end of the line
+        this.custos.bounds.x = this.staffRight - this.custos.bounds.width - this.custos.leadingSpace;
+        
         extraSpace -= this.custos.bounds.width + this.custos.leadingSpace;
 
         // nothing more to see here...
@@ -664,9 +675,14 @@ export class ChantLine extends ChantLayoutElement {
       this.staffRight = last.bounds.right();
     }
 
+    // If the last line ends with a divider and is very near to taking up the whole width, still justify it:
+    if(lastIndex > lastNotationIndex) {
+      this.justify = last.isDivider && (this.staffRight - curr.bounds.right() < ctxt.intraNeumeSpacing * 4);
+      extraSpace += last.trailingSpace;
+    }
+
     // Justify the line if we are not the last one
     if (this.justify === true && width > 0 &&
-        lastIndex < notations.length &&
         extraSpace > 0)
       this.justifyElements(extraSpace);
 
