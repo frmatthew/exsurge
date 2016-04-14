@@ -1058,6 +1058,18 @@ export class ChantNotationElement extends ChantLayoutElement {
     return this.bounds.x + this.lyrics[index].bounds.x + this.lyrics[index].bounds.width;
   }
 
+  getLyricLeftMost() {
+    return this.bounds.x + Math.min.apply(null, this.lyrics.map(function(lyrics){
+      return lyrics.bounds.x;
+    }));
+  }
+
+  getLyricRightMost() {
+    return this.bounds.x + Math.max.apply(null, this.lyrics.map(function(lyrics){
+      return lyrics.bounds.x + lyrics.bounds.width;
+    }));
+  }
+
   // used by subclasses while building up the chant notations.
   addVisualizer(chantLayoutElement) {
     if (this.bounds.isEmpty())

@@ -638,16 +638,20 @@ export class ChantLine extends ChantLayoutElement {
       }
     }
 
-    var last, extraSpace = 0;
+    var last, lastWithLyrics, extraSpace = 0, spaceAfterLyrics = 0;
     var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
     if (this.numNotationsOnLine > 0) {
       last = notations[lastIndex - 1];
 
-      if (last.hasLyrics() && last.getLyricRight(0) > (last.bounds.right() + last.trailingSpace))
-        extraSpace = this.staffRight - last.getLyricRight(0);
-      else
-        extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
+      // Even if the last notation itself doesn't have lyrics, we need to look at the last one that does.
+      lastWithLyrics = notations.slice(this.notationsStartIndex, lastIndex).reduceRight(function(result, notation, index){
+        return result || (notation.hasLyrics() && notation);
+      }, null);
+
+      extraSpace = this.staffRight - (last.bounds.right() + last.trailingSpace);
+      if (lastWithLyrics)
+        spaceAfterLyrics = this.staffRight - lastWithLyrics.getLyricRightMost();
     }
 
     // create the automatic custos at the end of the line if there are neumes left in the notations
@@ -678,7 +682,22 @@ export class ChantLine extends ChantLayoutElement {
     // If the last line ends with a divider and is very near to taking up the whole width, still justify it:
     if(lastIndex > lastNotationIndex) {
       this.justify = last.isDivider && (this.staffRight - curr.bounds.right() < ctxt.intraNeumeSpacing * 4);
+      // we don't use the trailing space on the last notation
       extraSpace += last.trailingSpace;
+      if(this.justify && spaceAfterLyrics > 0 && spaceAfterLyrics < extraSpace) {
+        // if the last lyric was extending beyond the final bar and we are going to justify the line,
+        // we need to move the bar to align it with the right edge of the lyric, so everything will
+        // be properly right aligned with the right edge of the score.
+        last.bounds.x += extraSpace - spaceAfterLyrics;
+      }
+    }
+
+    // If there is less space following the last lyric than what is following the last neume,
+    // then we can only spread out the line by that much extra space, so that the lyric will not extend too far.
+    // This is done here rather than above, so that when dealing with justifying the final line, we can handle
+    // cases where the lyric text would have extended beyond the line, and this happens immediately above.
+    if(spaceAfterLyrics > 0 && spaceAfterLyrics < extraSpace) {
+      extraSpace = spaceAfterLyrics;
     }
 
     // Justify the line if we are not the last one
@@ -942,6 +961,7 @@ export class ChantLine extends ChantLayoutElement {
 
       var prevLyricRightMax = Number.MIN_VALUE;
       var currLyricLeftMin = Number.MAX_VALUE;
+      var currLyricRightMax = Number.MIN_VALUE;
 
       for (i = 0; i < lyricCount; i++) {
           
@@ -958,15 +978,19 @@ export class ChantLine extends ChantLayoutElement {
           prevLyricRightMax = Math.max(prevLyricRightMax, right);
         }
 
-        if (i < curr.lyrics.length && curr.lyrics[i] !== null)
+        if (i < curr.lyrics.length && curr.lyrics[i] !== null) {
           currLyricLeftMin = Math.min(currLyricLeftMin, curr.getLyricLeft(i));
+          currLyricRightMax = Math.max(currLyricRightMax, curr.getLyricRight(i));
+        }
       }
       
       // if the lyrics overlap, then we need to shift over the current element a bit
-      if (prevLyricRightMax > currLyricLeftMin)
+      if (prevLyricRightMax > currLyricLeftMin) {
         curr.bounds.x += prevLyricRightMax - currLyricLeftMin;
+        currLyricRightMax += prevLyricRightMax - currLyricLeftMin;
+      }
 
-      if (curr.bounds.right() < rightBoundary)
+      if (curr.bounds.right() < rightBoundary && currLyricRightMax <= this.staffRight)
         return true;
       else {
         curr.bounds.x = 0 ;
@@ -1011,7 +1035,7 @@ export class ChantLine extends ChantLayoutElement {
       }
     }
 
-    if (curr.bounds.right() + curr.trailingSpace < rightBoundary)
+    if (curr.bounds.right() + curr.trailingSpace < rightBoundary && curr.getLyricRight(0) <= this.staffRight)
       return true;
 
     // if we made it this far, then the element won't fit on this line.
