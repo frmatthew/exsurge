@@ -26,7 +26,7 @@
 
 import { Units, Pitch, Point, Rect, Margins, Size, Step } from 'Exsurge.Core'
 import { LyricType, Lyric } from 'Exsurge.Drawing'
-import { Ictus, Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
+import { Note, LiquescentType, NoteShape, NoteShapeModifiers, ChantMapping, ChantScore, ChantDocument, Clef, DoClef, FaClef, TextOnly, ChantLineBreak } from 'Exsurge.Chant'
 import * as Markings from 'Exsurge.Chant.Markings'
 import * as Signs from 'Exsurge.Chant.Signs'
 import * as Neumes from 'Exsurge.Chant.Neumes'
@@ -58,6 +58,10 @@ export class Gabc {
     ctxt.activeClef = Clef.default();
     
     var mappings = this.createMappingsFromWords(ctxt, words, (clef) => ctxt.activeClef = clef);
+
+    // always set the last notation to have a trailingSpace of 0. This makes layout for the last chant line simpler
+    if (mappings.length > 0 && mappings[mappings.length - 1].notations.length > 0)
+      mappings[mappings.length - 1].notations[mappings[mappings.length - 1].notations.length - 1].trailingSpace = 0;
 
     return mappings;
   }
@@ -138,6 +142,9 @@ export class Gabc {
   // new source
   static updateMappingsFromSource(ctxt, mappings, newGabcSource) {
 
+    // always remove the last old mapping since it's spacing/trailingSpace is handled specially
+    mappings.pop();
+
     var newWords = this.splitWords(newGabcSource);
 
     var results = this.diffDescriptorsAndNewWords(mappings, newWords);
@@ -182,6 +189,10 @@ export class Gabc {
         }
       }
     }
+
+    // always set the last notation to have a trailingSpace of 0. This makes layout for the last chant line simpler
+    if (mappings.length > 0 && mappings[mappings.length - 1].notations.length > 0)
+      mappings[mappings.length - 1].notations[mappings[mappings.length - 1].notations.length - 1].trailingSpace = 0;
   }
 
   // takes an array of gabc words (like that returned by splitWords below)
@@ -968,7 +979,7 @@ export class Gabc {
               lookahead = '0';
           }
 
-          mark = new Markings.Mora(note, ctxt.staffInterval / 4.0);
+          mark = new Markings.Mora(ctxt, note);
           if (haveLookahead && lookahead === '1')
             mark.positionHint = Markings.MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
@@ -1032,7 +1043,7 @@ export class Gabc {
           break;
 
         case '\'':
-          mark = new Ictus(note);
+          mark = new Markings.Ictus(ctxt, note);
           if (haveLookahead && lookahead === '1')
             mark.positionHint = Markings.MarkingPositionHint.Above;
           else if (haveLookahead && lookahead === '0')
@@ -1044,7 +1055,7 @@ export class Gabc {
         //note shapes
         case 'r':
           if (haveLookahead && lookahead === '1') {
-            note.extraMarkings.push(new Markings.AcuteAccent(note));
+            note.acuteAccent = new Markings.AcuteAccent(ctxt, note);
             i++;
           } else
             note.shapeModifiers |= NoteShapeModifiers.Cavum;
@@ -1159,18 +1170,20 @@ export class Gabc {
   }
 
   // an instruction in this context is referring to a special gabc coding found after
-  // notes between ['s and ]'s. choral signs (unsupported) and braces fall into this
+  // notes between ['s and ]'s. choral signs and braces fall into this
   // category.
+  //
+  // currently only brace instructions are supported here!
   static processInstructionForNote(ctxt, note, instruction) {
 
-    var results = gabcGroupString.match(__braceSpecRegex);
+    var results = instruction.match(__braceSpecRegex);
 
     if (results === null)
       return;
 
     // see the comments at the definition of __braceSpecRegex for the
     // capturing groups
-    var under = results[1] === 'u';
+    var above = results[1] === 'o';
     var shape = Markings.BraceShape.CurlyBrace; // default
 
     switch(results[2]) {
@@ -1185,15 +1198,14 @@ export class Gabc {
         break;
     }
 
-    var attachmentPoint = results[3] === '0' ? Markings.BraceAttachmentPoint.Left : Markings.BraceAttachmentPoint.Right;
+    var attachmentPoint = results[3] === '0' ? Markings.BraceAttachment.Left : Markings.BraceAttachment.Right;
     var brace = null;
+    var type;
 
     if (results[4] === '{')
-      brace = new Markings.BraceStart(note, shape, attachmentPoint);
+      note.braceStart = new Markings.BracePoint(note, above, shape, attachmentPoint);
     else
-      brace = new Markings.BraceEnd(note);
-
-    note.extraMarkings.push(brace);
+      note.braceEnd = new Markings.BracePoint(note, above, shape, attachmentPoint);
   }
 
   // takes raw gabc text source and parses it into words. For example, passing

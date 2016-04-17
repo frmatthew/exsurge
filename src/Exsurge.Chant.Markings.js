@@ -24,7 +24,7 @@
 //
 
 import * as Exsurge from 'Exsurge.Core'
-import { ctxt, QuickSvg, ChantLayoutElement, GlyphCode, GlyphVisualizer, HorizontalEpisemaVisualizer } from 'Exsurge.Drawing'
+import { QuickSvg, ChantLayoutElement, GlyphCode, GlyphVisualizer } from 'Exsurge.Drawing'
 import { Note, NoteShape } from 'Exsurge.Chant'
 
 
@@ -35,53 +35,21 @@ export var MarkingPositionHint = {
   Below:        2
 };
 
-export class Marking extends ChantLayoutElement {
+export class AcuteAccent extends GlyphVisualizer {
 
-  constructor(note) {
-    super();
-
+  constructor(ctxt, note) {
+    super(ctxt, GlyphCode.AcuteAccent);
     this.note = note;
-    this.horizontalOffset = 0;
-    this.verticalOffset = 0;
-    this.positionHint = MarkingPositionHint.Default;
-
-    // each marking has its own visualizer
-    this.visualizer = null;
-  }
-
-  performLayout(ctxt) {
-
-  }
-}
-
-export class AcuteAccent extends Marking {
-
-  constructor(note) {
-    super(note);
-
     this.positionHint = MarkingPositionHint.Above;
   }
 
   performLayout(ctxt) {
 
-    this.visualizer = new GlyphVisualizer(ctxt, GlyphCode.AcuteAccent);
+    this.bounds.x += this.bounds.width / 2; // center on the note itself
 
-    // fixme: acute markings might need to be positioned vertically over
-    // the notation bounds of the chantline after everything has already
-    // been laid out on the line...for now we just place them at
-    // reasonable height above the staff line.
-    this.verticalOffset = -ctxt.staffInterval * 4;
-    this.horizontalOffset = this.visualizer.bounds.width / 2; // center on the note itself
-
-    this.bounds = this.visualizer.bounds.clone();
-    this.bounds.x += this.horizontalOffset;
-    this.bounds.y += this.verticalOffset;
-
-    // position the visualizer too...
-    this.visualizer.bounds.x = this.bounds.x;
-    this.visualizer.bounds.y = this.bounds.y;
-
-    super.performLayout(ctxt);
+    // this puts the acute accent either over the staff lines, or over the note if the
+    // note is above the staff lines
+    this.setStaffPosition(ctxt, Math.max(this.note.staffPosition + 1, 4))
   }
 }
 
@@ -93,30 +61,25 @@ export var HorizontalEpisemaAlignment = {
   Right:        3
 };
 
+
 /*
  * HorizontalEpisema
+ *
+ * A horizontal episema marking is it's own visualizer (that is, it implements createDrawable)
  */
-export class HorizontalEpisema extends Marking {
+export class HorizontalEpisema extends ChantLayoutElement {
 
   constructor(note) {
-    super(note);
+    super();
+
+    this.note = note;
     
+    this.positionHint = MarkingPositionHint.Default;
     this.terminating = false; // indicates if this episema should terminate itself or not
     this.alignment = HorizontalEpisemaAlignment.Default;
   }
 
-  updateY(y) {
-    this.bounds.y = y;
-    this.visualizer.bounds.y = y;
-  }
-
-  updateWidth(width) {
-    this.bounds.width = width;
-    this.visualizer.bounds.width = width;
-  }
-
   performLayout(ctxt) {
-    super.performLayout(ctxt);
 
     // following logic helps to keep the episemae away from staff lines if they get too close
     // the placement is based on a review of the Vatican and solesmes editions, which
@@ -179,93 +142,141 @@ export class HorizontalEpisema extends Marking {
 
     this.origin.x = 0;
     this.origin.y = 0;
+  }
 
-    this.visualizer = new HorizontalEpisemaVisualizer(ctxt, x, y, width);
+  createDrawable(ctxt) {
+
+    return QuickSvg.createFragment('rect', {
+      'x': this.bounds.x,
+      'y': this.bounds.y,
+      'width': this.bounds.width,
+      'height': this.bounds.height,
+      'fill': ctxt.neumeLineColor,
+      'class': 'horizontalEpisema'
+    });
+  }
+}
+
+/*
+ * Ictus
+ */
+export class Ictus extends GlyphVisualizer {
+
+  constructor(ctxt, note) {
+    super(ctxt, GlyphCode.VerticalEpisemaAbove);
+    this.note = note;
+    this.positionHint = MarkingPositionHint.Default;
+  }
+
+  performLayout(ctxt) {
+
+    var glyphCode;
+
+    // fixme: this positioning logic doesn't work for the ictus on a virga apparently...?
+
+    if (this.positionHint === MarkingPositionHint.Above) {
+      glyphCode = GlyphCode.VerticalEpisemaAbove;
+    } else {
+      glyphCode = GlyphCode.VerticalEpisemaBelow;
+    }
+
+    var staffPosition = this.note.staffPosition;
+    
+    var horizontalOffset = this.note.bounds.width / 2;
+    var verticalOffset = 0;
+
+    switch (glyphCode) {
+      case GlyphCode.VerticalEpisemaAbove:
+        if (staffPosition % 2 === 0)
+          verticalOffset -= ctxt.staffInterval * 1.5;
+        else
+          verticalOffset -= ctxt.staffInterval * .9;
+        break;
+
+      case GlyphCode.VerticalEpisemaBelow:
+      default:
+        if (staffPosition % 2 === 0)
+          verticalOffset += ctxt.staffInterval * 1.5;
+        else
+          verticalOffset += ctxt.staffInterval * .8;
+        break;
+    }
+
+    this.setGlyph(ctxt, glyphCode);
+    this.setStaffPosition(ctxt, staffPosition);
+
+    this.bounds.x =  this.note.bounds.x + horizontalOffset - this.origin.x;
+    this.bounds.y += verticalOffset;
   }
 }
 
 /*
  * Mora
  */
-export class Mora extends Marking {
+export class Mora extends GlyphVisualizer {
 
-  constructor(note, horizontalOffset) {
-    super(note);
-
-    this.horizontalOffset = horizontalOffset;
+  constructor(ctxt, note) {
+    super(ctxt, GlyphCode.Mora);
+    this.note = note;
+    this.positionHint = MarkingPositionHint.Default;
   }
 
   performLayout(ctxt) {
 
     var staffPosition = this.note.staffPosition;
 
-    this.visualizer = new GlyphVisualizer(ctxt, GlyphCode.Mora);
-    this.visualizer.setStaffPosition(ctxt, staffPosition);
+    this.setStaffPosition(ctxt, staffPosition);
 
-    this.verticalOffset = 0;
+    var verticalOffset = 0;
     if (this.positionHint === MarkingPositionHint.Above) {
       if (staffPosition % 2 === 0)
-        this.verticalOffset -= ctxt.staffInterval + ctxt.staffInterval * .75;
+        verticalOffset -= ctxt.staffInterval + ctxt.staffInterval * .75;
       else
-        this.verticalOffset -= ctxt.staffInterval * .75;
+        verticalOffset -= ctxt.staffInterval * .75;
     } else if (this.positionHint === MarkingPositionHint.Below) {
       if (staffPosition % 2 === 0)
-        this.verticalOffset += ctxt.staffInterval + ctxt.staffInterval * .75;
+        verticalOffset += ctxt.staffInterval + ctxt.staffInterval * .75;
       else
-        this.verticalOffset += ctxt.staffInterval * .75;
+        verticalOffset += ctxt.staffInterval * .75;
     } else {
       if (Math.abs(staffPosition) % 2 === 1)
-        this.verticalOffset -= ctxt.staffInterval * .75;
+        verticalOffset -= ctxt.staffInterval * .75;
     }
 
-    this.bounds = this.visualizer.bounds.clone();
-    this.bounds.x += this.note.bounds.right() + this.horizontalOffset;
-    this.bounds.y += this.verticalOffset;
-
-    this.visualizer.bounds.x = this.bounds.x;
-    this.visualizer.bounds.y = this.bounds.y;
-
-    super.performLayout(ctxt);
+    this.bounds.x += this.note.bounds.right() + ctxt.staffInterval / 4.0;
+    this.bounds.y += verticalOffset;
   }
 }
 
-
+// indicates the shape of the brace
 export var BraceShape = {
   RoundBrace: 0,
   CurlyBrace: 1,
   AccentedCurlyBrace: 2
 };
 
-export var BraceAttachmentPoint = {
+// indicates how the brace is alignerd to the note to which it's connected
+export var BraceAttachment = {
   Left: 0,
   Right: 1
 };
 
 
-export class BraceStart extends Marking {
+export class BracePoint extends ChantLayoutElement {
 
-  constructor(note, shape, attachmentPoint) {
-    super(note);
+  constructor(note, isAbove, shape, attachment) {
+    super();
 
+    this.note = note;
+    this.isAbove = isAbove;
     this.shape = shape;
-    this.attachmentPoint = attachmentPoint;
+    this.attachment = attachment;
   }
 
-  performLayout(ctxt) {
-    super.performLayout(ctxt);
-  }
-}
-
-export class BraceEnd extends Marking {
-
-  // right now a BraceEnd marking doesn't keep any info about what type
-  // of brace it ends. that means there can only be a single brace active at
-  // any given time...
-  constructor(note) {
-    super(note);
-  }
-
-  performLayout(ctxt) {
-    super.performLayout(ctxt);
+  getAttachmentX() {
+    if (this.attachment === BraceAttachment.Left)
+      return this.note.neume.bounds.x + this.note.bounds.x;
+    else
+      return this.note.neume.bounds.x + this.note.bounds.right();
   }
 }

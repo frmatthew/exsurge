@@ -508,34 +508,6 @@ export class VirgaLineVisualizer extends ChantLayoutElement {
   }
 }
 
-export class HorizontalEpisemaVisualizer extends ChantLayoutElement {
-
-  constructor(ctxt, x, y, width) {
-    super();
-
-    this.bounds.x = x;
-    this.bounds.y = y;
-    this.bounds.width = width;
-    this.bounds.height = ctxt.episemaLineWeight;
-
-    this.origin.x = 0;
-    this.origin.y = 0;
-  }
-
-  createDrawable(ctxt) {
-
-    return QuickSvg.createFragment('rect', {
-      'x': this.bounds.x,
-      'y': this.bounds.y,
-      'width': this.bounds.width,
-      'height': this.bounds.height,
-      'fill': ctxt.neumeLineColor,
-      'class': 'horizontalEpisema'
-    });
-  }
-}
-
-
 export class GlyphVisualizer extends ChantLayoutElement {
 
   constructor(ctxt, glyphCode) {
@@ -595,9 +567,9 @@ export class GlyphVisualizer extends ChantLayoutElement {
   }
 }
 
-export class CurlyBraceVisualizer extends ChantLayoutElement {
+export class RoundBraceVisualizer extends ChantLayoutElement {
 
-  constructor(ctxt, x1, x2, y, upper = true, addAcuteAccent = false) {
+  constructor(ctxt, x1, x2, y, isAbove) {
     super();
 
     if (x1 > x2) {
@@ -607,66 +579,165 @@ export class CurlyBraceVisualizer extends ChantLayoutElement {
       x2 = temp;
     }
 
-    this.x1 = x1;
-    this.x2 = x2;
-    this.y = y;
-    this.upper = upper;
-    this.addAcuteAccent = addAcuteAccent;
+    this.isAbove = isAbove;
+    this.braceHeight = ctxt.staffInterval / 2;
+
+    this.bounds = new Rect(x1, y, x2 - x1, this.braceHeight);
 
     this.origin.x = 0;
     this.origin.y = 0;
-
-    this.bounds.x = this.x1;
-    this.bounds.y = y;
-    this.bounds.width = this.x2 - this.x1;
-    this.bounds.height = 10;
   }
 
   createDrawable(ctxt) {
-    var path;
-
-    if (this.upper)
-      path = this.generatePathString(-ctxt.staffInterval / 2, .6);
-    else
-      path = this.generatePathString(ctxt.staffInterval / 2, .6);
-
-    return QuickSvg.createFragment('path', {
-      'd': path,
+    var drawable = QuickSvg.createFragment('path', {
+      'd': this.generatePathString(),
       'stroke': ctxt.neumeLineColor,
-      'stroke-width': ctxt.neumeLineWeight + 'px',
-      'fill': 'none'
+      'stroke-width': ctxt.staffLineWeight + 'px',
+      'fill': 'none',
+      'class': 'brace'
     });
+
+    if (this.acuteAccent) {
+
+      drawable += this.acuteAccent.createDrawable(ctxt);
+
+      return QuickSvg.createFragment('g', {
+        'class': 'accentedBrace'
+      }, drawable);
+    } else
+      return drawable;
   }
 
-  // code below based on code by: https://gist.github.com/alexhornbake
-  //
-  // optimized for braces that are only drawn horizontally.
-  // returns svg path string
-  // w is the height of the bracket. use negative number for down facing
-  // bracket, positive number for upper facing backet
-  // and q factor, .5 is normal, higher q = more expressive bracket 
-  generatePathString(h, q) {
+  // returns svg path d string
+  generatePathString() {
 
-    var dx = -1;
-    var len = this.x2 - this.x1;
+    var x1 = this.bounds.x;
+    var x2 = this.bounds.right();
+    var width = this.bounds.width;
+    var y, dx, dy;
+
+    if (this.isAbove) {
+      y = this.bounds.bottom();
+      dx = width / 6;
+      dy = -width / 6;
+    } else {
+      y = this.bounds.y;
+      dx = width / 6;
+      dy = width / 6;
+    }
 
     //Calculate Control Points of path,
-    var qx1 = this.x1;
-    var qy1 = this.y  + q*h;
-    var qx2 = this.x1 + .25*len;
-    var qy2 = this.y  + (1-q)*h;
-    var tx1 = this.x1 + .5*len;
-    var ty1 = this.y  + h;
-    var qx3 = this.x2;
-    var qy3 = this.y  + q*h;
-    var qx4 = this.x1 + .75*len;
-    var qy4 = this.y  + (1-q)*h;
-    return ( "M " +  this.x1 + " " +  this.y +
-            " Q " + qx1 + " " + qy1 + " " + qx2 + " " + qy2 + 
-            " T " + tx1 + " " + ty1 +
-            " M " +  this.x2 + " " +  this.y +
-            " Q " + qx3 + " " + qy3 + " " + qx4 + " " + qy4 + 
-            " T " + tx1 + " " + ty1);
+    var cx1 = x1 + dx;
+    var cy  = y  + dy;
+    var cx2 = x2 - dx;
+
+    // two decimal points should be enough, but if we need more precision, we can
+    // up it here.
+    var dp = 2;
+    return   "M " + x1.toFixed(dp)  + " " + y.toFixed(dp) +
+            " C " + cx1.toFixed(dp) + " " + cy.toFixed(dp) + 
+            " "   + cx2.toFixed(dp) + " " + cy.toFixed(dp) +
+            " "   + x2.toFixed(dp)  + " " + y.toFixed(dp);
+  }
+}
+
+export class CurlyBraceVisualizer extends ChantLayoutElement {
+
+  constructor(ctxt, x1, x2, y, isAbove = true, addAcuteAccent = false) {
+    super();
+
+    if (x1 > x2) {
+      // swap the xs
+      var temp = x1;
+      x1 = x2;
+      x2 = temp;
+    }
+
+    this.isAbove = isAbove;
+    this.braceHeight = ctxt.staffInterval / 2;
+
+    // y is the actual vertical start of the brace (left hand side)
+    // thus for a brace over notes, bounds.y is the bottom of brace,
+    // but for a brace under the notes, y is simply the y passed in.
+    if (isAbove)
+      y -= this.braceHeight;
+
+    var bounds = new Rect(x1, y, x2 - x1, this.braceHeight);
+
+    if (addAcuteAccent && isAbove) {
+
+      this.acuteAccent = new GlyphVisualizer(ctxt, GlyphCode.AcuteAccent);
+      this.acuteAccent.bounds.x += bounds.x + (x2 - x1) / 2;
+      this.acuteAccent.bounds.y += bounds.y - ctxt.staffInterval / 4;
+
+      bounds.union(this.acuteAccent.bounds);
+    }
+
+    this.bounds = bounds;
+
+    this.origin.x = 0;
+    this.origin.y = 0;
+  }
+
+  createDrawable(ctxt) {
+    var drawable = QuickSvg.createFragment('path', {
+      'd': this.generatePathString(),
+      'stroke': ctxt.neumeLineColor,
+      'stroke-width': ctxt.staffLineWeight + 'px',
+      'fill': 'none',
+      'class': 'brace'
+    });
+
+    if (this.acuteAccent) {
+
+      drawable += this.acuteAccent.createDrawable(ctxt);
+
+      return QuickSvg.createFragment('g', {
+        'class': 'accentedBrace'
+      }, drawable);
+    } else
+      return drawable;
+  }
+
+  // code below inspired by: https://gist.github.com/alexhornbake
+  // optimized for braces that are only drawn horizontally.
+  // returns svg path d string
+  generatePathString() {
+
+    var q = 0.6; // .5 is normal, higher q = more expressive bracket
+
+    var x1 = this.bounds.x;
+    var x2 = this.bounds.right();
+    var width = this.bounds.width;
+    var y, h;
+
+    if (this.isAbove) {
+      y = this.bounds.bottom();
+      h = -this.braceHeight;
+    } else {
+      y = this.bounds.y;
+      h = this.braceHeight;
+    }
+
+    // calculate Control Points of path
+    var qy1 = y  + q * h;
+    var qx2 = x1 + .25 * width;
+    var qy2 = y  + (1 - q) * h;
+    var tx1 = x1 + .5 * width;
+    var ty1 = y  + h;
+    var qy3 = y  + q * h;
+    var qx4 = x1 + .75 * width;
+    var qy4 = y  + (1 - q) * h;
+
+    // two decimal points should be enough, but if we need more precision, we can
+    // up it here.
+    var dp = 2;
+    return   "M " + x1.toFixed(dp)  + " " + y.toFixed(dp) +
+            " Q " + x1.toFixed(dp) + " " + qy1.toFixed(dp) + " " + qx2.toFixed(dp) + " " + qy2.toFixed(dp) + 
+            " T " + tx1.toFixed(dp) + " " + ty1.toFixed(dp) +
+            " M " + x2.toFixed(dp)  + " " + y.toFixed(dp) +
+            " Q " + x2.toFixed(dp) + " " + qy3.toFixed(dp) + " " + qx4.toFixed(dp) + " " + qy4.toFixed(dp) + 
+            " T " + tx1.toFixed(dp) + " " + ty1.toFixed(dp);
   }
 }
 
@@ -1129,11 +1200,39 @@ export class ChantNotationElement extends ChantLayoutElement {
   }
 
   getLyricLeft(index) {
+    // warning: no error checking on index or on whether lyric[index] is valid
     return this.bounds.x + this.lyrics[index].bounds.x;
   }
 
+  getAllLyricsLeft() {
+    if (this.lyrics.length === 0)
+      return this.bounds.right();
+
+    var x = Number.MAX_VALUE;
+    for (var i = 0; i < this.lyrics.length; i++) {
+      if (this.lyrics[i])
+        x = Math.min(x, this.lyrics[i].bounds.x);
+    }
+
+    return this.bounds.x + x;
+  }
+
   getLyricRight(index) {
+    // warning: no error checking on index or on whether lyric[index] is valid
     return this.bounds.x + this.lyrics[index].bounds.x + this.lyrics[index].bounds.width;
+  }
+
+  getAllLyricsRight() {
+    if (this.lyrics.length === 0)
+      return this.bounds.x;
+
+    var x = Number.MIN_VALUE;
+    for (var i = 0; i < this.lyrics.length; i++) {
+      if (this.lyrics[i])
+        x = Math.max(x, this.lyrics[i].bounds.x + this.lyrics[i].bounds.width);
+    }
+
+    return this.bounds.x + x;
   }
 
   // used by subclasses while building up the chant notations.

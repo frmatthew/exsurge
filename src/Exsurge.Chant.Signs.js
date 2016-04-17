@@ -24,7 +24,7 @@
 //
 
 import * as Exsurge from 'Exsurge.Core'
-import { ctxt, GlyphCode, GlyphVisualizer, DividerLineVisualizer, ChantNotationElement } from 'Exsurge.Drawing'
+import { GlyphCode, GlyphVisualizer, DividerLineVisualizer, ChantNotationElement } from 'Exsurge.Drawing'
 
 /*
  *
