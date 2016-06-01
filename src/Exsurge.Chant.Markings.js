@@ -219,6 +219,7 @@ export class Mora extends GlyphVisualizer {
     super(ctxt, GlyphCode.Mora);
     this.note = note;
     this.positionHint = MarkingPositionHint.Default;
+    this.horizontalOffset = 0;
   }
 
   performLayout(ctxt) {
@@ -243,7 +244,7 @@ export class Mora extends GlyphVisualizer {
         verticalOffset -= ctxt.staffInterval * .75;
     }
 
-    this.bounds.x += this.note.bounds.right() + ctxt.staffInterval / 4.0;
+    this.bounds.x += this.horizontalOffset + this.note.bounds.right() + ctxt.staffInterval / 4.0;
     this.bounds.y += verticalOffset;
   }
 }

@@ -565,20 +565,13 @@ export class Clivis extends Neume {
     // 1. morae need to be lined up if both notes have morae
     // 2. like the podatus, mora on lower note needs to below
     //    under certain circumstances
-    for (i = 0; i < this.notes[1].morae.length; i++) {
-      mark = this.notes[1].morae[i];
-
-      if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
-          Math.abs(this.notes[1].staffPosition % 2) === 1)
-        mark.positionHint = MarkingPositionHint.Below;
-    }
-
-    for (i = 0; i < this.notes[0].morae.length; i++) {
-
-      if (hasLowerMora) {
-        mark = this.notes[0].morae[i];
-        mark.positionHint = MarkingPositionHint.Above;
-        mark.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+    if (this.notes[1].morae.length &&
+          this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
+          Math.abs(this.notes[1].staffPosition % 2) === 1) {
+      var morae = this.notes[1].morae;
+      morae.slice(-1)[0].positionHint = MarkingPositionHint.Below;
+      if(morae.length > 1) {
+        morae[0].horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
       }
     }
 
@@ -793,16 +786,16 @@ export class Podatus extends Neume {
       if (this.notes[0].epismata[i].positionHint === MarkingPositionHint.Default)
         this.notes[0].epismata[i].positionHint = MarkingPositionHint.Below;
 
-    // if this note has two or more (!?) morae then we just leave them be
-    // since they have already been assigned position hints.
-    if (this.notes[0].morae.length < 2) {
-      for (i = 0; i < this.notes[0].morae.length; i++) {
-        marking = this.notes[0].morae[i];
-
-        if ((this.notes[1].staffPosition - this.notes[0].staffPosition) === 1 &&
-            Math.abs(this.notes[0].staffPosition % 2) === 1)
-          marking.positionHint = MarkingPositionHint.Below;
+    // The mora on the first (lower) note needs to be below it, if the second note
+    // is only one pitch above, and the first note is on a line.
+    if (this.notes[1].staffPosition - this.notes[0].staffPosition === 1 &&
+          Math.abs(this.notes[0].staffPosition % 2) === 1) {
+      if (this.notes[0].morae.length == 1) {
+        marking = this.notes[0].morae[0];
+      } else if (this.notes[1].morae.length > 1) {
+        marking = this.notes[1].morae[0];
       }
+      if(marking) marking.positionHint = MarkingPositionHint.Below;
     }
 
     for (i = 0; i < this.notes[1].epismata.length; i++)

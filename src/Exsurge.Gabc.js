@@ -969,14 +969,10 @@ export class Gabc {
           // position hint. if a user decides to try to put position indicators
           // on the double morae (such as 1 or 2), then really the behavior is
           // not defined by gabc, so it's on the user to figure it out.
-          if (note.morae.length > 0) {
-            // if we already have one mora, then create another but force a
-            // an alternative positionHint
-            haveLookahead = true;
-            if (Math.abs(note.staffPosition) % 2 === 0)
-              lookahead = '1';
-            else
-              lookahead = '0';
+          if (note.morae.length > 0 && notes.length) {
+            var previousNote = notes.slice(-1)[0];
+            var previousMora = note.morae.slice(-1)[0];
+            previousMora.note = previousNote;
           }
 
           mark = new Markings.Mora(ctxt, note);
