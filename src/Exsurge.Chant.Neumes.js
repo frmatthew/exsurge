@@ -790,7 +790,7 @@ export class Podatus extends Neume {
     // is only one pitch above, and the first note is on a line.
     if (this.notes[1].staffPosition - this.notes[0].staffPosition === 1 &&
           Math.abs(this.notes[0].staffPosition % 2) === 1) {
-      if (this.notes[0].morae.length == 1) {
+      if (this.notes[0].morae.length === 1) {
         marking = this.notes[0].morae[0];
       } else if (this.notes[1].morae.length > 1) {
         marking = this.notes[1].morae[0];
