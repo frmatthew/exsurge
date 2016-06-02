@@ -65,7 +65,7 @@ if (typeof document !== 'undefined') {
       score.performLayout(ctxt, function() {
         score.layoutChantLines(ctxt, width, function() {
           // render the score to svg code
-          _element.innerHTML = score.createDrawable(ctxt);
+          _element.innerHTML = score.createSvgFragment(ctxt);
         });
       });
     }

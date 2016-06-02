@@ -38,7 +38,7 @@ export let GlyphCode = {
 
   AcuteAccent: "AcuteAccent",
   Stropha: "Stropha",
-  //  StrophaLiquescent: "StrophaLiquescent",
+  StrophaLiquescent: "StrophaLiquescent",
 
   BeginningAscLiquescent: "BeginningAscLiquescent",
   BeginningDesLiquescent: "BeginningDesLiquescent",
@@ -119,10 +119,6 @@ export var QuickSvg = {
       node.appendChild(defs);
     }
 
-    return node;
-  },
-
-  defs: function() {
     return node;
   },
 
@@ -254,8 +250,11 @@ export class ChantContext {
     this.glyphScaling = 1.0 / 16.0; 
 
     this.staffInterval = this.glyphPunctumWidth * this.glyphScaling;
-    this.staffLineWeight = this.glyphPunctumWidth * this.glyphScaling / 8;
-    this.neumeLineWeight = this.glyphPunctumWidth * this.glyphScaling / 8; // the weight of connecting lines in the glyphs.
+
+    // setup the line weights for the various elements.
+    // we 
+    this.staffLineWeight = Math.round(this.glyphPunctumWidth * this.glyphScaling / 8);
+    this.neumeLineWeight = this.staffLineWeight; // the weight of connecting lines in the glyphs.
     this.dividerLineWeight = this.neumeLineWeight; // of quarter bar, half bar, etc.
     this.episemaLineWeight = this.neumeLineWeight; // of horizontal episemae
 
@@ -267,6 +266,21 @@ export class ChantContext {
     this.dividerLineColor = "#000";
 
     this.defaultLanguage = new Latin();
+
+    this.canvas = document.createElement("canvas");
+    this.canvasCtxt = this.canvas.getContext("2d");
+
+    // calculate the pixel ratio for drawing to a canvas
+    var dpr = window.devicePixelRatio || 1.0;
+    var bsr = this.canvasCtxt.webkitBackingStorePixelRatio ||
+              this.canvasCtxt.mozBackingStorePixelRatio ||
+              this.canvasCtxt.msBackingStorePixelRatio ||
+              this.canvasCtxt.oBackingStorePixelRatio ||
+              this.canvasCtxt.backingStorePixelRatio || 1.0;
+
+    this.pixelRatio = dpr / bsr;
+
+    this.canvasCtxt.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
 
     this.svgTextMeasurer = QuickSvg.svg(1,1);
     this.svgTextMeasurer.setAttribute('id', "TextMeasurer");
@@ -351,6 +365,15 @@ export class ChantContext {
 
     return null;
   }
+
+  setCanvasSize(width, height) {
+    this.canvas.width = width * this.pixelRatio;
+    this.canvas.height = height * this.pixelRatio;
+    this.canvas.style.width = width + "px";
+    this.canvas.style.height = height + "px";
+
+    this.canvasCtxt.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+  }
 }
 
 
@@ -368,14 +391,14 @@ export class ChantLayoutElement {
     this.highlighted = false;
   }
 
-  // draws the element an html5 canvas
+  // draws the element on an html5 canvas
   draw(ctxt) {
 
   }
 
   // returns svg code for the element, used for printing support
-  createDrawable(ctxt) {
-    throw "ChantLayout Elements must implement createDrawable(ctxt)";
+  createSvgFragment(ctxt) {
+    throw "ChantLayout Elements must implement createSvgFragment(ctxt)";
   }
 }
 
@@ -403,7 +426,19 @@ export class DividerLineVisualizer extends ChantLayoutElement {
     this.origin.y = y0;
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    canvasCtxt.lineWidth = this.bounds.width;
+    canvasCtxt.strokeStyle = ctxt.dividerLineColor;
+
+    canvasCtxt.beginPath();
+    canvasCtxt.moveTo(this.bounds.x - this.origin.x, this.bounds.y);
+    canvasCtxt.lineTo(this.bounds.x - this.origin.x, this.bounds.y + this.bounds.height);
+    canvasCtxt.stroke();
+  }
+
+  createSvgFragment(ctxt) {
 
     return QuickSvg.createFragment('rect', {
       'x': this.bounds.x,
@@ -458,7 +493,25 @@ export class NeumeLineVisualizer extends ChantLayoutElement {
     this.origin.y = 0;
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    canvasCtxt.lineWidth = this.bounds.width;
+    canvasCtxt.strokeStyle = ctxt.neumeLineColor;
+
+    canvasCtxt.beginPath();
+    
+    // since the canvas context draws strokes centered on the path
+    // and neume lines are supposed to be draw left aligned,
+    // we need to offset the line by half the line width.
+    var x = this.bounds.x + this.bounds.width / 2;
+
+    canvasCtxt.moveTo(x, this.bounds.y);
+    canvasCtxt.lineTo(x, this.bounds.y + this.bounds.height);
+    canvasCtxt.stroke();
+  }
+
+  createSvgFragment(ctxt) {
 
     return QuickSvg.createFragment('rect', {
       'x': this.bounds.x,
@@ -495,7 +548,19 @@ export class VirgaLineVisualizer extends ChantLayoutElement {
     this.origin.y = 0;
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    canvasCtxt.lineWidth = this.bounds.width;
+    canvasCtxt.strokeStyle = ctxt.neumeLineColor;
+
+    canvasCtxt.beginPath();
+    canvasCtxt.moveTo(this.bounds.x, this.bounds.y);
+    canvasCtxt.lineTo(this.bounds.x, this.bounds.y + this.bounds.height);
+    canvasCtxt.stroke();
+  }
+
+  createSvgFragment(ctxt) {
 
     return QuickSvg.createFragment('rect', {
       'x': this.bounds.x,
@@ -557,7 +622,25 @@ export class GlyphVisualizer extends ChantLayoutElement {
     this.bounds.y += ctxt.calculateHeightFromStaffPosition(staffPosition);
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    var x = this.bounds.x + this.origin.x;
+    var y = this.bounds.y + this.origin.y;
+    canvasCtxt.translate(x, y);
+    canvasCtxt.scale(ctxt.glyphScaling, ctxt.glyphScaling);
+
+    for (var i = 0; i < this.glyph.paths.length; i++) {
+      var path = this.glyph.paths[i];
+      canvasCtxt.fillStyle = ctxt.neumeLineColor;
+      canvasCtxt.fill(new Path2D(path.data));
+    }
+
+    canvasCtxt.scale(1.0 / ctxt.glyphScaling, 1.0 / ctxt.glyphScaling);
+    canvasCtxt.translate(-x, -y);
+  }
+
+  createSvgFragment(ctxt) {
 
     return QuickSvg.createFragment('use', {
       'xlink:href': '#' + this.glyphCode,
@@ -588,8 +671,8 @@ export class RoundBraceVisualizer extends ChantLayoutElement {
     this.origin.y = 0;
   }
 
-  createDrawable(ctxt) {
-    var drawable = QuickSvg.createFragment('path', {
+  createSvgFragment(ctxt) {
+    var fragment = QuickSvg.createFragment('path', {
       'd': this.generatePathString(),
       'stroke': ctxt.neumeLineColor,
       'stroke-width': ctxt.staffLineWeight + 'px',
@@ -599,13 +682,13 @@ export class RoundBraceVisualizer extends ChantLayoutElement {
 
     if (this.acuteAccent) {
 
-      drawable += this.acuteAccent.createDrawable(ctxt);
+      fragment += this.acuteAccent.createSvgFragment(ctxt);
 
       return QuickSvg.createFragment('g', {
         'class': 'accentedBrace'
-      }, drawable);
+      }, fragment);
     } else
-      return drawable;
+      return fragment;
   }
 
   // returns svg path d string
@@ -679,8 +762,8 @@ export class CurlyBraceVisualizer extends ChantLayoutElement {
     this.origin.y = 0;
   }
 
-  createDrawable(ctxt) {
-    var drawable = QuickSvg.createFragment('path', {
+  createSvgFragment(ctxt) {
+    var fragment = QuickSvg.createFragment('path', {
       'd': this.generatePathString(),
       'stroke': ctxt.neumeLineColor,
       'stroke-width': ctxt.staffLineWeight + 'px',
@@ -690,13 +773,13 @@ export class CurlyBraceVisualizer extends ChantLayoutElement {
 
     if (this.acuteAccent) {
 
-      drawable += this.acuteAccent.createDrawable(ctxt);
+      fragment += this.acuteAccent.createSvgFragment(ctxt);
 
       return QuickSvg.createFragment('g', {
         'class': 'accentedBrace'
-      }, drawable);
+      }, fragment);
     } else
-      return drawable;
+      return fragment;
   }
 
   // code below inspired by: https://gist.github.com/alexhornbake
@@ -901,7 +984,7 @@ export class TextElement extends ChantLayoutElement {
     this.bounds.x = 0;
     this.bounds.y = 0;
 
-    var xml = '<svg xmlns="http://www.w3.org/2000/svg">' + this.createDrawable(ctxt) + '</svg>';
+    var xml = '<svg xmlns="http://www.w3.org/2000/svg">' + this.createSvgFragment(ctxt) + '</svg>';
     var doc = new DOMParser().parseFromString(xml, 'application/xml');
     
     while(ctxt.svgTextMeasurer.firstChild)
@@ -933,7 +1016,22 @@ export class TextElement extends ChantLayoutElement {
     });
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    if (this.textAnchor === 'middle')
+      canvasCtxt.textAlign = 'center';
+    else
+      canvasCtxt.textAlign = 'start';
+
+    canvasCtxt.font = this.fontSize + "px " + this.fontFamily;
+
+    for (var i = 0; i < this.spans.length; i++)
+      canvasCtxt.fillText(this.spans[i].text, this.bounds.x, this.bounds.y);
+  }
+
+  createSvgFragment(ctxt) {
 
     var spans = "";
 
@@ -1127,7 +1225,7 @@ export class Lyric extends TextElement {
     return props;
   }
 
-  createDrawable(ctxt) {
+  createSvgFragment(ctxt) {
     if (this.spans.length > 0) {
       if (this.needsConnector)
         this.spans[this.spans.length - 1].text = this.lastSpanTextWithConnector;
@@ -1135,7 +1233,7 @@ export class Lyric extends TextElement {
         this.spans[this.spans.length - 1].text = this.lastSpanText;
     }
 
-    return super.createDrawable(ctxt);
+    return super.createSvgFragment(ctxt);
   }
 }
 
@@ -1259,7 +1357,7 @@ export class ChantNotationElement extends ChantLayoutElement {
 
   // chant notation elements are given an opportunity to perform their layout via this function.
   // subclasses should call this function first in overrides of this function.
-  // on completion, exsurge presumes that the bounds, the origin, and the drawable objects are
+  // on completion, exsurge presumes that the bounds, the origin, and the fragment objects are
   // all valid and prepared for higher level layout.
   performLayout(ctxt) {
 
@@ -1294,14 +1392,28 @@ export class ChantNotationElement extends ChantLayoutElement {
     this.needsLayout = false;
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+
+    var canvasCtxt = ctxt.canvasCtxt;
+    canvasCtxt.translate(this.bounds.x, 0);
+
+    for (var i = 0; i < this.visualizers.length; i++)
+      this.visualizers[i].draw(ctxt);
+
+    for (i = 0; i < this.lyrics.length; i++)
+      this.lyrics[i].draw(ctxt);
+
+    canvasCtxt.translate(-this.bounds.x, 0);
+  }
+
+  createSvgFragment(ctxt) {
     var inner = "";
 
     for (var i = 0; i < this.visualizers.length; i++)
-      inner += this.visualizers[i].createDrawable(ctxt);
+      inner += this.visualizers[i].createSvgFragment(ctxt);
 
     for (i = 0; i < this.lyrics.length; i++)
-      inner += this.lyrics[i].createDrawable(ctxt);
+      inner += this.lyrics[i].createSvgFragment(ctxt);
 
     return QuickSvg.createFragment('g', {
       'class': 'ChantNotationElement ' + this.constructor.name,

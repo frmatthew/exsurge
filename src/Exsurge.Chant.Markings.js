@@ -49,7 +49,7 @@ export class AcuteAccent extends GlyphVisualizer {
 
     // this puts the acute accent either over the staff lines, or over the note if the
     // note is above the staff lines
-    this.setStaffPosition(ctxt, Math.max(this.note.staffPosition + 1, 4))
+    this.setStaffPosition(ctxt, Math.max(this.note.staffPosition + 1, 4));
   }
 }
 
@@ -65,7 +65,7 @@ export var HorizontalEpisemaAlignment = {
 /*
  * HorizontalEpisema
  *
- * A horizontal episema marking is it's own visualizer (that is, it implements createDrawable)
+ * A horizontal episema marking is it's own visualizer (that is, it implements createSvgFragment)
  */
 export class HorizontalEpisema extends ChantLayoutElement {
 
@@ -144,7 +144,7 @@ export class HorizontalEpisema extends ChantLayoutElement {
     this.origin.y = 0;
   }
 
-  createDrawable(ctxt) {
+  createSvgFragment(ctxt) {
 
     return QuickSvg.createFragment('rect', {
       'x': this.bounds.x,

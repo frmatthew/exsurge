@@ -146,11 +146,11 @@ export class Note extends ChantLayoutElement {
     this.glyphVisualizer.draw(ctxt);
   }
 
-  createDrawable(ctxt) {
+  createSvgFragment(ctxt) {
 
     this.glyphVisualizer.bounds.x = this.bounds.x;
     this.glyphVisualizer.bounds.y = this.bounds.y;
-    return this.glyphVisualizer.createDrawable(ctxt);
+    return this.glyphVisualizer.createSvgFragment(ctxt);
   }
 }
 
@@ -550,32 +550,46 @@ export class ChantScore {
       finishedCallback(this);
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
 
-    var i, drawable = "";
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    canvasCtxt.clearRect(0, 0, ctxt.canvas.width, ctxt.canvas.height);
+
+    canvasCtxt.translate(this.bounds.x, this.bounds.y);
+
+    for (var i = 0; i < this.lines.length; i++)
+      this.lines[i].draw(ctxt);
+
+    canvasCtxt.translate(-this.bounds.x, -this.bounds.y);
+  }
+
+  createSvg(ctxt) {
+
+    var fragment = "";
 
     // create defs section
     for (var def in ctxt.defs)
       if (ctxt.defs.hasOwnProperty(def))
-        drawable += ctxt.defs[def];
+        fragment += ctxt.defs[def];
 
-    drawable = QuickSvg.createFragment('defs', {}, drawable);
+    fragment = QuickSvg.createFragment('defs', {}, fragment);
 
-    for (i = 0; i < this.lines.length; i++)
-      drawable += this.lines[i].createDrawable(ctxt);
+    for (var i = 0; i < this.lines.length; i++)
+      fragment += this.lines[i].createSvgFragment(ctxt);
 
-    drawable = QuickSvg.createFragment('g', {}, drawable);
+    fragment = QuickSvg.createFragment('g', {}, fragment);
 
-    drawable = QuickSvg.createFragment('svg', {
+    fragment = QuickSvg.createFragment('svg', {
       'xmlns': 'http://www.w3.org/2000/svg',
       'version': '1.1',
       'xmlns:xlink': 'http://www.w3.org/1999/xlink',
       'class': 'ChantScore',
       'width': this.bounds.width,
       'height': this.bounds.height
-    }, drawable);
+    }, fragment);
 
-    return drawable;
+    return fragment;
   }
 
   unserializeFromJson(data) {
