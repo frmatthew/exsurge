@@ -567,13 +567,12 @@ export class Clivis extends Neume {
     // 1. morae need to be lined up if both notes have morae
     // 2. like the podatus, mora on lower note needs to below
     //    under certain circumstances
-    if (this.notes[1].morae.length &&
-          this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
-          Math.abs(this.notes[1].staffPosition % 2) === 1) {
+    if (this.notes[1].morae.length) {
       var morae = this.notes[1].morae;
-      morae.slice(-1)[0].positionHint = MarkingPositionHint.Below;
-      if(morae.length > 1) {
-        morae[0].horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+      morae[0].horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
+      if(this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
+          Math.abs(this.notes[1].staffPosition % 2) === 1) {
+        morae.slice(-1)[0].positionHint = MarkingPositionHint.Below;
       }
     }
 
