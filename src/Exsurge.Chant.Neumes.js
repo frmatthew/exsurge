@@ -227,7 +227,7 @@ class NeumeBuilder {
         note.setGlyph(this.ctxt, GlyphCode.PunctumInclinatumLiquescent);
       else if (note.liquescent & LiquescentType.Large)
         // fixme: is the large inclinatum liquescent the same as the apostropha?
-        note.setGlyph(this.ctxt, GlyphCode.Apostropha);
+        note.setGlyph(this.ctxt, GlyphCode.Stropha);
       else 
         // fixme: some climaci in the new chant books end with a punctum quadratum
         // (see, for example, the antiphon "Sancta Maria" for October 7).
@@ -256,6 +256,8 @@ class NeumeBuilder {
 
       this.neume.addVisualizer(note);
     }
+
+    return this;
   }
 
   withPorrectusSwash(start, end) {
@@ -760,7 +762,7 @@ export class PesSubpunctis extends Neume {
     this.build(ctxt)
       .withPodatus(this.notes[0], this.notes[1])
       .advanceBy(ctxt.intraNeumeSpacing / 2)
-      .withInclinati(this.notes.slice(2))
+      .withInclinati(this.notes.slice(2));
 
     this.finishLayout(ctxt);
   }
@@ -979,7 +981,7 @@ export class Salicus extends Neume {
 
     // second note is always an oriscus, which may or may not be stemmed
     // to the first
-    builder.noteAt(second, GlyphCode.OriscusAsc)
+    builder.noteAt(second, GlyphCode.OriscusAsc);
 
     // third note can be a punctum quadratum or various liquescent forms
     if (third.liquescent & LiquescentType.Small)
@@ -1028,7 +1030,7 @@ export class SalicusFlexus extends Neume {
 
     // second note is always an oriscus, which may or may not be stemmed
     // to the first
-    builder.noteAt(second, GlyphCode.OriscusAsc)
+    builder.noteAt(second, GlyphCode.OriscusAsc);
 
     // third note can be a punctum quadratum or various liquescent forms,
     // ...based on note four though!
@@ -1065,9 +1067,9 @@ export class Scandicus extends Neume {
         this.notes[0].epismata[i].positionHint = MarkingPositionHint.Below;
 
     var positionHint = this.notes[2].shape === NoteShape.Virga ? MarkingPositionHint.Above : MarkingPositionHint.Below;
-    for (i = 0; i < this.notes[2].epismata.length; i++)
-      if (this.notes[2].epismata[i].positionHint === MarkingPositionHint.Default)
-        this.notes[2].epismata[i].positionHint = positionHint;
+    for (i = 0; i < this.notes[1].epismata.length; i++)
+      if (this.notes[1].epismata[i].positionHint === MarkingPositionHint.Default)
+        this.notes[1].epismata[i].positionHint = positionHint;
 
     // by default place third note epismata above
     for (i = 0; i < this.notes[2].epismata.length; i++)
@@ -1114,9 +1116,9 @@ export class ScandicusFlexus extends Neume {
         this.notes[0].epismata[i].positionHint = MarkingPositionHint.Below;
 
     var positionHint = this.notes[2].shape === NoteShape.Virga ? MarkingPositionHint.Above : MarkingPositionHint.Below;
-    for (i = 0; i < this.notes[2].epismata.length; i++)
-      if (this.notes[2].epismata[i].positionHint === MarkingPositionHint.Default)
-        this.notes[2].epismata[i].positionHint = positionHint;
+    for (i = 0; i < this.notes[1].epismata.length; i++)
+      if (this.notes[1].epismata[i].positionHint === MarkingPositionHint.Default)
+        this.notes[1].epismata[i].positionHint = positionHint;
 
     // by default place third note epismata above
     for (i = 0; i < this.notes[2].epismata.length; i++)
@@ -1124,9 +1126,9 @@ export class ScandicusFlexus extends Neume {
         this.notes[2].epismata[i].positionHint = MarkingPositionHint.Above;
 
     // by default place fourth note epismata above
-    for (i = 0; i < this.notes[2].epismata.length; i++)
-      if (this.notes[2].epismata[i].positionHint === MarkingPositionHint.Default)
-        this.notes[2].epismata[i].positionHint = MarkingPositionHint.Above;
+    for (i = 0; i < this.notes[3].epismata.length; i++)
+      if (this.notes[3].epismata[i].positionHint === MarkingPositionHint.Default)
+        this.notes[3].epismata[i].positionHint = MarkingPositionHint.Above;
   }
 
   performLayout(ctxt) {
@@ -1143,7 +1145,7 @@ export class ScandicusFlexus extends Neume {
         .advanceBy(ctxt.intraNeumeSpacing)
         .withClivis(third, fourth);
     } else {
-      var fourthGlyph = GlyphCode.PunctumQuadratum
+      var fourthGlyph = GlyphCode.PunctumQuadratum;
       
       if (fourth.liquescent & LiquescentType.Ascending)
         fourthGlyph = GlyphCode.PunctumQuadratumAscLiquescent;

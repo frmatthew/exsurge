@@ -165,7 +165,68 @@ export class ChantLine extends ChantLayoutElement {
     this.origin = new Point(this.staffLeft, -this.notationBounds.y);
   }
 
-  createDrawable(ctxt) {
+  draw(ctxt) {
+
+    var canvasCtxt = ctxt.canvasCtxt;
+
+    canvasCtxt.translate(this.bounds.x, this.bounds.y);
+
+    // draw the chant lines
+    var i, x1 = this.staffLeft, x2 = this.staffRight, y;
+
+    canvasCtxt.lineWidth = Math.round(ctxt.staffLineWeight);
+    canvasCtxt.strokeStyle = ctxt.staffLineWeight;
+
+    for (i = -3; i <= 3; i += 2) {
+
+      y = Math.round(ctxt.staffInterval * i) + 0.5;
+
+      canvasCtxt.beginPath();
+      canvasCtxt.moveTo(x1, y);
+      canvasCtxt.lineTo(x2, y);
+      canvasCtxt.stroke();
+    }
+
+    // draw the ledger lines
+    for (i = 0; i < this.ledgerLines.length; i++) {
+
+      var ledgerLine = this.ledgerLines[i];
+      y = ctxt.calculateHeightFromStaffPosition(ledgerLine.staffPosition);
+
+      canvasCtxt.beginPath();
+      canvasCtxt.moveTo(ledgerLine.x1, y);
+      canvasCtxt.lineTo(ledgerLine.x2, y);
+      canvasCtxt.stroke();
+    }
+
+    // fixme: draw the braces
+
+    // draw the dropCap and the annotations
+    if (this.notationsStartIndex === 0) {
+
+      if (this.score.dropCap !== null)
+        this.score.dropCap.draw(ctxt);
+
+      if (this.score.annotation !== null)
+        this.score.annotation.draw(ctxt);
+    }
+
+    // draw the notations
+    var notations = this.score.notations;
+    var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
+
+    for (i = this.notationsStartIndex; i < lastIndex; i++)
+      notations[i].draw(ctxt);
+
+    this.startingClef.draw(ctxt);
+
+    if (this.custos)
+      this.custos.draw(ctxt);
+
+    canvasCtxt.translate(-this.bounds.x, -this.bounds.y);
+  }
+
+  createSvgFragment(ctxt) {
     var inner = "";
 
     // add the chant lines
@@ -204,29 +265,29 @@ export class ChantLine extends ChantLayoutElement {
 
     // add any braces
     for (i = 0; i < this.braces.length; i++)
-      inner += this.braces[i].createDrawable(ctxt);
+      inner += this.braces[i].createSvgFragment(ctxt);
 
     // dropCap and the annotations
     if (this.notationsStartIndex === 0) {
 
       if (this.score.dropCap !== null)
-        inner += this.score.dropCap.createDrawable(ctxt);
+        inner += this.score.dropCap.createSvgFragment(ctxt);
 
       if (this.score.annotation !== null)
-          inner += this.score.annotation.createDrawable(ctxt);
+          inner += this.score.annotation.createSvgFragment(ctxt);
     }
 
-    inner += this.startingClef.createDrawable(ctxt);
+    inner += this.startingClef.createSvgFragment(ctxt);
 
     var notations = this.score.notations;
     var lastIndex = this.notationsStartIndex + this.numNotationsOnLine;
 
     // add all of the notations
     for (i = this.notationsStartIndex; i < lastIndex; i++)
-      inner += notations[i].createDrawable(ctxt);
+      inner += notations[i].createSvgFragment(ctxt);
 
     if (this.custos)
-      inner += this.custos.createDrawable(ctxt);
+      inner += this.custos.createSvgFragment(ctxt);
 
     return QuickSvg.createFragment('g', {
       'class': 'chantLine',
