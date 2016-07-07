@@ -1416,6 +1416,7 @@ export class ChantNotationElement extends ChantLayoutElement {
       inner += this.lyrics[i].createSvgFragment(ctxt);
 
     return QuickSvg.createFragment('g', {
+      // this.constructor.name will not be the same after being mangled by UglifyJS
       'class': 'ChantNotationElement ' + this.constructor.name,
       'transform': 'translate(' + this.bounds.x + ',' + 0 + ')'
     }, inner);
