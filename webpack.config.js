@@ -9,7 +9,7 @@ var plugins = [];
 var outputFile;
 
 if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true, mangle: false }));
+  plugins.push(new UglifyJsPlugin({ minimize: true }));
   outputFile = package.name + '.min.js';
 } else {
   outputFile = package.name + '.js';

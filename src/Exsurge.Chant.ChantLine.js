@@ -441,7 +441,7 @@ export class ChantLine extends ChantLayoutElement {
         ctxt.activeClef = curr;
 
       // line breaks are a special case indicating to stop processing here
-      if (curr.constructor.name === ChantLineBreak.name && width > 0) {
+      if (curr.constructor === ChantLineBreak && width > 0) {
         this.justify = curr.justify;
         break;
       }
@@ -533,7 +533,7 @@ export class ChantLine extends ChantLayoutElement {
       if (prevWithLyrics !== null && prevWithLyrics.lyrics[0].allowsConnector() && !prevWithLyrics.lyrics[0].needsConnector)
         continue;
 
-      if (curr.constructor.name === ChantLineBreak.name)
+      if (curr.constructor === ChantLineBreak)
         continue;
 
       // otherwise, we can add space before this element
@@ -622,7 +622,7 @@ export class ChantLine extends ChantLayoutElement {
       minY = Math.min(minY, notations[i].bounds.y);
       maxY = Math.max(maxY, notations[i].bounds.bottom());
 
-      if (notations[i].constructor.name === Custos.name) {
+      if (notations[i].constructor === Custos) {
         processElementForLedgerLine(notations[i]);
         continue;
       }
