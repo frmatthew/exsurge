@@ -979,27 +979,41 @@ export class TextElement extends ChantLayoutElement {
       closeSpan(text);
   }
 
+  measureSubstring(ctxt, length) {
+    if(length === 0) return 0;
+    if(!length) length = Infinity;
+    var canvasCtxt = ctxt.canvasCtxt;
+    var baseFont = this.fontSize + "px " + this.fontFamily;
+    var width = 0;
+    var subStringLength = 0;
+    for (var i = 0; i < this.spans.length; i++) {
+      var font = '',
+          span = this.spans[i],
+          myText = span.text.slice(0, length - subStringLength);
+      if(span.properties.indexOf('font-style:italic;') >= 0) font += 'italic ';
+      if(span.properties.indexOf("font-variant:small-caps;") >= 0) font += 'small-caps ';
+      if(span.properties.indexOf('font-weight:bold;') >= 0) font += 'bold ';
+      font += baseFont;
+      canvasCtxt.font = font;
+      var metrics = canvasCtxt.measureText(myText, this.bounds.x, this.bounds.y);
+      width += metrics.width;
+      subStringLength += myText.length;
+      if(subStringLength === length) break;
+    }
+    return width;
+  }
+
   recalculateMetrics(ctxt) {
 
     this.bounds.x = 0;
     this.bounds.y = 0;
 
-    var xml = '<svg xmlns="http://www.w3.org/2000/svg">' + this.createSvgFragment(ctxt) + '</svg>';
-    var doc = new DOMParser().parseFromString(xml, 'application/xml');
-    
-    while(ctxt.svgTextMeasurer.firstChild)
-      ctxt.svgTextMeasurer.firstChild.remove();
-
-    ctxt.svgTextMeasurer.appendChild(ctxt.svgTextMeasurer.ownerDocument.importNode(doc.documentElement, true).firstChild);
-
-    var bbox = ctxt.svgTextMeasurer.firstChild.getBBox();
-
     this.bounds.x = 0;
     this.bounds.y = 0;
-    this.bounds.width = bbox.width;
-    this.bounds.height = bbox.height;
+    this.bounds.width = this.measureSubstring(ctxt);
+    this.bounds.height = this.fontSize;
     this.origin.x = 0;
-    this.origin.y = -bbox.y; // offset to baseline from top
+    this.origin.y = this.fontSize;
   }
 
   getCssClasses() {
@@ -1157,8 +1171,8 @@ export class Lyric extends TextElement {
       // if we have manually overriden the centering logic for this lyric,
       // then always use that.
       // svgTextMeasurer still has the current lyric in it...
-      x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex);
-      x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, this.centerStartIndex + this.centerLength);
+      x1 = this.measureSubstring(ctxt, this.centerStartIndex);
+      x2 = this.measureSubstring(ctxt, this.centerStartIndex + this.centerLength);
       offset = x1 + (x2 - x1) / 2;
     } else {
 
@@ -1171,8 +1185,8 @@ export class Lyric extends TextElement {
       
         if (result.found === true) {
           // svgTextMeasurer still has the current lyric in it...
-          x1 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex);
-          x2 = ctxt.svgTextMeasurer.firstChild.getSubStringLength(0, result.startIndex + result.length);
+          x1 = this.measureSubstring(ctxt, result.startIndex);
+          x2 = this.measureSubstring(ctxt, result.startIndex + result.length);
           offset = x1 + (x2 - x1) / 2;
         }
       }
