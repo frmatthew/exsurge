@@ -691,19 +691,19 @@ export class ChantLine extends ChantLayoutElement {
           // under/over the brace.
           var y;
           var dy = ctxt.intraNeumeSpacing / 2; // some safe space between brace and notes.
-          if (startBrace.isAbove) {
-            y = ctxt.calculateHeightFromStaffPosition(4);
-            for (k = startBraceNotationIndex; k <= i; k++)
-              y = Math.min(y, notations[k].bounds.y - dy);
-          } else {
-            y = ctxt.calculateHeightFromStaffPosition(-4);
-            for (k = startBraceNotationIndex; k <= i; k++)
-              y = Math.max(y, notations[k].bounds.y + dy);
-          }
-
           if (startBrace === null) {
             // fixme: this brace must have started on the previous line...what to do here, draw half a brace?
           } else {
+            if (startBrace.isAbove) {
+              y = ctxt.calculateHeightFromStaffPosition(4);
+              for (k = startBraceNotationIndex; k <= i; k++)
+                y = Math.min(y, notations[k].bounds.y - dy);
+            } else {
+              y = ctxt.calculateHeightFromStaffPosition(-4);
+              for (k = startBraceNotationIndex; k <= i; k++)
+                y = Math.max(y, notations[k].bounds.y + dy);
+            }
+
             var addAcuteAccent = false;
 
             if (startBrace.shape === BraceShape.RoundBrace) {
