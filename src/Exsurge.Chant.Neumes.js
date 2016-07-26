@@ -1218,6 +1218,8 @@ export class Torculus extends Neume {
 
     if (note1.liquescent === LiquescentType.InitioDebilis)
       glyph1 = GlyphCode.TerminatingDesLiquescent;
+    else if (note1.shape === NoteShape.Quilisma)
+      glyph1 = GlyphCode.Quilisma;
     else
       glyph1 = GlyphCode.PunctumQuadratum;
 
