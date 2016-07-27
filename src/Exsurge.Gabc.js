@@ -1212,12 +1212,12 @@ export class Gabc {
   // in a string of "me(f.) (,) ma(fff)num(d!ewf) tu(fgF'E)am,(f.)" would return
   // an array of four strings: ["me(f.)", "(,)", "ma(fff)num(d!ewf)", "tu(fgF'E)am,(f.)"]
   static splitWords(gabcNotations) {
-    // split the notations on whitespace boundaries, unless the space is inside
-    // of parentheses. Prior to doing that, we replace all whitespace with
-    // spaces, which prevents tabs and newlines from ending up in the notation
-    // data.
-    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ');
-    return gabcNotations.split(/ +(?=[^\)]*(?:\(|$))/g);
+    // split the notations on whitespace boundaries, as long as the space
+    // immediately follows a set of parentheses. Prior to doing that, we replace
+    // all whitespace with spaces, which prevents tabs and newlines from ending
+    // up in the notation data.
+    gabcNotations = gabcNotations.trim().replace(/\s/g, ' ').replace(/\) (?=[^\)]*(?:\(|$))/g,')\n');
+    return gabcNotations.split(/\n/g);
   }
 
   static parseSource(gabcSource) {
