@@ -50,7 +50,8 @@ Very few good chant layout software exist for developers. exsurge allows web dev
 
 After grabbing the repo from github, it's a simple matter of using `npm` to build exsurge:
 
-```npm install
+```
+npm install
 npm run build
 ```
 
