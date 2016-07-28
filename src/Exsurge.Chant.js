@@ -592,6 +592,36 @@ export class ChantScore {
     return fragment;
   }
 
+  createSvgForEachLine(ctxt) {
+
+    var fragment = "",
+        fragmentDefs = "";
+
+    // create defs section
+    for (var def in ctxt.defs)
+      if (ctxt.defs.hasOwnProperty(def))
+        fragmentDefs += ctxt.defs[def];
+
+    fragmentDefs = QuickSvg.createFragment('defs', {}, fragmentDefs);
+    var top = 0;
+    for (var i = 0; i < this.lines.length; i++) {
+      var lineFragment = fragmentDefs + this.lines[i].createSvgFragment(ctxt, top);
+      var height = this.lines[i].bounds.height + ctxt.staffInterval * 1.5;
+      lineFragment = QuickSvg.createFragment('g', {}, lineFragment);
+      lineFragment = QuickSvg.createFragment('svg', {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+        'class': 'ChantScore',
+        'width': this.bounds.width,
+        'height': height
+      }, lineFragment);
+      fragment += lineFragment;
+      top += height;
+    }
+    return fragment;
+  }
+
   unserializeFromJson(data) {
     this.autoColoring = data['auto-coloring'];
 

@@ -226,7 +226,7 @@ export class ChantLine extends ChantLayoutElement {
     canvasCtxt.translate(-this.bounds.x, -this.bounds.y);
   }
 
-  createSvgFragment(ctxt) {
+  createSvgFragment(ctxt, top = 0) {
     var inner = "";
 
     // add the chant lines
@@ -291,7 +291,7 @@ export class ChantLine extends ChantLayoutElement {
 
     return QuickSvg.createFragment('g', {
       'class': 'chantLine',
-      'transform': 'translate(' + this.bounds.x + ',' + this.bounds.y + ')'
+      'transform': 'translate(' + this.bounds.x + ',' + (this.bounds.y - top) + ')'
     }, inner);
   }
 
