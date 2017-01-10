@@ -69,9 +69,10 @@ class NeumeBuilder {
     if (needsLine) {
       var line = new NeumeLineVisualizer(this.ctxt, this.lastNote, note, this.lineIsHanging);
       this.neume.addVisualizer(line);
-      
-      if (noteAlignsRight)
-        line.bounds.x = this.x - line.bounds.width;
+      line.bounds.x = Math.max(0, this.x - line.bounds.width);
+
+      if (!noteAlignsRight)
+        this.x = line.bounds.x;
     }
 
     // if this is the first note of a right aligned glyph (probably an initio debilis),
@@ -268,7 +269,7 @@ class NeumeBuilder {
 
     if (needsLine) {
       var line = new NeumeLineVisualizer(this.ctxt, this.lastNote, start, this.lineIsHanging);
-      this.x -= line.bounds.width;
+      this.x = Math.max(0, this.x - line.bounds.width);
       line.bounds.x = this.x;
       this.neume.addVisualizer(line);
     }
