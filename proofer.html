@@ -8,10 +8,20 @@
   <meta name="description" content="exsurge Test Page">
   <meta name="author" content="Fr. Matthew Spencer, O.S.J.">
   <link href='https://fonts.googleapis.com/css?family=Crimson+Text:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <!--[if lt IE 9]>
   <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
+  <style>
+    #chant-container {
+      width: 50%;
+      cursor: move;
+      
+    }
+  </style>
 </head>
 
 <body onload="updateChant()" onresize="layoutChant()">
@@ -79,6 +89,11 @@
         });
       });
     }
+    
+    $( function() {
+    $("#chant-container").draggable();
+  } );
+
   </script>
 </body>
 </html>
