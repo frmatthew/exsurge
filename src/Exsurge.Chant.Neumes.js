@@ -391,6 +391,57 @@ export class Neume extends ChantNotationElement {
     return new NeumeBuilder(ctxt, this);
   }
 
+  // for any subclasses that basically end with a clivis, they can call this from their positionMarkings()
+  positionClivisMarkings() {
+    var mark, i, hasTopEpisema = false;
+
+    // 1. morae need to be lined up if both notes have morae
+    // 2. like the podatus, mora on lower note needs to below
+    //    under certain circumstances
+    var lastNote =        this.notes[this.notes.length - 1];
+    var penultimateNote = this.notes[this.notes.length - 2];
+    var antepenult =      this.notes[this.notes.length - 3];  // may not exist
+    if (lastNote.morae.length) {
+      var morae = lastNote.morae;
+      if(morae.length > 1) morae[0].horizontalOffset += lastNote.bounds.right() - penultimateNote.bounds.right();
+      if(penultimateNote.staffPosition - lastNote.staffPosition === 1 &&
+          Math.abs(lastNote.staffPosition % 2) === 1) {
+        morae.slice(-1)[0].positionHint = MarkingPositionHint.Below;
+      }
+    }
+
+
+    // first do the penultimate (highest) note to see if we should try to move
+    // episemata on the other lower note(s)
+    for (i = 0; i < penultimateNote.epismata.length; i++) {
+      mark = penultimateNote.epismata[i];
+
+      if (mark.positionHint === MarkingPositionHint.Default) {
+        mark.positionHint = MarkingPositionHint.Above;
+        hasTopEpisema = true;
+      }
+    }
+
+    // 1. episema on lower notes should be below, upper note above
+    // 2. like the podatus, mora on lower note needs to below
+    //    under certain circumstances
+    for (i = 0; i < lastNote.epismata.length; i++) {
+      mark = lastNote.epismata[i];
+
+      if (mark.positionHint === MarkingPositionHint.Default)
+        mark.positionHint = hasTopEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
+    }
+
+    if(antepenult) {
+      for (i = 0; i < antepenult.epismata.length; i++) {
+        mark = antepenult.epismata[i];
+
+        if (mark.positionHint === MarkingPositionHint.Default)
+          mark.positionHint = hasTopEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
+      }
+    }
+  }
+
   // subclasses can override this in order to correctly place markings in a neume specific way
   positionMarkings() {
 
@@ -560,43 +611,7 @@ export class Climacus extends Neume {
 export class Clivis extends Neume {
 
   positionMarkings() {
-
-    var hasLowerMora = false;
-    var mark, i;
-
-    // 1. morae need to be lined up if both notes have morae
-    // 2. like the podatus, mora on lower note needs to below
-    //    under certain circumstances
-    for (i = 0; i < this.notes[1].morae.length; i++) {
-      mark = this.notes[1].morae[i];
-
-      if (this.notes[0].staffPosition - this.notes[1].staffPosition === 1 &&
-          Math.abs(this.notes[1].staffPosition % 2) === 1)
-        mark.positionHint = MarkingPositionHint.Below;
-    }
-
-    for (i = 0; i < this.notes[0].morae.length; i++) {
-
-      if (hasLowerMora) {
-        mark = this.notes[0].morae[i];
-        mark.positionHint = MarkingPositionHint.Above;
-        mark.horizontalOffset += this.notes[1].bounds.right() - this.notes[0].bounds.right();
-      }
-    }
-
-    for (i = 0; i < this.notes[0].epismata.length; i++) {
-      mark = this.notes[0].epismata[i];
-
-      if (mark.positionHint === MarkingPositionHint.Default)
-        mark.positionHint = MarkingPositionHint.Above;
-    }
-
-    for (i = 0; i < this.notes[1].epismata.length; i++) {
-      mark = this.notes[1].epismata[i];
-
-      if (mark.positionHint === MarkingPositionHint.Default)
-        mark.positionHint = MarkingPositionHint.Above;
-    }
+    this.positionClivisMarkings();
   }
 
   performLayout(ctxt) {
@@ -795,16 +810,16 @@ export class Podatus extends Neume {
       if (this.notes[0].epismata[i].positionHint === MarkingPositionHint.Default)
         this.notes[0].epismata[i].positionHint = MarkingPositionHint.Below;
 
-    // if this note has two or more (!?) morae then we just leave them be
-    // since they have already been assigned position hints.
-    if (this.notes[0].morae.length < 2) {
-      for (i = 0; i < this.notes[0].morae.length; i++) {
-        marking = this.notes[0].morae[i];
-
-        if ((this.notes[1].staffPosition - this.notes[0].staffPosition) === 1 &&
-            Math.abs(this.notes[0].staffPosition % 2) === 1)
-          marking.positionHint = MarkingPositionHint.Below;
+    // The mora on the first (lower) note needs to be below it, if the second note
+    // is only one pitch above, and the first note is on a line.
+    if (this.notes[1].staffPosition - this.notes[0].staffPosition === 1 &&
+          Math.abs(this.notes[0].staffPosition % 2) === 1) {
+      if (this.notes[0].morae.length === 1) {
+        marking = this.notes[0].morae[0];
+      } else if (this.notes[1].morae.length > 1) {
+        marking = this.notes[1].morae[0];
       }
+      if(marking) marking.positionHint = MarkingPositionHint.Below;
     }
 
     for (i = 0; i < this.notes[1].epismata.length; i++)
@@ -855,6 +870,10 @@ export class Porrectus extends Neume {
  * PorrectusFlexus
  */
 export class PorrectusFlexus extends Neume {
+
+  positionMarkings() {
+    this.positionClivisMarkings();
+  }
 
   performLayout(ctxt) {
     super.performLayout(ctxt);
@@ -1010,14 +1029,7 @@ export class Salicus extends Neume {
 export class SalicusFlexus extends Neume {
 
   positionMarkings() {
-    var marking, i, j;
-
-    // by default place episema below
-    // fixme: is this correct?
-    for (i = 0; i < this.notes.length; i++)
-      for (j = 0; j < this.notes[i].epismata.length; j++)
-        if (this.notes[i].epismata[j].positionHint === MarkingPositionHint.Default)
-          this.notes[i].epismata[j].positionHint = MarkingPositionHint.Below;
+    this.positionClivisMarkings();
   }
 
   performLayout(ctxt) {
@@ -1176,35 +1188,7 @@ export class ScandicusFlexus extends Neume {
 export class Torculus extends Neume {
 
   positionMarkings() {
-    var marking, i;
-    var hasMiddleEpisema = false;
-
-    // first do the middle note to see if we should try to move
-    // epismata on the other two lower notes
-    for (i = 0; i < this.notes[1].epismata.length; i++) {
-      marking = this.notes[1].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default) {
-        marking.positionHint = MarkingPositionHint.Above;
-        hasMiddleEpisema = true;
-      }
-    }
-
-    // 1. episema on lower notes should be below, upper note above
-    // 2. morae: fixme: implement
-    for (i = 0; i < this.notes[0].epismata.length; i++) {
-      marking = this.notes[0].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default)
-        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
-    }
-
-    for (i = 0; i < this.notes[2].epismata.length; i++) {
-      marking = this.notes[2].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default)
-        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
-    } 
+    this.positionClivisMarkings();
   }
 
   performLayout(ctxt) {
@@ -1324,49 +1308,24 @@ export class TorculusResupinus extends Neume {
 export class TorculusResupinusFlexus extends Neume {
 
   positionMarkings() {
-    var marking, i;
-    var hasMiddleEpisema = false;
-
-    // first do the middle note to see if we should try to move
-    // epismata on the other two lower notes
-    for (i = 0; i < this.notes[1].epismata.length; i++) {
-      marking = this.notes[1].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default) {
-        marking.positionHint = MarkingPositionHint.Above;
-        hasMiddleEpisema = true;
-      }
-    }
-
+    var mark, i;
+    
+    this.positionClivisMarkings();
+    
     // 1. episema on lower notes should be below, upper note above
-    // 2. morae: fixme: implement
     for (i = 0; i < this.notes[0].epismata.length; i++) {
       marking = this.notes[0].epismata[i];
 
       if (marking.positionHint === MarkingPositionHint.Default)
-        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
+        marking.positionHint = MarkingPositionHint.Below;
     }
 
-    for (i = 0; i < this.notes[2].epismata.length; i++) {
-      marking = this.notes[2].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default)
-        marking.positionHint = hasMiddleEpisema ? MarkingPositionHint.Above : MarkingPositionHint.Below;
-    } 
-
-    for (i = 0; i < this.notes[3].epismata.length; i++) {
-      marking = this.notes[3].epismata[i];
+    for (i = 0; i < this.notes[1].epismata.length; i++) {
+      marking = this.notes[1].epismata[i];
 
       if (marking.positionHint === MarkingPositionHint.Default)
         marking.positionHint = MarkingPositionHint.Above;
-    } 
-
-    for (i = 0; i < this.notes[4].epismata.length; i++) {
-      marking = this.notes[4].epismata[i];
-
-      if (marking.positionHint === MarkingPositionHint.Default)
-        marking.positionHint = MarkingPositionHint.Above;
-    } 
+    }
   }
 
   performLayout(ctxt) {
