@@ -420,6 +420,30 @@ export class ChantLine extends ChantLayoutElement {
       var fitsOnLine = this.positionNotationElement(ctxt, prevWithLyrics, prev, curr, actualRightBoundary);
       if (fitsOnLine === false) {
 
+        // check for an end brace in the curr element
+        var braceEndIndex = curr.notes && curr.notes.reduce(function(result,n,i){ return result || (n.braceEnd && (i + 1)) || 0}, 0);
+        var braceStartIndex = curr.notes && curr.notes.reduce(function(result,n,i){ return result || (n.braceStart && (i + 1)) || 0}, 0);
+        // if there is not a start brace earlier in the element than the end brace, we need to find the earlier start brace
+        // to keep the entire brace together on the next line
+        if(braceEndIndex && (!braceStartIndex || braceStartIndex > braceEndIndex)) {
+          // find last index of start brace
+          var index = notations.slice(this.notationsStartIndex, i).reduceRight(function(accum,cne,index){
+            if(accum === -1 && cne.notes) {
+              var braceStart = cne.notes.filter(function(n){ return n.braceStart; }).length;
+              var braceEnd = cne.notes.filter(function(n){ return n.braceEnd; }).length;
+              // if we see another end brace before we get to a start brace, short circuit
+              if(braceEnd) return -2;
+              if(braceStart) return index;
+            }
+            return accum;
+          },-1);
+          // if the start brace was found, this line needs to end just before it:
+          if(index > 0) {
+            this.numNotationsOnLine = index;
+            i = index + this.notationsStartIndex;
+          }
+        }
+
         // check if the prev elements want to be kept with this one
         for (j = i - 1; j > this.notationsStartIndex; j--) {
           var cne = notations[j];
@@ -691,19 +715,19 @@ export class ChantLine extends ChantLayoutElement {
           // under/over the brace.
           var y;
           var dy = ctxt.intraNeumeSpacing / 2; // some safe space between brace and notes.
-          if (startBrace.isAbove) {
-            y = ctxt.calculateHeightFromStaffPosition(4);
-            for (k = startBraceNotationIndex; k <= i; k++)
-              y = Math.min(y, notations[k].bounds.y - dy);
-          } else {
-            y = ctxt.calculateHeightFromStaffPosition(-4);
-            for (k = startBraceNotationIndex; k <= i; k++)
-              y = Math.max(y, notations[k].bounds.y + dy);
-          }
-
           if (startBrace === null) {
             // fixme: this brace must have started on the previous line...what to do here, draw half a brace?
           } else {
+            if (startBrace.isAbove) {
+              y = ctxt.calculateHeightFromStaffPosition(4);
+              for (k = startBraceNotationIndex; k <= i; k++)
+                y = Math.min(y, notations[k].bounds.y - dy);
+            } else {
+              y = ctxt.calculateHeightFromStaffPosition(-4);
+              for (k = startBraceNotationIndex; k <= i; k++)
+                y = Math.max(y, notations[k].bounds.y + dy);
+            }
+
             var addAcuteAccent = false;
 
             if (startBrace.shape === BraceShape.RoundBrace) {
